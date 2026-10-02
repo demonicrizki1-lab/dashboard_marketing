@@ -11,7 +11,8 @@ import {
   Award,
   HelpCircle,
   PackageX,
-  BarChart2
+  BarChart2,
+  RefreshCw
 } from 'lucide-react';
 import CampaignDetailModal from './CampaignDetailModal';
 
@@ -27,7 +28,7 @@ const formatNumber = (val) => {
   return new Intl.NumberFormat('id-ID').format(val || 0);
 };
 
-export default function CampaignTable({ campaigns = [] }) {
+export default function CampaignTable({ campaigns = [], dateRange, loading = false }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all'); // 'all' | 'ongoing' | 'paused' | 'ended' | 'deleted'
   const [selectedEval, setSelectedEval] = useState('all'); // 'all' | 'winning' | 'boncos' | 'potential'
@@ -343,7 +344,21 @@ export default function CampaignTable({ campaigns = [] }) {
             </tr>
           </thead>
           <tbody>
-            {paginatedCampaigns.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="9" style={{ textAlign: 'center', padding: '48px 16px', color: 'var(--text-muted)' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                    <RefreshCw size={24} className="spin-animation" style={{ color: 'var(--color-brand-primary)' }} />
+                    <p style={{ fontSize: '13px', color: 'var(--text-primary)', fontWeight: 600 }}>
+                      Memperbarui data kampanye untuk periode {dateRange?.label || 'terpilih'}...
+                    </p>
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                      Mengambil metrik performa langsung dari Shopee Ads
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            ) : paginatedCampaigns.length === 0 ? (
               <tr>
                 <td colSpan="9" style={{ textAlign: 'center', padding: '48px 16px', color: 'var(--text-muted)' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>

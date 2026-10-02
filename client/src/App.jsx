@@ -38,6 +38,7 @@ export default function App() {
   });
   const [activeModuleTab, setActiveModuleTab] = useState('module2');
   const [toast, setToast] = useState(null);
+  const [campaignsLoading, setCampaignsLoading] = useState(false);
 
   // Helper show toast
   const showToast = (message, type = 'success') => {
@@ -47,7 +48,27 @@ export default function App() {
     }, 4500);
   };
 
-  // Fetch initial data
+  // Fetch campaigns for specific dateRange
+  const loadCampaignsForRange = async (range) => {
+    try {
+      setCampaignsLoading(true);
+      const params = new URLSearchParams();
+      if (range?.startDate) params.set('startDate', range.startDate);
+      if (range?.endDate) params.set('endDate', range.endDate);
+
+      const res = await fetch(`/api/ads/campaigns?${params.toString()}`);
+      if (res.ok) {
+        const campData = await res.json();
+        setCampaigns(campData.campaigns || []);
+      }
+    } catch (err) {
+      console.error('Error loading campaigns for date range:', err);
+    } finally {
+      setCampaignsLoading(false);
+    }
+  };
+
+  // Fetch initial general data
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -71,13 +92,6 @@ export default function App() {
         setTimeGraph(tgData);
       }
 
-      // 3. Fetch Campaigns
-      const resCampaigns = await fetch('/api/ads/campaigns');
-      if (resCampaigns.ok) {
-        const campData = await resCampaigns.json();
-        setCampaigns(campData.campaigns || []);
-      }
-
       setLastUpdated(new Date().toLocaleTimeString('id-ID'));
     } catch (err) {
       console.error('Error loading dashboard data:', err);
@@ -91,6 +105,11 @@ export default function App() {
     fetchData();
   }, []);
 
+  // Re-fetch campaigns every time dateRange changes
+  useEffect(() => {
+    loadCampaignsForRange(dateRange);
+  }, [dateRange]);
+
   // Sync Live Data from Shopee
   const handleLiveSync = async () => {
     setIsRefreshing(true);
@@ -102,6 +121,7 @@ export default function App() {
         showToast('Sinkronisasi sukses! Data terbaru Shopee berhasil ditarik.', 'success');
         setIsLive(true);
         await fetchData();
+        await loadCampaignsForRange(dateRange);
       } else {
         showToast(data.message || 'Sesi Shopee kedaluwarsa. Silakan perbarui cURL.', 'error');
         setIsLive(false);
@@ -245,19 +265,26 @@ export default function App() {
 
           {/* Campaign Product Table with Filter & Evaluasi */}
           <section aria-label="Tabel Kampanye Iklan Produk">
-            <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <Layers size={18} style={{ color: 'var(--color-brand-primary)' }} />
                 <h3 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.02em' }}>
                   Daftar Kinerja Campaign Iklan Produk
                 </h3>
+                <span className="badge" style={{ backgroundColor: 'rgba(238, 77, 45, 0.12)', color: 'var(--color-brand-primary)', border: '1px solid rgba(238, 77, 45, 0.25)', fontSize: '11px', padding: '3px 8px' }}>
+                  📅 {dateRange?.label || '1 Bulan Terakhir'}
+                </span>
               </div>
               <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                 Total <strong>{campaigns.length}</strong> Kampanye Terdata
               </span>
             </div>
             
-            <CampaignTable campaigns={campaigns} />
+            <CampaignTable 
+              campaigns={campaigns} 
+              dateRange={dateRange}
+              loading={campaignsLoading}
+            />
           </section>
         </main>
       </div>

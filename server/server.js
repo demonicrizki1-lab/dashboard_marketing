@@ -11,6 +11,7 @@ const {
   getLocalCampaigns,
   getFormattedTimeGraph,
   getFormattedCampaigns,
+  getCampaignsData,
   syncLiveFromShopee,
   getConfig,
   saveConfig
@@ -47,21 +48,30 @@ app.get('/api/ads/time-graph', (req, res) => {
   }
 });
 
-// 3. Endpoint Data Per Campaign Produk
-app.get('/api/ads/campaigns', (req, res) => {
+// 3. Endpoint Data Per Campaign Produk (Mendukung Filter Tanggal startDate & endDate)
+app.get('/api/ads/campaigns', async (req, res) => {
   try {
-    const rawCampaigns = getLocalCampaigns();
-    if (!rawCampaigns) {
-      return res.status(404).json({ error: 'Data campaign lokal belum tersedia. Silakan lakukan sinkronisasi.' });
-    }
+    const { 
+      state = 'all', 
+      search = '', 
+      sortBy = 'cost', 
+      sortOrder = 'desc',
+      startDate,
+      endDate 
+    } = req.query;
 
-    const { state = 'all', search = '', sortBy = 'cost', sortOrder = 'desc' } = req.query;
-    const formatted = getFormattedCampaigns(rawCampaigns, {
+    const formatted = await getCampaignsData({
       stateFilter: state,
       searchTerm: search,
       sortBy,
-      sortOrder
+      sortOrder,
+      startDate,
+      endDate
     });
+
+    if (!formatted) {
+      return res.status(404).json({ error: 'Data campaign belum tersedia.' });
+    }
 
     res.json(formatted);
   } catch (err) {

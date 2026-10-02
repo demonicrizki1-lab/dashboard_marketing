@@ -398,6 +398,86 @@ async function syncLiveFromShopee() {
   };
 }
 
+// 5. Fetch Campaign Query Live untuk Rentang Tanggal Spesifik
+async function fetchLiveCampaigns(startTime, endTime) {
+  const config = getConfig();
+  if (!config.cookie || !config.spcCds) return null;
+
+  const url = `https://seller.shopee.co.id/api/pas/v1/homepage/query/?SPC_CDS=${config.spcCds}&SPC_CDS_VER=${config.spcCdsVer || '2'}`;
+  const commonHeaders = {
+    'accept': 'application/json, text/plain, */*',
+    'accept-language': 'en-US,en;q=0.9,id;q=0.8',
+    'content-type': 'application/json;charset=UTF-8',
+    'cookie': config.cookie,
+    'origin': 'https://seller.shopee.co.id',
+    'referer': 'https://seller.shopee.co.id/portal/marketing/pas',
+    'sc-fe-session': config.scFeSession || 'C62425B4417CEC63',
+    'sc-fe-ver': config.scFeVer || '21.167990',
+    'user-agent': config.userAgent || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36',
+    'af-ac-enc-dat': config.afAcEncDat || '',
+    'af-ac-enc-sz-token': config.afAcEncSzToken || ''
+  };
+
+  const payload = {
+    start_time: startTime,
+    end_time: endTime,
+    filter_list: [{ campaign_type: "product_homepage_v3", state: "all", search_term: "", is_valid_rebate_only: false }],
+    offset: 0,
+    limit: 100,
+    use_paid_gmv: false
+  };
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: commonHeaders,
+      body: JSON.stringify(payload)
+    });
+    const json = await res.json();
+    if (json.code === 0 && json.data) {
+      return json;
+    }
+  } catch (err) {
+    console.error('[Shopee PAS] Gagal mengambil campaign live:', err.message);
+  }
+  return null;
+}
+
+// 6. Router data campaign: Live jika tersedia, fallback ke local
+async function getCampaignsData(options = {}) {
+  const { startDate, endDate } = options;
+
+  let startTime = 1788282000;
+  let endTime = 1790960399;
+
+  if (startDate) {
+    startTime = Math.floor(new Date(startDate + 'T00:00:00+07:00').getTime() / 1000);
+  }
+  if (endDate) {
+    endTime = Math.floor(new Date(endDate + 'T23:59:59+07:00').getTime() / 1000);
+  }
+
+  // 1. Coba ambil live dari Shopee API sesuai start_time & end_time
+  const liveJson = await fetchLiveCampaigns(startTime, endTime);
+  if (liveJson && liveJson.data) {
+    return {
+      ...getFormattedCampaigns(liveJson, options),
+      isLiveFiltered: true,
+      timeWindow: { startTime, endTime, startDate, endDate }
+    };
+  }
+
+  // 2. Fallback ke data lokal jika sesi offline
+  const rawCampaigns = getLocalCampaigns();
+  if (!rawCampaigns) return null;
+
+  return {
+    ...getFormattedCampaigns(rawCampaigns, options),
+    isLiveFiltered: false,
+    timeWindow: { startTime, endTime, startDate, endDate }
+  };
+}
+
 module.exports = {
   getConfig,
   saveConfig,
@@ -406,5 +486,6 @@ module.exports = {
   getStoreInfo,
   getFormattedTimeGraph,
   getFormattedCampaigns,
+  getCampaignsData,
   syncLiveFromShopee
 };
