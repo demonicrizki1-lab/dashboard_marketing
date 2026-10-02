@@ -149,9 +149,10 @@ function getFormattedTimeGraph(rawJson) {
     const cost = (m.cost || 0) / 100000;
     const broadGmv = (m.broad_gmv || 0) / 100000;
     const directGmv = (m.direct_gmv || 0) / 100000;
-    const dateObj = new Date(Number(item.key) * 1000);
-    const dateStr = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-    const fullDate = dateObj.toISOString().split('T')[0];
+    // Konversi ke zona waktu Indonesia GMT+7 (+7 jam)
+    const gmt7Date = new Date(Number(item.key) * 1000 + 7 * 3600 * 1000);
+    const dateStr = gmt7Date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+    const fullDate = gmt7Date.toISOString().split('T')[0];
 
     return {
       timestamp: Number(item.key),
@@ -181,17 +182,25 @@ function getFormattedTimeGraph(rawJson) {
 
   return {
     summary: {
+      cost: totalCost,
       totalCost,
+      broad_gmv: totalBroadGmv,
       totalBroadGmv,
+      direct_gmv: totalDirectGmv,
       totalDirectGmv,
+      broad_order: totalOrders,
       totalOrders,
+      click: totalClicks,
       totalClicks,
+      impression: totalImpressions,
       totalImpressions,
+      broad_cart: totalAtc,
       totalAtc,
       roas: aggregate.broad_roi || (totalCost > 0 ? totalBroadGmv / totalCost : 0),
       ctr: ((aggregate.ctr || 0) * 100),
       cr: ((aggregate.cr || 0) * 100),
       avgCpc: (aggregate.cpc || 0) / 100000,
+      cpc: (aggregate.cpc || 0) / 100000,
       cir: ((aggregate.broad_cir || 0) * 100)
     },
     timeSeries
@@ -478,6 +487,125 @@ async function getCampaignsData(options = {}) {
   };
 }
 
+// 6. Fetch Time Graph Live untuk Rentang Tanggal Spesifik
+async function fetchLiveTimeGraph(startTime, endTime) {
+  const config = getConfig();
+  if (!config.cookie || !config.spcCds) return null;
+
+  const url = `https://seller.shopee.co.id/api/pas/v1/report/get_time_graph/?SPC_CDS=${config.spcCds}&SPC_CDS_VER=${config.spcCdsVer || '2'}`;
+  const commonHeaders = {
+    'accept': 'application/json, text/plain, */*',
+    'accept-language': 'en-US,en;q=0.9,id;q=0.8',
+    'content-type': 'application/json;charset=UTF-8',
+    'cookie': config.cookie,
+    'origin': 'https://seller.shopee.co.id',
+    'referer': 'https://seller.shopee.co.id/portal/marketing/pas',
+    'sc-fe-session': config.scFeSession || 'C62425B4417CEC63',
+    'sc-fe-ver': config.scFeVer || '21.167990',
+    'user-agent': config.userAgent || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36',
+    'af-ac-enc-dat': config.afAcEncDat || '',
+    'af-ac-enc-sz-token': config.afAcEncSzToken || ''
+  };
+
+  const payload = {
+    agg_interval: 96,
+    campaign_type: "product_homepage_v2",
+    start_time: startTime,
+    end_time: endTime,
+    need_roi_target_setting: false,
+    filter_params: { campaign_type: "new_cpc_homepage" }
+  };
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: commonHeaders,
+      body: JSON.stringify(payload)
+    });
+    const json = await res.json();
+    if (json.code === 0 && json.data) {
+      return json;
+    }
+  } catch (err) {
+    console.error('[Shopee PAS] Gagal mengambil time graph live:', err.message);
+  }
+  return null;
+}
+
+// 7. Router data time graph: Live jika tersedia, fallback ke local
+async function getTimeGraphData(options = {}) {
+  const { startDate, endDate } = options;
+
+  let startTime = 1788282000;
+  let endTime = 1790960399;
+
+  if (startDate) {
+    startTime = Math.floor(new Date(startDate + 'T00:00:00+07:00').getTime() / 1000);
+  }
+  if (endDate) {
+    endTime = Math.floor(new Date(endDate + 'T23:59:59+07:00').getTime() / 1000);
+  }
+
+  // 1. Coba ambil live dari Shopee API sesuai start_time & end_time
+  const liveJson = await fetchLiveTimeGraph(startTime, endTime);
+  if (liveJson && liveJson.data) {
+    return {
+      ...getFormattedTimeGraph(liveJson),
+      isLiveFiltered: true,
+      timeWindow: { startTime, endTime, startDate, endDate }
+    };
+  }
+
+  // 2. Fallback ke data lokal jika sesi offline
+  const rawIklan = getLocalIklan();
+  if (!rawIklan) return null;
+
+  const baseResult = getFormattedTimeGraph(rawIklan);
+  let timeSeries = baseResult.timeSeries;
+
+  if (startDate && endDate) {
+    const filtered = timeSeries.filter(item => item.fullDate >= startDate && item.fullDate <= endDate);
+    if (filtered.length > 0) {
+      const fCost = filtered.reduce((a, b) => a + (b.cost || 0), 0);
+      const fGmv = filtered.reduce((a, b) => a + (b.broadGmv || b.directGmv || 0), 0);
+      const fOrders = filtered.reduce((a, b) => a + (b.orders || 0), 0);
+      const fClicks = filtered.reduce((a, b) => a + (b.clicks || 0), 0);
+      const fImp = filtered.reduce((a, b) => a + (b.impressions || 0), 0);
+      const fAtc = filtered.reduce((a, b) => a + (b.atc || 0), 0);
+
+      return {
+        summary: {
+          cost: fCost,
+          totalCost: fCost,
+          broad_gmv: fGmv,
+          totalBroadGmv: fGmv,
+          broad_order: fOrders,
+          totalOrders: fOrders,
+          click: fClicks,
+          totalClicks: fClicks,
+          impression: fImp,
+          totalImpressions: fImp,
+          broad_cart: fAtc,
+          totalAtc: fAtc,
+          roas: fCost > 0 ? fGmv / fCost : 0,
+          ctr: fImp > 0 ? (fClicks / fImp) * 100 : 0,
+          cpc: fClicks > 0 ? fCost / fClicks : 0,
+          avgCpc: fClicks > 0 ? fCost / fClicks : 0
+        },
+        timeSeries: filtered,
+        isLiveFiltered: false,
+        timeWindow: { startTime, endTime, startDate, endDate }
+      };
+    }
+  }
+
+  return {
+    ...baseResult,
+    isLiveFiltered: false,
+    timeWindow: { startTime, endTime, startDate, endDate }
+  };
+}
+
 module.exports = {
   getConfig,
   saveConfig,
@@ -485,6 +613,7 @@ module.exports = {
   getLocalCampaigns,
   getStoreInfo,
   getFormattedTimeGraph,
+  getTimeGraphData,
   getFormattedCampaigns,
   getCampaignsData,
   syncLiveFromShopee

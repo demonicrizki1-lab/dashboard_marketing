@@ -48,21 +48,29 @@ export default function App() {
     }, 4500);
   };
 
-  // Fetch campaigns for specific dateRange
-  const loadCampaignsForRange = async (range) => {
+  // Fetch campaigns and time graph for specific dateRange
+  const loadDataForRange = async (range) => {
     try {
       setCampaignsLoading(true);
       const params = new URLSearchParams();
       if (range?.startDate) params.set('startDate', range.startDate);
       if (range?.endDate) params.set('endDate', range.endDate);
 
-      const res = await fetch(`/api/ads/campaigns?${params.toString()}`);
-      if (res.ok) {
-        const campData = await res.json();
+      const [resCamp, resTimeGraph] = await Promise.all([
+        fetch(`/api/ads/campaigns?${params.toString()}`),
+        fetch(`/api/ads/time-graph?${params.toString()}`)
+      ]);
+
+      if (resCamp.ok) {
+        const campData = await resCamp.json();
         setCampaigns(campData.campaigns || []);
       }
+      if (resTimeGraph.ok) {
+        const tgData = await resTimeGraph.json();
+        setTimeGraph(tgData);
+      }
     } catch (err) {
-      console.error('Error loading campaigns for date range:', err);
+      console.error('Error loading data for date range:', err);
     } finally {
       setCampaignsLoading(false);
     }
@@ -85,12 +93,8 @@ export default function App() {
         setIsLive(store.isConnected);
       }
 
-      // 2. Fetch Time Graph
-      const resTimeGraph = await fetch('/api/ads/time-graph');
-      if (resTimeGraph.ok) {
-        const tgData = await resTimeGraph.json();
-        setTimeGraph(tgData);
-      }
+      // 2. Fetch Time Graph & Campaigns for initial range
+      await loadDataForRange(dateRange);
 
       setLastUpdated(new Date().toLocaleTimeString('id-ID'));
     } catch (err) {
@@ -105,9 +109,9 @@ export default function App() {
     fetchData();
   }, []);
 
-  // Re-fetch campaigns every time dateRange changes
+  // Re-fetch data every time dateRange changes
   useEffect(() => {
-    loadCampaignsForRange(dateRange);
+    loadDataForRange(dateRange);
   }, [dateRange]);
 
   // Sync Live Data from Shopee
@@ -121,7 +125,6 @@ export default function App() {
         showToast('Sinkronisasi sukses! Data terbaru Shopee berhasil ditarik.', 'success');
         setIsLive(true);
         await fetchData();
-        await loadCampaignsForRange(dateRange);
       } else {
         showToast(data.message || 'Sesi Shopee kedaluwarsa. Silakan perbarui cURL.', 'error');
         setIsLive(false);
@@ -153,13 +156,20 @@ export default function App() {
       return d >= start && d <= end;
     });
 
-    return filtered.length > 0 ? filtered : list;
+    return filtered;
   }, [timeGraph, dateRange]);
 
   // Recalculate summary metrics based on selected datePreset
   const calculatedTotals = useMemo(() => {
+    if (timeGraph?.isLiveFiltered && timeGraph?.summary) {
+      return timeGraph.summary;
+    }
+
     if (!filteredTimeSeries || filteredTimeSeries.length === 0) {
-      return timeGraph?.summary || {
+      if (!dateRange?.startDate && timeGraph?.summary) {
+        return timeGraph.summary;
+      }
+      return {
         cost: 0,
         broad_gmv: 0,
         roas: 0,

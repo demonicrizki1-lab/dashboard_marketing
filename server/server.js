@@ -10,6 +10,7 @@ const {
   getLocalIklan,
   getLocalCampaigns,
   getFormattedTimeGraph,
+  getTimeGraphData,
   getFormattedCampaigns,
   getCampaignsData,
   syncLiveFromShopee,
@@ -34,15 +35,15 @@ app.get('/api/store/info', async (req, res) => {
   }
 });
 
-// 2. Endpoint Data Time Graph & Summary KPI Iklan
-app.get('/api/ads/time-graph', (req, res) => {
+// 2. Endpoint Data Time Graph & Summary KPI Iklan (Mendukung Filter Tanggal)
+app.get('/api/ads/time-graph', async (req, res) => {
   try {
-    const rawIklan = getLocalIklan();
-    if (!rawIklan) {
-      return res.status(404).json({ error: 'Data iklan lokal belum tersedia. Silakan lakukan sinkronisasi.' });
+    const { startDate, endDate } = req.query;
+    const data = await getTimeGraphData({ startDate, endDate });
+    if (!data) {
+      return res.status(404).json({ error: 'Data iklan belum tersedia. Silakan lakukan sinkronisasi.' });
     }
-    const formatted = getFormattedTimeGraph(rawIklan);
-    res.json(formatted);
+    res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
