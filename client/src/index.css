@@ -1,0 +1,12 @@
+@import './styles/design-tokens.css';
+@import './styles/dashboard.css';
+
+/* Full width and reset default Vite centering */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}

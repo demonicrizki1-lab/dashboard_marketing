@@ -1,0 +1,11 @@
+{
+  "spcCds": "your-spc-cds-here",
+  "spcCdsVer": "2",
+  "afAcEncDat": "your-af-ac-enc-dat-here",
+  "afAcEncSzToken": "your-af-ac-enc-sz-token-here",
+  "scFeSession": "your-sc-fe-session-here",
+  "scFeVer": "21.167990",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+  "cookie": "your-shopee-seller-cookie-here",
+  "lastSyncTime": null
+}
