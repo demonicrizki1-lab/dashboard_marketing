@@ -291,7 +291,7 @@ export default function ProductSkuManager({ showToast }) {
       </div>
 
       {/* Tabel Master SKU Produk */}
-      <div className="table-container" style={{ backgroundColor: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+      <div className="table-responsive" style={{ backgroundColor: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
         {loading ? (
           <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
             <div className="spinner" style={{ margin: '0 auto 12px auto' }}></div>
@@ -303,24 +303,70 @@ export default function ProductSkuManager({ showToast }) {
             <p style={{ margin: 0, fontSize: '14px' }}>Tidak ada produk yang cocok dengan pencarian.</p>
           </div>
         ) : (
-          <table className="data-table">
+          <table className="campaign-data-table" style={{ width: '100%' }}>
             <thead>
               <tr>
-                <th style={{ width: '40px' }}></th>
-                <th style={{ minWidth: '260px' }}>PRODUK & SKU INDUK</th>
-                <th>STOK</th>
-                <th>HARGA PROMO</th>
-                <th>PLAFON CPR (25%)</th>
-                <th>PLAFON CAC (40%)</th>
-                <th>ESTIMASI CUAN</th>
-                <th>STATUS MARGIN</th>
-                <th style={{ textAlign: 'center' }}>AKSI</th>
+                <th style={{ width: '44px', textAlign: 'center' }}></th>
+                <th style={{ minWidth: '260px', textAlign: 'left', fontSize: '11px', letterSpacing: '0.04em' }}>
+                  PRODUK & SKU INDUK
+                </th>
+                <th style={{ width: '90px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                  STOK
+                </th>
+                <th style={{ width: '130px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                  HARGA PROMO
+                </th>
+                <th style={{ width: '130px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                  PLAFON CPR (25%)
+                </th>
+                <th style={{ width: '130px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                  PLAFON CAC (40%)
+                </th>
+                <th style={{ width: '130px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                  ESTIMASI CUAN
+                </th>
+                <th style={{ width: '120px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                  STATUS MARGIN
+                </th>
+                <th style={{ width: '100px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                  AKSI
+                </th>
               </tr>
             </thead>
             <tbody>
               {products.map((p) => {
                 const isExpanded = expandedItemId === p.itemId;
                 const eco = p.economics || {};
+
+                // Sort models per warna dan size M -> 4XL/6XL
+                const sizeHierarchy = {
+                  'xs': 1, 's': 2, 'm': 3, 'l': 4, 'xl': 5, 
+                  '2xl': 6, 'xxl': 6, '3xl': 7, 'xxxl': 7, 
+                  '4xl': 8, 'xxxxl': 8, '5xl': 9, '6xl': 10
+                };
+                const parseVar = (name) => {
+                  const parts = (name || '').split(',');
+                  if (parts.length >= 2) {
+                    const p0 = parts[0].trim();
+                    const p1 = parts[1].trim();
+                    if (sizeHierarchy[p0.toLowerCase()] && !sizeHierarchy[p1.toLowerCase()]) {
+                      return { color: p1, size: p0 };
+                    }
+                    return { color: p0, size: p1 };
+                  }
+                  return { color: name || '', size: '' };
+                };
+                const sortedModels = [...(p.models || [])].sort((a, b) => {
+                  const varA = parseVar(a.name);
+                  const varB = parseVar(b.name);
+                  if (varA.color !== varB.color) {
+                    return varA.color.localeCompare(varB.color);
+                  }
+                  const ordA = sizeHierarchy[varA.size.toLowerCase()] || 99;
+                  const ordB = sizeHierarchy[varB.size.toLowerCase()] || 99;
+                  if (ordA !== ordB) return ordA - ordB;
+                  return varA.size.localeCompare(varB.size);
+                });
 
                 return (
                   <React.Fragment key={p.itemId}>
@@ -337,17 +383,17 @@ export default function ProductSkuManager({ showToast }) {
                         </button>
                       </td>
 
-                      {/* Info Produk */}
+                      {/* Info Produk (Left Aligned) */}
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                           {p.coverImage ? (
                             <img 
                               src={p.coverImage} 
                               alt={p.name} 
-                              style={{ width: '44px', height: '44px', borderRadius: '8px', objectFit: 'cover', border: '1px solid var(--border-color)', flexShrink: 0 }}
+                              style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover', border: '1px solid var(--border-color)', flexShrink: 0 }}
                             />
                           ) : (
-                            <div style={{ width: '44px', height: '44px', borderRadius: '8px', backgroundColor: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <div style={{ width: '42px', height: '42px', borderRadius: '8px', backgroundColor: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                               <Package size={20} style={{ color: 'var(--text-muted)' }} />
                             </div>
                           )}
@@ -366,117 +412,129 @@ export default function ProductSkuManager({ showToast }) {
                         </div>
                       </td>
 
-                      {/* Stok Tersedia */}
-                      <td>
+                      {/* Stok Tersedia (Center Aligned) */}
+                      <td style={{ textAlign: 'center' }}>
                         <span className="tabular-nums" style={{ fontSize: '13px', fontWeight: 600, color: p.availableStock > 0 ? 'var(--text-primary)' : 'var(--color-danger)' }}>
                           {p.availableStock} pcs
                         </span>
                       </td>
 
-                      {/* Harga Jual Promo */}
-                      <td>
-                        <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-brand-primary)' }}>
-                          {formatRupiah(p.representativePrice)}
-                        </div>
-                        {p.sellingPriceMin !== p.sellingPriceMax && (
-                          <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
-                            {formatRupiah(p.sellingPriceMin)} - {formatRupiah(p.sellingPriceMax)}
-                          </div>
-                        )}
-                      </td>
-
-                      {/* Plafon CPR 25% */}
-                      <td>
-                        <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: '#10B981' }}>
-                          {formatRupiah(eco.cprLimit)}
-                        </div>
-                        <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
-                          ROAS ≥ 4.0x
-                        </span>
-                      </td>
-
-                      {/* Plafon CAC 40% */}
-                      <td>
-                        <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: '#F59E0B' }}>
-                          {formatRupiah(eco.cacLimit)}
-                        </div>
-                        <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
-                          ROAS ≥ 2.5x
-                        </span>
-                      </td>
-
-                      {/* Estimasi Laba Bersih */}
-                      <td>
-                        {p.isConfigured ? (
-                          <div>
-                            <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: eco.netProfitWithCpr > 0 ? '#10B981' : '#EF4444' }}>
-                              {formatRupiah(eco.netProfitWithCpr)}
-                            </div>
-                            <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
-                              {eco.netProfitMarginPercent}% Margin
-                            </span>
-                          </div>
-                        ) : (
-                          <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                            Belum diinput HPP
-                          </span>
-                        )}
-                      </td>
-
-                      {/* Status Konfigurasi Margin */}
-                      <td>
-                        {p.isConfigured ? (
-                          <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.25)', fontSize: '11px' }}>
-                            ✅ Terkonfigurasi
-                          </span>
-                        ) : (
-                          <span className="badge" style={{ backgroundColor: 'rgba(239, 68, 68, 0.12)', color: '#F87171', border: '1px solid rgba(239, 68, 68, 0.25)', fontSize: '11px' }}>
-                            ⚠️ Belum Diisi
-                          </span>
-                        )}
-                      </td>
-
-                      {/* Tombol Aksi */}
+                      {/* Harga Jual Promo (Center Aligned) */}
                       <td style={{ textAlign: 'center' }}>
-                        <button
-                          onClick={() => setSelectedProductForMargin(p)}
-                          className="btn btn-secondary"
-                          style={{ padding: '6px 12px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-                        >
-                          <Edit3 size={13} />
-                          <span>Atur Margin</span>
-                        </button>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                          <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-brand-primary)' }}>
+                            {formatRupiah(p.representativePrice)}
+                          </div>
+                          {p.sellingPriceMin !== p.sellingPriceMax && (
+                            <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                              {formatRupiah(p.sellingPriceMin)} - {formatRupiah(p.sellingPriceMax)}
+                            </div>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Plafon CPR 25% (Center Aligned) */}
+                      <td style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                          <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: '#10B981' }}>
+                            {formatRupiah(eco.cprLimit)}
+                          </div>
+                          <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                            ROAS ≥ 4.0x
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* Plafon CAC 40% (Center Aligned) */}
+                      <td style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                          <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: '#F59E0B' }}>
+                            {formatRupiah(eco.cacLimit)}
+                          </div>
+                          <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                            ROAS ≥ 2.5x
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* Estimasi Laba Bersih (Center Aligned) */}
+                      <td style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                          {p.isConfigured ? (
+                            <>
+                              <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: eco.netProfitWithCpr > 0 ? '#10B981' : '#EF4444' }}>
+                                {formatRupiah(eco.netProfitWithCpr)}
+                              </div>
+                              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                                {eco.netProfitMarginPercent}% Margin
+                              </span>
+                            </>
+                          ) : (
+                            <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                              Belum diinput HPP
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Status Konfigurasi Margin (Center Aligned) */}
+                      <td style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                          {p.isConfigured ? (
+                            <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.25)', fontSize: '11px', padding: '3px 8px' }}>
+                              ✅ Terkonfigurasi
+                            </span>
+                          ) : (
+                            <span className="badge" style={{ backgroundColor: 'rgba(239, 68, 68, 0.12)', color: '#F87171', border: '1px solid rgba(239, 68, 68, 0.25)', fontSize: '11px', padding: '3px 8px' }}>
+                              ⚠️ Belum Diisi
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Tombol Aksi (Center Aligned) */}
+                      <td style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                          <button
+                            onClick={() => setSelectedProductForMargin(p)}
+                            className="btn btn-secondary"
+                            style={{ padding: '6px 12px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                          >
+                            <Edit3 size={13} />
+                            <span>Atur Margin</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
 
-                    {/* Accordion Detail: Daftar Varian Model SKU */}
+                    {/* Accordion Detail: Daftar Varian Model SKU (Urutan Warna & Size M - 4XL/6XL) */}
                     {isExpanded && (
                       <tr>
                         <td colSpan={9} style={{ backgroundColor: 'rgba(0, 0, 0, 0.25)', padding: '14px 20px', borderBottom: '1px solid var(--border-color)' }}>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                               <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)' }}>
-                                📦 Rincian {p.models.length} Varian SKU Model untuk produk ini:
+                                📦 Rincian {sortedModels.length} Varian SKU Model (Urutan Warna & Size M - 4XL):
                               </span>
                               <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
                                 Parameter margin dihitung proporsional terhadap harga promo varian
                               </span>
                             </div>
 
-                            <div style={{ maxHeight: '240px', overflowY: 'auto', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
+                            <div style={{ maxHeight: '280px', overflowY: 'auto', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
                               <table style={{ width: '100%', fontSize: '12px', borderCollapse: 'collapse' }}>
                                 <thead style={{ backgroundColor: 'var(--bg-card)', color: 'var(--text-muted)', borderBottom: '1px solid var(--border-color)' }}>
                                   <tr>
-                                    <th style={{ padding: '8px 12px', textAlign: 'left' }}>VARIAN</th>
-                                    <th style={{ padding: '8px 12px', textAlign: 'left' }}>KODE SKU MODEL</th>
-                                    <th style={{ padding: '8px 12px', textAlign: 'right' }}>STOK</th>
-                                    <th style={{ padding: '8px 12px', textAlign: 'right' }}>HARGA PROMO</th>
-                                    <th style={{ padding: '8px 12px', textAlign: 'right' }}>PLAFON CPR (25%)</th>
-                                    <th style={{ padding: '8px 12px', textAlign: 'right' }}>PLAFON CAC (40%)</th>
+                                    <th style={{ padding: '8px 12px', textAlign: 'left', fontSize: '10.5px', letterSpacing: '0.04em' }}>VARIAN</th>
+                                    <th style={{ padding: '8px 12px', textAlign: 'left', fontSize: '10.5px', letterSpacing: '0.04em' }}>KODE SKU MODEL</th>
+                                    <th style={{ padding: '8px 12px', textAlign: 'center', fontSize: '10.5px', letterSpacing: '0.04em' }}>STOK</th>
+                                    <th style={{ padding: '8px 12px', textAlign: 'center', fontSize: '10.5px', letterSpacing: '0.04em' }}>HARGA PROMO</th>
+                                    <th style={{ padding: '8px 12px', textAlign: 'center', fontSize: '10.5px', letterSpacing: '0.04em' }}>PLAFON CPR (25%)</th>
+                                    <th style={{ padding: '8px 12px', textAlign: 'center', fontSize: '10.5px', letterSpacing: '0.04em' }}>PLAFON CAC (40%)</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {p.models.map(m => (
+                                  {sortedModels.map(m => (
                                     <tr key={m.modelId} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
                                       <td style={{ padding: '8px 12px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -487,14 +545,14 @@ export default function ProductSkuManager({ showToast }) {
                                         </div>
                                       </td>
                                       <td style={{ padding: '8px 12px', color: 'var(--text-secondary)' }}>{m.sku}</td>
-                                      <td style={{ padding: '8px 12px', textAlign: 'right' }} className="tabular-nums">{m.availableStock}</td>
-                                      <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 600, color: 'var(--color-brand-primary)' }} className="tabular-nums">
+                                      <td style={{ padding: '8px 12px', textAlign: 'center' }} className="tabular-nums">{m.availableStock}</td>
+                                      <td style={{ padding: '8px 12px', textAlign: 'center', fontWeight: 600, color: 'var(--color-brand-primary)' }} className="tabular-nums">
                                         {formatRupiah(m.promotionPrice)}
                                       </td>
-                                      <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 600, color: '#10B981' }} className="tabular-nums">
+                                      <td style={{ padding: '8px 12px', textAlign: 'center', fontWeight: 600, color: '#10B981' }} className="tabular-nums">
                                         {formatRupiah(m.cprLimit)}
                                       </td>
-                                      <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 600, color: '#F59E0B' }} className="tabular-nums">
+                                      <td style={{ padding: '8px 12px', textAlign: 'center', fontWeight: 600, color: '#F59E0B' }} className="tabular-nums">
                                         {formatRupiah(m.cacLimit)}
                                       </td>
                                     </tr>

@@ -217,8 +217,28 @@ function getProductsWithMargins(options = {}) {
     // Unit economics produk induk
     const economics = calculateUnitEconomics(repPrice, marginConfig);
 
+    // Size order hierarchy
+    const sizeHierarchy = {
+      'xs': 1, 's': 2, 'm': 3, 'l': 4, 'xl': 5, 
+      '2xl': 6, 'xxl': 6, '3xl': 7, 'xxxl': 7, 
+      '4xl': 8, 'xxxxl': 8, '5xl': 9, '6xl': 10
+    };
+
+    const parseVariant = (name) => {
+      const parts = (name || '').split(',');
+      if (parts.length >= 2) {
+        const p0 = parts[0].trim();
+        const p1 = parts[1].trim();
+        if (sizeHierarchy[p0.toLowerCase()] && !sizeHierarchy[p1.toLowerCase()]) {
+          return { color: p1, size: p0 };
+        }
+        return { color: p0, size: p1 };
+      }
+      return { color: name || '', size: '' };
+    };
+
     // Format varian SKU
-    const models = modelList.map(m => {
+    const rawModels = modelList.map(m => {
       const modelPrice = Number(m.price_detail?.promotion_price || m.price_detail?.origin_price || repPrice);
       const modelEconomics = calculateUnitEconomics(modelPrice, marginConfig);
       return {
@@ -233,6 +253,27 @@ function getProductsWithMargins(options = {}) {
         cacLimit: modelEconomics.cacLimit,
         netProfit: modelEconomics.netProfitWithCpr
       };
+    });
+
+    // Urutkan varian: per-warna, dan per-ukuran mulai dari M hingga 4XL/6XL
+    const models = [...rawModels].sort((a, b) => {
+      const varA = parseVariant(a.name);
+      const varB = parseVariant(b.name);
+
+      // 1. Urutkan berdasarkan Warna
+      if (varA.color !== varB.color) {
+        return varA.color.localeCompare(varB.color);
+      }
+
+      // 2. Urutkan berdasarkan Ukuran: M -> 4XL / 6XL
+      const orderA = sizeHierarchy[varA.size.toLowerCase()] || 99;
+      const orderB = sizeHierarchy[varB.size.toLowerCase()] || 99;
+
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
+
+      return varA.size.localeCompare(varB.size);
     });
 
     return {

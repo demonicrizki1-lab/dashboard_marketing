@@ -113,20 +113,48 @@ export default function SkuMarginModal({ product, isOpen, onClose, onSaveSuccess
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose} style={{ zIndex: 1100 }}>
+    <div 
+      className="modal-overlay" 
+      onClick={onClose} 
+      style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        bottom: 0, 
+        backgroundColor: 'rgba(0, 0, 0, 0.75)', 
+        backdropFilter: 'blur(5px)', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        zIndex: 99999, 
+        padding: '20px' 
+      }}
+    >
       <div 
-        className="modal-container" 
+        className="modal-content" 
         onClick={(e) => e.stopPropagation()} 
-        style={{ maxWidth: '820px', width: '95%', maxHeight: '92vh', overflowY: 'auto' }}
+        style={{ 
+          maxWidth: '820px', 
+          width: '100%', 
+          maxHeight: '90vh', 
+          overflowY: 'auto',
+          backgroundColor: 'var(--bg-surface)',
+          borderRadius: '16px',
+          border: '1px solid var(--border-subtle)',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+          padding: '24px',
+          position: 'relative'
+        }}
       >
         {/* Header Modal */}
-        <div className="modal-header" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', paddingBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div className="modal-icon-badge" style={{ backgroundColor: 'rgba(238, 77, 45, 0.15)', color: 'var(--color-brand-primary)' }}>
+            <div style={{ backgroundColor: 'rgba(238, 77, 45, 0.15)', color: 'var(--color-brand-primary)', width: '40px', height: '40px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Calculator size={22} />
             </div>
             <div>
-              <h2 style={{ fontSize: '18px', fontWeight: 700, margin: 0, letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: 700, margin: 0, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
                 Kalkulator Margin & Biaya Produk
               </h2>
               <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '3px 0 0 0' }}>
@@ -134,8 +162,14 @@ export default function SkuMarginModal({ product, isOpen, onClose, onSaveSuccess
               </p>
             </div>
           </div>
-          <button className="btn-close" onClick={onClose} aria-label="Tutup Modal">
-            <X size={18} />
+          <button 
+            type="button"
+            className="btn btn-secondary btn-icon-only" 
+            onClick={onClose} 
+            aria-label="Tutup Modal"
+            style={{ borderRadius: '50%', padding: '6px', background: 'rgba(255,255,255,0.06)', cursor: 'pointer' }}
+          >
+            <X size={16} />
           </button>
         </div>
 
