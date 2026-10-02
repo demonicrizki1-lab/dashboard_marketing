@@ -62,20 +62,31 @@ Dashboard akan terdiri dari 5 modul / halaman utama:
   - Konversi (%)
   - Klik & Tayangan
 
-### 3.4 Modul 3: Dashboard Performa Produk (Per SKU)
-**Deskripsi:** Menganalisis penjualan secara mendetail hingga ke level variasi produk (SKU) untuk mengetahui produk pemenang (winning products) dan yang kurang laku.
+### 3.4 Modul 3: Master Data Produk & Kalkulator Margin SKU (Unit Economics)
+**Deskripsi:** Pusat data acuan katalog produk, rincian varian model SKU, dan kalkulator margin finansial riil toko untuk menentukan batas toleransi biaya iklan otomatis.
 
 **Metrik & Fungsionalitas:**
-- **Filter**: Rentang Tanggal, Kategori Produk.
-- **Peringkat (Leaderboard)**: Top 10 SKU Terlaris dan Bottom 10 SKU (Paling sedikit terjual).
-- **Tabel Metrik per SKU (Bisa diurutkan / di-sort)**:
-  - Nama Produk Utama
-  - Variasi (Nama SKU)
-  - SKU ID / Barcode
-  - Total Terjual (Pieces)
-  - Omzet per SKU (Revenue)
-  - Sisa Stok Saat Ini (Opsional namun direkomendasikan)
-  - Seluruh metrik lain yang tersedia dari API Shopee terkait produk tersebut (misal: dilihat, dimasukkan keranjang).
+- **Sinkronisasi Katalog Shopee**: Menarik seluruh produk dan varian SKU aktif langsung via `search_product_list` API Shopee.
+- **Kartu Ringkasan Finansial**:
+  - Total Produk Toko
+  - Total Varian Model SKU
+  - Jumlah SKU Terkonfigurasi Margin
+  - Rata-rata Estimasi Margin Bersih (%)
+- **Input Finansial per SKU (Modal & Potongan)**:
+  - HPP Produk (Modal Barang per unit)
+  - Biaya Admin Shopee (Default 8.5%)
+  - Biaya Layanan Gratis Ongkir / Cashback (Default 4.0%)
+  - Beban Voucher Toko per Order (Rp)
+  - Alokasi Komisi Affiliate (Rp)
+  - Biaya Operasional & Packaging (Default Rp 3.500)
+  - Pajak Iklan PPN 11%
+- **Hitungan Otomatis Unit Economics**:
+  - **Plafon CPR (25%)**: Batas maksimal biaya iklan per order untuk cuan stabil (Target ROAS ≥ 4.0x).
+  - **Plafon CAC (40%)**: Batas toleransi maksimal akuisisi pelanggan baru (Batas ROAS ≥ 2.5x).
+  - **Estimasi Laba Bersih (Net Profit)** per unit dan persentase margin riil.
+- **Integrasi Evaluasi Cerdas Iklan (Modul 2)**:
+  - Penjodohan otomatis (*matching*) iklan dengan `item_id` katalog master SKU.
+  - Klasifikasi 3 Zona: 🟢 Winning (CPA ≤ CPR 25%), 🟡 Toleransi Akuisisi (CPR < CPA ≤ CAC 40%), 🔴 Boncos Kritis (CPA > CAC 40% / bakar budget), ⏳ Testing (< 30 klik), dan ⚪ Dihapus (strip netral).
 
 ### 3.5 Modul 4: Dashboard Affiliate
 **Deskripsi:** Mengukur efektivitas kampanye afiliasi dan performa individu dari para affiliator yang mempromosikan produk toko.
