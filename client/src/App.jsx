@@ -5,6 +5,7 @@ import KpiGrid from './components/KpiGrid';
 import AdsCharts from './components/AdsCharts';
 import CampaignTable from './components/CampaignTable';
 import SettingsModal from './components/SettingsModal';
+import ShopeeDateRangePicker from './components/ShopeeDateRangePicker';
 import { 
   Calendar, 
   Sparkles, 
@@ -29,7 +30,12 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [datePreset, setDatePreset] = useState('30d'); // '7d' | '30d' | 'all'
+  const [dateRange, setDateRange] = useState({
+    startDate: '2026-09-02',
+    endDate: '2026-10-02',
+    label: '1 Bulan Terakhir (GMT+7)',
+    presetKey: '1_month'
+  });
   const [activeModuleTab, setActiveModuleTab] = useState('module2');
   const [toast, setToast] = useState(null);
 
@@ -109,15 +115,26 @@ export default function App() {
     }
   };
 
-  // Compute filtered timeSeries based on datePreset
+  // Compute filtered timeSeries based on dateRange
   const filteredTimeSeries = useMemo(() => {
-    if (!timeGraph?.timeSeries) return [];
+    if (!timeGraph?.timeSeries || timeGraph.timeSeries.length === 0) return [];
     const list = timeGraph.timeSeries;
-    if (datePreset === '7d') {
-      return list.slice(-7);
+
+    if (!dateRange || !dateRange.startDate || !dateRange.endDate) {
+      return list;
     }
-    return list; // '30d' or default
-  }, [timeGraph, datePreset]);
+
+    const start = dateRange.startDate;
+    const end = dateRange.endDate;
+
+    const filtered = list.filter(item => {
+      const d = item.fullDate;
+      if (!d) return true;
+      return d >= start && d <= end;
+    });
+
+    return filtered.length > 0 ? filtered : list;
+  }, [timeGraph, dateRange]);
 
   // Recalculate summary metrics based on selected datePreset
   const calculatedTotals = useMemo(() => {
@@ -196,28 +213,16 @@ export default function App() {
 
         {/* Content Body */}
         <main className="content-body">
-          {/* Filter Bar */}
+          {/* Filter Bar with Shopee Date Range Picker */}
           <div className="filter-bar">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)' }}>
                 RENTANG WAKTU:
               </span>
-              <div className="date-preset-group">
-                <button
-                  className={`preset-btn ${datePreset === '7d' ? 'active' : ''}`}
-                  onClick={() => setDatePreset('7d')}
-                  id="preset-7d"
-                >
-                  7 Hari Terakhir
-                </button>
-                <button
-                  className={`preset-btn ${datePreset === '30d' ? 'active' : ''}`}
-                  onClick={() => setDatePreset('30d')}
-                  id="preset-30d"
-                >
-                  30 Hari Terakhir
-                </button>
-              </div>
+              <ShopeeDateRangePicker
+                dateRange={dateRange}
+                onChange={setDateRange}
+              />
             </div>
 
             <div className="filter-info-tag">

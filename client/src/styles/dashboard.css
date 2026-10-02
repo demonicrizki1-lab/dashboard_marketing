@@ -373,6 +373,197 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
+   Shopee Date Range Picker (Seller Center Style)
+   ========================================================================== */
+.shopee-datepicker-container {
+  position: relative;
+  display: inline-block;
+}
+
+.shopee-datepicker-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  height: 34px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.shopee-datepicker-trigger:hover {
+  border-color: var(--color-brand-primary);
+  background-color: var(--bg-card-hover);
+}
+
+.shopee-datepicker-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 60;
+  display: flex;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: modalFadeIn 140ms ease-out;
+}
+
+.shopee-datepicker-presets {
+  width: 155px;
+  border-right: 1px solid var(--border-subtle);
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.shopee-preset-item {
+  padding: 8px 12px;
+  border-radius: var(--radius-xs);
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.shopee-preset-item:hover {
+  background-color: var(--bg-surface-elevated);
+  color: var(--text-primary);
+}
+
+.shopee-preset-item.active {
+  background-color: var(--color-brand-subtle);
+  color: var(--color-brand-primary);
+  font-weight: 600;
+}
+
+.shopee-calendars-wrapper {
+  display: flex;
+  gap: 24px;
+  padding: 16px 20px;
+}
+
+.shopee-calendar-month {
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.shopee-cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.shopee-cal-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.shopee-cal-nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast);
+}
+
+.shopee-cal-nav-btn:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-surface-elevated);
+}
+
+.shopee-cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.shopee-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 3px;
+  column-gap: 2px;
+}
+
+.shopee-cal-cell {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  user-select: none;
+  color: var(--text-secondary);
+  transition: background-color 100ms;
+}
+
+.shopee-cal-cell:hover:not(.disabled):not(.empty) {
+  background-color: var(--bg-surface-elevated);
+  color: var(--text-primary);
+}
+
+.shopee-cal-cell.today {
+  color: var(--color-brand-primary);
+  font-weight: 700;
+}
+
+.shopee-cal-cell.selected-edge {
+  background-color: var(--color-brand-primary) !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+}
+
+.shopee-cal-cell.in-range {
+  background-color: rgba(238, 77, 45, 0.16);
+  color: var(--text-primary);
+  border-radius: 0;
+}
+
+.shopee-cal-cell.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.shopee-cal-cell.empty {
+  cursor: default;
+}
+
+.shopee-datepicker-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-top: 1px solid var(--border-subtle);
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+
+/* ==========================================================================
    KPI Scorecard Grid (PRD 3.3)
    ========================================================================== */
 .kpi-grid {
