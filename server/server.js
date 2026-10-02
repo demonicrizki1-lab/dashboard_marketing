@@ -18,6 +18,11 @@ const {
   saveConfig
 } = require('./services/shopeeService');
 const { parseCurl } = require('./services/curlParser');
+const {
+  syncProductsFromShopee,
+  getProductsWithMargins,
+  saveProductMargin
+} = require('./services/productService');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -143,8 +148,44 @@ app.get('/api/settings', (req, res) => {
     hasCookie: !!config.cookie,
     hasAfAcDat: !!config.afAcEncDat,
     hasAfAcSzToken: !!config.afAcEncSzToken,
-    lastSyncTime: config.lastSyncTime || null
+    lastSyncTime: config.lastSyncTime || null,
+    lastSyncProductsTime: config.lastSyncProductsTime || null
   });
+});
+
+// 7. Modul 3: Endpoint Master Data Produk & SKU Margin
+app.get('/api/products', (req, res) => {
+  try {
+    const { search = '', status = 'all' } = req.query;
+    const data = getProductsWithMargins({ search, statusFilter: status });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 8. Modul 3: Sinkronisasi Katalog Produk dari Shopee API
+app.post('/api/products/sync', async (req, res) => {
+  try {
+    const result = await syncProductsFromShopee();
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 9. Modul 3: Simpan / Perbarui Konfigurasi Margin per SKU
+app.post('/api/products/margin', (req, res) => {
+  try {
+    const { itemId, ...marginData } = req.body;
+    if (!itemId) {
+      return res.status(400).json({ error: 'itemId wajib disertakan.' });
+    }
+    const saved = saveProductMargin(itemId, marginData);
+    res.json({ success: true, itemId, margin: saved });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.listen(PORT, () => {

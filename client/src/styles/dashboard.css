@@ -979,6 +979,19 @@ button, input, select, textarea {
   border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
+.badge-acquisition {
+  background-color: rgba(245, 158, 11, 0.14);
+  color: #F59E0B;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-testing {
+  background-color: rgba(139, 92, 246, 0.14);
+  color: #A78BFA;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+
 /* ==========================================================================
    Settings Modal (Smart cURL Importer)
    ========================================================================== */

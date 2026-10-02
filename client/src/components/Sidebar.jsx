@@ -14,8 +14,8 @@ import {
 export default function Sidebar({ storeInfo, onOpenSettings, activeTab, setActiveTab }) {
   const navItems = [
     { id: 'module1', label: '1. Ringkasan Bisnis', icon: BarChart3, badge: 'Segera', disabled: true },
-    { id: 'module2', label: '2. Performa Iklan', icon: TrendingUp, badge: 'Aktif', active: true },
-    { id: 'module3', label: '3. Analisis Produk & SKU', icon: Package, badge: 'Segera', disabled: true },
+    { id: 'module2', label: '2. Performa Iklan', icon: TrendingUp, badge: 'Aktif', disabled: false },
+    { id: 'module3', label: '3. Master Data SKU & Margin', icon: Package, badge: 'Aktif', disabled: false },
     { id: 'module4', label: '4. Program Promosi', icon: Tag, badge: 'Segera', disabled: true },
     { id: 'module5', label: '5. Analisis Pelanggan', icon: Users, badge: 'Segera', disabled: true },
   ];
@@ -42,7 +42,7 @@ export default function Sidebar({ storeInfo, onOpenSettings, activeTab, setActiv
         <div className="nav-section-title">Modul Marketing PRD</div>
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = item.active || activeTab === item.id;
+          const isActive = activeTab === item.id;
           return (
             <button
               key={item.id}

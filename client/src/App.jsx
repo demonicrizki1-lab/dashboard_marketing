@@ -6,6 +6,7 @@ import AdsCharts from './components/AdsCharts';
 import CampaignTable from './components/CampaignTable';
 import SettingsModal from './components/SettingsModal';
 import ShopeeDateRangePicker from './components/ShopeeDateRangePicker';
+import ProductSkuManager from './components/ProductSkuManager';
 import { 
   Calendar, 
   Sparkles, 
@@ -243,59 +244,67 @@ export default function App() {
 
         {/* Content Body */}
         <main className="content-body">
-          {/* Filter Bar with Shopee Date Range Picker */}
-          <div className="filter-bar">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)' }}>
-                RENTANG WAKTU:
-              </span>
-              <ShopeeDateRangePicker
-                dateRange={dateRange}
-                onChange={setDateRange}
-              />
-            </div>
+          {activeModuleTab === 'module3' ? (
+            /* Modul 3: Master Data SKU & Kalkulator Margin */
+            <ProductSkuManager showToast={showToast} />
+          ) : (
+            /* Modul 2: Performa Iklan */
+            <>
+              {/* Filter Bar with Shopee Date Range Picker */}
+              <div className="filter-bar">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)' }}>
+                    RENTANG WAKTU:
+                  </span>
+                  <ShopeeDateRangePicker
+                    dateRange={dateRange}
+                    onChange={setDateRange}
+                  />
+                </div>
 
-            <div className="filter-info-tag">
-              <Clock size={13} />
-              <span>
-                Pembaruan Terakhir: <strong style={{ color: 'var(--text-secondary)' }}>{lastUpdated} WIB</strong>
-              </span>
-            </div>
-          </div>
-
-          {/* KPI Scorecards Grid */}
-          <section aria-label="KPI Ringkasan Iklan">
-            <KpiGrid totals={calculatedTotals} />
-          </section>
-
-          {/* Interactive Trends Chart */}
-          <section aria-label="Grafik Tren Iklan">
-            <AdsCharts chartData={chartData} />
-          </section>
-
-          {/* Campaign Product Table with Filter & Evaluasi */}
-          <section aria-label="Tabel Kampanye Iklan Produk">
-            <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Layers size={18} style={{ color: 'var(--color-brand-primary)' }} />
-                <h3 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.02em' }}>
-                  Daftar Kinerja Campaign Iklan Produk
-                </h3>
-                <span className="badge" style={{ backgroundColor: 'rgba(238, 77, 45, 0.12)', color: 'var(--color-brand-primary)', border: '1px solid rgba(238, 77, 45, 0.25)', fontSize: '11px', padding: '3px 8px' }}>
-                  📅 {dateRange?.label || '1 Bulan Terakhir'}
-                </span>
+                <div className="filter-info-tag">
+                  <Clock size={13} />
+                  <span>
+                    Pembaruan Terakhir: <strong style={{ color: 'var(--text-secondary)' }}>{lastUpdated} WIB</strong>
+                  </span>
+                </div>
               </div>
-              <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                Total <strong>{campaigns.length}</strong> Kampanye Terdata
-              </span>
-            </div>
-            
-            <CampaignTable 
-              campaigns={campaigns} 
-              dateRange={dateRange}
-              loading={campaignsLoading}
-            />
-          </section>
+
+              {/* KPI Scorecards Grid */}
+              <section aria-label="KPI Ringkasan Iklan">
+                <KpiGrid totals={calculatedTotals} />
+              </section>
+
+              {/* Interactive Trends Chart */}
+              <section aria-label="Grafik Tren Iklan">
+                <AdsCharts chartData={chartData} />
+              </section>
+
+              {/* Campaign Product Table with Filter & Evaluasi */}
+              <section aria-label="Tabel Kampanye Iklan Produk">
+                <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Layers size={18} style={{ color: 'var(--color-brand-primary)' }} />
+                    <h3 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.02em' }}>
+                      Daftar Kinerja Campaign Iklan Produk
+                    </h3>
+                    <span className="badge" style={{ backgroundColor: 'rgba(238, 77, 45, 0.12)', color: 'var(--color-brand-primary)', border: '1px solid rgba(238, 77, 45, 0.25)', fontSize: '11px', padding: '3px 8px' }}>
+                      📅 {dateRange?.label || '1 Bulan Terakhir'}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                    Total <strong>{campaigns.length}</strong> Kampanye Terdata
+                  </span>
+                </div>
+                
+                <CampaignTable 
+                  campaigns={campaigns} 
+                  dateRange={dateRange}
+                  loading={campaignsLoading}
+                />
+              </section>
+            </>
+          )}
         </main>
       </div>
 

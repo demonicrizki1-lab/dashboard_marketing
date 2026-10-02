@@ -57,8 +57,11 @@ export default function CampaignTable({ campaigns = [], dateRange, loading = fal
       }
 
       // Eval filter
-      if (selectedEval !== 'all' && (c.evaluation?.type || '').toLowerCase() !== selectedEval) {
-        return false;
+      if (selectedEval !== 'all') {
+        const evalKey = (c.evaluation?.statusKey || c.evaluation?.type || '').toLowerCase();
+        if (evalKey !== selectedEval) {
+          return false;
+        }
       }
 
       // Search query
@@ -271,7 +274,14 @@ export default function CampaignTable({ campaigns = [], dateRange, loading = fal
           onClick={() => { setSelectedEval('winning'); setPage(1); }}
           style={{ padding: '3px 8px', fontSize: '11px' }}
         >
-          🏆 Winning
+          🏆 Winning (CPR ≤ 25%)
+        </button>
+        <button
+          className={`preset-btn ${selectedEval === 'acquisition' ? 'active' : ''}`}
+          onClick={() => { setSelectedEval('acquisition'); setPage(1); }}
+          style={{ padding: '3px 8px', fontSize: '11px' }}
+        >
+          🎯 Toleransi Akuisisi (CAC ≤ 40%)
         </button>
         <button
           className={`preset-btn ${selectedEval === 'boncos' ? 'active' : ''}`}
@@ -279,6 +289,13 @@ export default function CampaignTable({ campaigns = [], dateRange, loading = fal
           style={{ padding: '3px 8px', fontSize: '11px' }}
         >
           ⚠️ Boncos
+        </button>
+        <button
+          className={`preset-btn ${selectedEval === 'testing' ? 'active' : ''}`}
+          onClick={() => { setSelectedEval('testing'); setPage(1); }}
+          style={{ padding: '3px 8px', fontSize: '11px' }}
+        >
+          ⏳ Testing
         </button>
         <button
           className={`preset-btn ${selectedEval === 'potential' ? 'active' : ''}`}

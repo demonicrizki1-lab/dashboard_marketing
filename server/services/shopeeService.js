@@ -47,55 +47,9 @@ function getLocalCampaigns() {
 }
 
 // Helper evaluasi performa campaign
-function evaluateCampaign(report) {
-  const cost = (report.cost || 0) / 100000;
-  const gmv = (report.broad_gmv || 0) / 100000;
-  const orders = report.broad_order || 0;
-  const roi = report.broad_roi || (cost > 0 ? gmv / cost : 0);
-  const ctr = report.ctr || 0;
-  const atc = report.atc || 0;
-
-  if (roi >= 4.0 && orders > 0) {
-    return {
-      statusKey: 'winning',
-      label: '🏆 Winning',
-      color: '#10B981',
-      badgeClass: 'badge-winning',
-      advice: 'Super Untung! Pertahankan dan pertimbangkan tambah budget.'
-    };
-  } else if (cost >= 30000 && orders === 0) {
-    return {
-      statusKey: 'boncos',
-      label: '⚠️ Boncos',
-      color: '#EF4444',
-      badgeClass: 'badge-boncos',
-      advice: 'Biaya tinggi tanpa penjualan. Segera evaluasi kata kunci atau jeda.'
-    };
-  } else if (orders > 0) {
-    return {
-      statusKey: 'profit',
-      label: '✅ Profit',
-      color: '#3B82F6',
-      badgeClass: 'badge-profit',
-      advice: 'Iklan menghasilkan penjualan secara stabil.'
-    };
-  } else if (ctr >= 0.025 || atc > 0) {
-    return {
-      statusKey: 'potential',
-      label: '🌱 Potensial',
-      color: '#F59E0B',
-      badgeClass: 'badge-potential',
-      advice: 'Banyak klik / masuk keranjang. Optimalkan harga dan promo produk.'
-    };
-  } else {
-    return {
-      statusKey: 'monitoring',
-      label: '⚪ Pemantauan',
-      color: '#9CA3AF',
-      badgeClass: 'badge-monitoring',
-      advice: 'Traffic masih rendah. Berikan waktu untuk mengumpulkan data.'
-    };
-  }
+function evaluateCampaign(report, campaignState = 'ongoing', productEconomics = null) {
+  const { evaluateCampaignWithEconomics } = require('./productService');
+  return evaluateCampaignWithEconomics(report, campaignState, productEconomics);
 }
 
 // 1. Cek Info Toko (Health Check)
@@ -213,6 +167,24 @@ function getFormattedCampaigns(rawJson, options = {}) {
   const data = rawJson?.data || {};
   const entries = data.entry_list || [];
 
+  const marginsMap = (() => {
+    try {
+      const { getLocalMargins, getLocalProducts, calculateUnitEconomics } = require('./productService');
+      const rawProducts = getLocalProducts()?.data?.products || [];
+      const margins = getLocalMargins();
+      const map = {};
+      rawProducts.forEach(p => {
+        const itemId = String(p.id);
+        const marginConfig = margins[itemId] || {};
+        const repPrice = Number(p.price_detail?.selling_price_min || p.price_detail?.price_min || 0);
+        map[itemId] = calculateUnitEconomics(repPrice, marginConfig);
+      });
+      return map;
+    } catch (e) {
+      return {};
+    }
+  })();
+
   let list = entries.map(item => {
     const r = item.report || {};
     const cost = (r.cost || 0) / 100000;
@@ -222,7 +194,9 @@ function getFormattedCampaigns(rawJson, options = {}) {
     const clicks = r.click || 0;
     const impressions = r.impression || 0;
     const roi = r.broad_roi || (cost > 0 ? gmv / cost : 0);
-    const evaluation = evaluateCampaign(r);
+    const itemId = String(item.manual_product_ads?.item_id || item.item_id || '');
+    const productEconomics = marginsMap[itemId] || null;
+    const evaluation = evaluateCampaign(r, item.state, productEconomics);
 
     return {
       campaignId: item.campaign?.campaign_id,
