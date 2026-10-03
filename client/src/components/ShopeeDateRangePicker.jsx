@@ -8,30 +8,14 @@ const MONTH_NAMES = [
 
 const WEEKDAY_NAMES = ['M', 'S', 'S', 'R', 'K', 'J', 'S']; // Minggu, Senin, Selasa, Rabu, Kamis, Jumat, Sabtu
 
-// Format Date to YYYY-MM-DD
-const toDateKey = (date) => {
-  if (!date) return '';
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-};
-
-// Format Date for Display (DD/MM/YYYY)
-const formatDisplayDate = (date) => {
-  if (!date) return '';
-  const d = String(date.getDate()).padStart(2, '0');
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const y = date.getFullYear();
-  return `${d}/${m}/${y}`;
-};
+import { toDateKey, formatDisplayDate, getTodayGMT7 } from '../utils/dateUtils';
 
 export default function ShopeeDateRangePicker({ dateRange, onChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
-  // Today reference
-  const today = useMemo(() => new Date(2026, 9, 2), []); // 2 Oktober 2026
+  // Today reference based on GMT+7 (Asia/Jakarta)
+  const today = useMemo(() => getTodayGMT7(), []);
 
   // Internal selection state
   const [selectedPreset, setSelectedPreset] = useState(dateRange?.presetKey || '1_month');
@@ -47,13 +31,27 @@ export default function ShopeeDateRangePicker({ dateRange, onChange }) {
   });
   const [hoverDate, setHoverDate] = useState(null);
 
-  // Left calendar view: default Oktober 2026
-  const [viewYear, setViewYear] = useState(2026);
-  const [viewMonth, setViewMonth] = useState(9); // 9 = Oktober (0-indexed)
+  // Left calendar view: default ke bulan & tahun tanggal terpilih / hari ini
+  const [viewYear, setViewYear] = useState(() => today.getFullYear());
+  const [viewMonth, setViewMonth] = useState(() => today.getMonth());
 
-  // Right calendar view: November 2026
+  // Right calendar view: Bulan berikutnya
   const rightMonth = (viewMonth + 1) % 12;
   const rightYear = viewMonth === 11 ? viewYear + 1 : viewYear;
+
+  // Sync state when datepicker is opened
+  useEffect(() => {
+    if (isOpen) {
+      if (dateRange?.startDate) setTempStart(new Date(dateRange.startDate + 'T00:00:00'));
+      if (dateRange?.endDate) {
+        const endD = new Date(dateRange.endDate + 'T00:00:00');
+        setTempEnd(endD);
+        setViewYear(endD.getFullYear());
+        setViewMonth(endD.getMonth());
+      }
+      if (dateRange?.presetKey) setSelectedPreset(dateRange.presetKey);
+    }
+  }, [isOpen, dateRange]);
 
   // Preset definitions matching Shopee Seller Center
   const presets = [

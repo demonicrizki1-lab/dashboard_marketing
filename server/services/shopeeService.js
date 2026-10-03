@@ -311,34 +311,48 @@ async function syncLiveFromShopee() {
     throw new Error('Kredensial Shopee belum dikonfigurasi.');
   }
 
-  const commonHeaders = {
+  // Helper membuat headers lengkap sesuai Akamai Bot Manager
+  const getShopeeHeaders = (startTime, endTime) => ({
     'accept': 'application/json, text/plain, */*',
     'accept-language': 'en-US,en;q=0.9,id;q=0.8',
     'content-type': 'application/json;charset=UTF-8',
     'cookie': config.cookie,
     'origin': 'https://seller.shopee.co.id',
-    'referer': 'https://seller.shopee.co.id/portal/marketing/pas',
+    'priority': 'u=1, i',
+    'referer': `https://seller.shopee.co.id/portal/marketing/pas/index?type=new_cpc_homepage&from=${startTime || 1788282000}&to=${endTime || 1790960399}&group=last_month&offset=600`,
     'sc-fe-session': config.scFeSession || 'C62425B4417CEC63',
     'sc-fe-ver': config.scFeVer || '21.167990',
+    'sec-ch-ua': '"Chromium";v="154", "Google Chrome";v="154", "Not A(Brand";v="99"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
     'user-agent': config.userAgent || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36',
     'af-ac-enc-dat': config.afAcEncDat || '',
     'af-ac-enc-sz-token': config.afAcEncSzToken || ''
-  };
+  });
+
+  // Helper hitung rentang default GMT+7 (30 hari terakhir s/d hari ini 23:59:59)
+  const nowGmt7 = new Date(Date.now() + 7 * 3600 * 1000);
+  const todayStr = nowGmt7.toISOString().split('T')[0];
+  const defaultEndTime = Math.floor(new Date(todayStr + 'T23:59:59+07:00').getTime() / 1000);
+  const defaultStartTime = Math.floor(new Date(todayStr + 'T00:00:00+07:00').getTime() / 1000) - 30 * 86400;
 
   // 1. Fetch Time Graph
   const timeGraphUrl = `https://seller.shopee.co.id/api/pas/v1/report/get_time_graph/?SPC_CDS=${config.spcCds}&SPC_CDS_VER=${config.spcCdsVer || '2'}`;
   const timeGraphPayload = {
     agg_interval: 96,
     campaign_type: "product_homepage_v2",
-    start_time: 1788282000,
-    end_time: 1790960399,
+    start_time: defaultStartTime,
+    end_time: defaultEndTime,
     need_roi_target_setting: false,
     filter_params: { campaign_type: "new_cpc_homepage" }
   };
 
   const resGraph = await fetch(timeGraphUrl, {
     method: 'POST',
-    headers: commonHeaders,
+    headers: getShopeeHeaders(defaultStartTime, defaultEndTime),
     body: JSON.stringify(timeGraphPayload)
   });
   const jsonGraph = await resGraph.json();
@@ -351,8 +365,8 @@ async function syncLiveFromShopee() {
   // 2. Fetch Campaign Query (Limit 100 agar 66 produk terambil semua)
   const campaignUrl = `https://seller.shopee.co.id/api/pas/v1/homepage/query/?SPC_CDS=${config.spcCds}&SPC_CDS_VER=${config.spcCdsVer || '2'}`;
   const campaignPayload = {
-    start_time: 1788282000,
-    end_time: 1790960399,
+    start_time: defaultStartTime,
+    end_time: defaultEndTime,
     filter_list: [{ campaign_type: "product_homepage_v3", state: "all", search_term: "", is_valid_rebate_only: false }],
     offset: 0,
     limit: 100,
@@ -361,7 +375,7 @@ async function syncLiveFromShopee() {
 
   const resCamp = await fetch(campaignUrl, {
     method: 'POST',
-    headers: commonHeaders,
+    headers: getShopeeHeaders(defaultStartTime, defaultEndTime),
     body: JSON.stringify(campaignPayload)
   });
   const jsonCamp = await resCamp.json();
@@ -387,15 +401,22 @@ async function fetchLiveCampaigns(startTime, endTime) {
   if (!config.cookie || !config.spcCds) return null;
 
   const url = `https://seller.shopee.co.id/api/pas/v1/homepage/query/?SPC_CDS=${config.spcCds}&SPC_CDS_VER=${config.spcCdsVer || '2'}`;
-  const commonHeaders = {
+  const headers = {
     'accept': 'application/json, text/plain, */*',
     'accept-language': 'en-US,en;q=0.9,id;q=0.8',
     'content-type': 'application/json;charset=UTF-8',
     'cookie': config.cookie,
     'origin': 'https://seller.shopee.co.id',
-    'referer': 'https://seller.shopee.co.id/portal/marketing/pas',
+    'priority': 'u=1, i',
+    'referer': `https://seller.shopee.co.id/portal/marketing/pas/index?type=new_cpc_homepage&from=${startTime}&to=${endTime}&group=last_month&offset=600`,
     'sc-fe-session': config.scFeSession || 'C62425B4417CEC63',
     'sc-fe-ver': config.scFeVer || '21.167990',
+    'sec-ch-ua': '"Chromium";v="154", "Google Chrome";v="154", "Not A(Brand";v="99"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
     'user-agent': config.userAgent || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36',
     'af-ac-enc-dat': config.afAcEncDat || '',
     'af-ac-enc-sz-token': config.afAcEncSzToken || ''
@@ -413,7 +434,7 @@ async function fetchLiveCampaigns(startTime, endTime) {
   try {
     const res = await fetch(url, {
       method: 'POST',
-      headers: commonHeaders,
+      headers,
       body: JSON.stringify(payload)
     });
     const json = await res.json();
@@ -430,8 +451,10 @@ async function fetchLiveCampaigns(startTime, endTime) {
 async function getCampaignsData(options = {}) {
   const { startDate, endDate } = options;
 
-  let startTime = 1788282000;
-  let endTime = 1790960399;
+  const nowGmt7 = new Date(Date.now() + 7 * 3600 * 1000);
+  const todayStr = nowGmt7.toISOString().split('T')[0];
+  let startTime = Math.floor(new Date(todayStr + 'T00:00:00+07:00').getTime() / 1000) - 30 * 86400;
+  let endTime = Math.floor(new Date(todayStr + 'T23:59:59+07:00').getTime() / 1000);
 
   if (startDate) {
     startTime = Math.floor(new Date(startDate + 'T00:00:00+07:00').getTime() / 1000);
@@ -467,15 +490,22 @@ async function fetchLiveTimeGraph(startTime, endTime) {
   if (!config.cookie || !config.spcCds) return null;
 
   const url = `https://seller.shopee.co.id/api/pas/v1/report/get_time_graph/?SPC_CDS=${config.spcCds}&SPC_CDS_VER=${config.spcCdsVer || '2'}`;
-  const commonHeaders = {
+  const headers = {
     'accept': 'application/json, text/plain, */*',
     'accept-language': 'en-US,en;q=0.9,id;q=0.8',
     'content-type': 'application/json;charset=UTF-8',
     'cookie': config.cookie,
     'origin': 'https://seller.shopee.co.id',
-    'referer': 'https://seller.shopee.co.id/portal/marketing/pas',
+    'priority': 'u=1, i',
+    'referer': `https://seller.shopee.co.id/portal/marketing/pas/index?type=new_cpc_homepage&from=${startTime}&to=${endTime}&group=last_month&offset=600`,
     'sc-fe-session': config.scFeSession || 'C62425B4417CEC63',
     'sc-fe-ver': config.scFeVer || '21.167990',
+    'sec-ch-ua': '"Chromium";v="154", "Google Chrome";v="154", "Not A(Brand";v="99"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
     'user-agent': config.userAgent || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36',
     'af-ac-enc-dat': config.afAcEncDat || '',
     'af-ac-enc-sz-token': config.afAcEncSzToken || ''
@@ -493,7 +523,7 @@ async function fetchLiveTimeGraph(startTime, endTime) {
   try {
     const res = await fetch(url, {
       method: 'POST',
-      headers: commonHeaders,
+      headers,
       body: JSON.stringify(payload)
     });
     const json = await res.json();
@@ -510,8 +540,10 @@ async function fetchLiveTimeGraph(startTime, endTime) {
 async function getTimeGraphData(options = {}) {
   const { startDate, endDate } = options;
 
-  let startTime = 1788282000;
-  let endTime = 1790960399;
+  const nowGmt7 = new Date(Date.now() + 7 * 3600 * 1000);
+  const todayStr = nowGmt7.toISOString().split('T')[0];
+  let startTime = Math.floor(new Date(todayStr + 'T00:00:00+07:00').getTime() / 1000) - 30 * 86400;
+  let endTime = Math.floor(new Date(todayStr + 'T23:59:59+07:00').getTime() / 1000);
 
   if (startDate) {
     startTime = Math.floor(new Date(startDate + 'T00:00:00+07:00').getTime() / 1000);
@@ -569,6 +601,31 @@ async function getTimeGraphData(options = {}) {
         timeSeries: filtered,
         isLiveFiltered: false,
         timeWindow: { startTime, endTime, startDate, endDate }
+      };
+    } else {
+      return {
+        summary: {
+          cost: 0,
+          totalCost: 0,
+          broad_gmv: 0,
+          totalBroadGmv: 0,
+          broad_order: 0,
+          totalOrders: 0,
+          click: 0,
+          totalClicks: 0,
+          impression: 0,
+          totalImpressions: 0,
+          broad_cart: 0,
+          totalAtc: 0,
+          roas: 0,
+          ctr: 0,
+          cpc: 0,
+          avgCpc: 0
+        },
+        timeSeries: [],
+        isLiveFiltered: false,
+        timeWindow: { startTime, endTime, startDate, endDate },
+        notice: 'Data untuk rentang tanggal ini belum ada di cache offline.'
       };
     }
   }

@@ -7,6 +7,7 @@ import CampaignTable from './components/CampaignTable';
 import SettingsModal from './components/SettingsModal';
 import ShopeeDateRangePicker from './components/ShopeeDateRangePicker';
 import ProductSkuManager from './components/ProductSkuManager';
+import { getDefaultDateRange } from './utils/dateUtils';
 import { 
   Calendar, 
   Sparkles, 
@@ -31,12 +32,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [dateRange, setDateRange] = useState({
-    startDate: '2026-09-02',
-    endDate: '2026-10-02',
-    label: '1 Bulan Terakhir (GMT+7)',
-    presetKey: '1_month'
-  });
+  const [dateRange, setDateRange] = useState(getDefaultDateRange);
   const [activeModuleTab, setActiveModuleTab] = useState('module2');
   const [toast, setToast] = useState(null);
   const [campaignsLoading, setCampaignsLoading] = useState(false);

@@ -132,7 +132,7 @@ export default function SettingsModal({ isOpen, onClose, onSessionUpdated }) {
                 </div>
                 {result.storeInfo && (
                   <div style={{ fontSize: '11px', color: 'var(--text-primary)', marginTop: '4px' }}>
-                    Toko Terverifikasi: <strong>{result.storeInfo.shop_name}</strong> (Shop ID: {result.storeInfo.shop_id})
+                    Toko Terverifikasi: <strong>{result.storeInfo.shopName || result.storeInfo.shop_name}</strong> (Shop ID: {result.storeInfo.shopId || result.storeInfo.shop_id})
                   </div>
                 )}
                 {result.extracted && (
