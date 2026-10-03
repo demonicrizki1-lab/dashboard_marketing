@@ -1,0 +1,62 @@
+{
+  "mCode": "2026-03",
+  "year": 2026,
+  "monthIndex": 2,
+  "startTime": 1772298000,
+  "endTime": 1774976400,
+  "keyMetrics": {
+    "shop_pv": { "value": 2249, "chain_ratio": -0.3522465437788018 },
+    "shop_uv": { "value": 1112, "chain_ratio": -0.37352112676056337 },
+    "product_clicks": { "value": 1568, "chain_ratio": -0.33727810650887574 },
+    "hybrid_uv": { "value": 1336, "chain_ratio": -0.3339980059820538 },
+    "paid_gmv": { "value": 2350987, "chain_ratio": -0.04585908263165777 },
+    "place_gmv": { "value": 1903988, "chain_ratio": -0.5304561755513105 },
+    "paid_orders": { "value": 15, "chain_ratio": -0.11764705882352941 },
+    "place_orders": { "value": 13, "chain_ratio": -0.5185185185185185 },
+    "paid_sales_per_order": { "value": 156732.46666666667, "chain_ratio": 0.08135970635078801 },
+    "confirmed_gmv": { "value": 1641990, "chain_ratio": -0.5786501068136183 },
+    "confirmed_orders": { "value": 11, "chain_ratio": -0.5769230769230769 },
+    "confirmed_sales_per_order": { "value": 149271.81818181818, "chain_ratio": -0.004082070650370442 },
+    "shop_uv_to_confirmed_buyers_rate": { "value": 0.009892086330935251, "chain_ratio": -0.00362904042962813 },
+    "shop_uv_to_paid_buyers_rate": { "value": 0.013489208633093525, "chain_ratio": 0.00391174384436113 }
+  },
+  "traffic": {
+    "overview": {
+      "total_sales": 2350987,
+      "total_sales_pct_diff": -0.04585908263165777,
+      "paid_ads": 0,
+      "paid_ads_ratio": 0,
+      "product_card": 2350987,
+      "product_card_ratio": 1,
+      "video": 0,
+      "video_ratio": 0,
+      "affiliate": 0,
+      "affiliate_ratio": 0,
+      "live": 0,
+      "live_ratio": 0
+    },
+    "product_card": {
+      "total": {
+        "orders": 15,
+        "buyers": 15,
+        "sales_per_order": 156732.47,
+        "product_impressions": 2249,
+        "product_clicks": 1568,
+        "ctr": 0.697,
+        "unique_product_clicks": 1112,
+        "product_clicks_to_orders_rate": 0.009566
+      }
+    }
+  },
+  "rankings": {
+    "items": []
+  },
+  "orderPerf": {
+    "cancelled_sales": { "value": 0 },
+    "cancelled_orders": { "value": 0 },
+    "return_refund_sales": { "value": 0 },
+    "return_refund_orders": { "value": 0 }
+  },
+  "source": "Shopee Seller Center v3/dashboard/key-metrics",
+  "fetchedAt": "2026-10-03T14:15:00.000Z"
+}

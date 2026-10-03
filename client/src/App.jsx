@@ -7,6 +7,7 @@ import CampaignTable from './components/CampaignTable';
 import SettingsModal from './components/SettingsModal';
 import ShopeeDateRangePicker from './components/ShopeeDateRangePicker';
 import ProductSkuManager from './components/ProductSkuManager';
+import StoreOverview from './components/StoreOverview';
 import { getDefaultDateRange } from './utils/dateUtils';
 import { 
   Calendar, 
@@ -240,7 +241,10 @@ export default function App() {
 
         {/* Content Body */}
         <main className="content-body">
-          {activeModuleTab === 'module3' ? (
+          {activeModuleTab === 'module1' ? (
+            /* Modul 1: Dashboard Utama (Overview Toko - Lifetime) */
+            <StoreOverview showToast={showToast} storeInfo={storeInfo} />
+          ) : activeModuleTab === 'module3' ? (
             /* Modul 3: Master Data SKU & Kalkulator Margin */
             <ProductSkuManager showToast={showToast} />
           ) : (

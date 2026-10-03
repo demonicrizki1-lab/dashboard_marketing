@@ -23,6 +23,10 @@ const {
   getProductsWithMargins,
   saveProductMargin
 } = require('./services/productService');
+const {
+  getOverviewData,
+  syncOverviewLiveFromShopee
+} = require('./services/overviewService');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -183,6 +187,35 @@ app.post('/api/products/margin', (req, res) => {
     }
     const saved = saveProductMargin(itemId, marginData);
     res.json({ success: true, itemId, margin: saved });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 10. Modul 1: Dashboard Utama (Overview Toko - Lifetime & Traffic Sources)
+app.get('/api/overview', async (req, res) => {
+  try {
+    const { period = 'past30days', startTime, endTime, orderType = 'paid', fetchLive, type, startMonth, endMonth } = req.query;
+    const data = await getOverviewData({
+      period,
+      startTime: startTime ? Number(startTime) : undefined,
+      endTime: endTime ? Number(endTime) : undefined,
+      orderType,
+      fetchLive: fetchLive === 'true',
+      type,
+      startMonth,
+      endMonth
+    });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/overview/sync', async (req, res) => {
+  try {
+    const result = await syncOverviewLiveFromShopee();
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

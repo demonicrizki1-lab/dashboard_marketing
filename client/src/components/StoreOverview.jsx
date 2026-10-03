@@ -1,0 +1,1066 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import ShopeeDataCenterPicker from './ShopeeDataCenterPicker';
+import {
+  TrendingUp,
+  ShoppingBag,
+  Users,
+  CreditCard,
+  Eye,
+  MousePointer,
+  Percent,
+  Calendar,
+  Store,
+  RefreshCw,
+  Download,
+  AlertCircle,
+  ArrowUpRight,
+  ArrowDownRight,
+  Sparkles,
+  Layers,
+  Award,
+  Video,
+  Radio,
+  Search,
+  Megaphone,
+  CheckCircle2,
+  UserCheck,
+  Briefcase,
+  History,
+  Target,
+  ArrowRight
+} from 'lucide-react';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+} from 'chart.js';
+import { Line, Doughnut } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
+
+export default function StoreOverview({ showToast, storeInfo }) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
+  const [selectedPeriodObj, setSelectedPeriodObj] = useState({
+    id: '30 hari sebelumnya.',
+    period: 'past30days',
+    label: '30 hari sebelumnya.'
+  });
+  const [chartViewMode, setChartViewMode] = useState('monthly'); // 'monthly' | 'daily'
+  const [orderType, setOrderType] = useState('paid'); // 'paid' | 'confirmed'
+
+  // Fetch overview data from backend directly
+  const fetchOverview = async (periodObj = selectedPeriodObj, forceLive = false, currentOrderType = orderType) => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (periodObj?.period) params.set('period', periodObj.period);
+      if (periodObj?.type) params.set('type', periodObj.type);
+      if (periodObj?.startMonth) params.set('startMonth', periodObj.startMonth);
+      if (periodObj?.endMonth) params.set('endMonth', periodObj.endMonth);
+      if (periodObj?.startTime) params.set('startTime', String(periodObj.startTime));
+      if (periodObj?.endTime) params.set('endTime', String(periodObj.endTime));
+      params.set('orderType', currentOrderType);
+      if (forceLive) params.set('fetchLive', 'true');
+
+      const res = await fetch(`/api/overview?${params.toString()}`);
+      if (res.ok) {
+        const json = await res.json();
+        setData(json);
+      } else {
+        showToast && showToast('Gagal memuat data ringkasan toko.', 'error');
+      }
+    } catch (err) {
+      console.error('Error fetching overview:', err);
+      showToast && showToast('Terjadi kesalahan jaringan: ' + err.message, 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOrderTypeChange = (newType) => {
+    setOrderType(newType);
+    fetchOverview(selectedPeriodObj, false, newType);
+  };
+
+  useEffect(() => {
+    fetchOverview(selectedPeriodObj);
+  }, [selectedPeriodObj]);
+
+  // Live Sync from Shopee Data Center
+  const handleSyncLive = async () => {
+    setSyncing(true);
+    try {
+      const res = await fetch('/api/overview/sync', { method: 'POST' });
+      const result = await res.json();
+      if (res.ok && result.success) {
+        showToast && showToast('Sinkronisasi sukses! Data terbaru Shopee Data Center berhasil ditarik.', 'success');
+        setData(result.overview);
+      } else {
+        showToast && showToast(result.error || 'Gagal sinkronisasi data Shopee.', 'error');
+      }
+    } catch (err) {
+      showToast && showToast('Koneksi gagal: ' + err.message, 'error');
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  // Export to CSV helper
+  const handleExportCSV = () => {
+    if (!data) return;
+    const km = data.keyMetrics;
+    const bm = data.picBenchmark;
+    const rows = [
+      ['RINGKASAN EKSEKUTIF TOKO MONTURE OUTDOOR'],
+      ['Tanggal Pendaftaran Toko', data.storeProfile?.creationDate || '30 September 2024'],
+      ['Mulai Aktif Penjualan', data.storeProfile?.firstSalesDate || '07 Juli 2025'],
+      ['Total Omzet Sepanjang Masa (Lifetime)', data.lifetime?.revenueFormatted || 'Rp 0'],
+      ['Total Pesanan Selesai (Lifetime)', (data.lifetime?.orders || 0) + ' Pesanan'],
+      [],
+      ['KOMPARASI KINERJA MARKETING: PIC LAMA VS PIC BARU'],
+      ['Metrik', 'PIC Lama (Sep 2024 - Jul 2026)', 'PIC Baru (Agu 2026 - Saat ini)', 'Pertumbuhan (% Delta)'],
+      ['Rata-Rata Omzet / Bulan', bm?.picLama?.avgMonthlyRevenueFormatted, bm?.picBaru?.avgMonthlyRevenueFormatted, (bm?.deltas?.avgMonthlyRevenueGrowth >= 0 ? '+' : '') + bm?.deltas?.avgMonthlyRevenueGrowth + '%'],
+      ['Total Omzet Terkumpul', bm?.picLama?.totalRevenueFormatted, bm?.picBaru?.totalRevenueFormatted, '-'],
+      ['Rata-Rata Pesanan / Bulan', bm?.picLama?.avgMonthlyOrders + ' Pesanan', bm?.picBaru?.avgMonthlyOrders + ' Pesanan', (bm?.deltas?.avgMonthlyOrdersGrowth >= 0 ? '+' : '') + bm?.deltas?.avgMonthlyOrdersGrowth + '%'],
+      ['AOV (Nilai Belanja Rata-Rata)', bm?.picLama?.aovFormatted, bm?.picBaru?.aovFormatted, (bm?.deltas?.aovGrowth >= 0 ? '+' : '') + bm?.deltas?.aovGrowth + '%'],
+      ['Rasio Omzet Iklan (Paid Ads)', bm?.picLama?.adsRatio + '%', bm?.picBaru?.adsRatio + '%', (bm?.deltas?.adsRatioDiff >= 0 ? '+' : '') + bm?.deltas?.adsRatioDiff + '%'],
+      ['Rasio Omzet Organik', bm?.picLama?.organicRatio + '%', bm?.picBaru?.organicRatio + '%', '-'],
+      [],
+      ['7 METRIK PERFORMA PERIODE TERPILIH', 'NILAI', 'PERUBAHAN VS SEBELUMNYA'],
+      ['Total Penjualan Kotor (Total Sales)', km?.totalSales?.formatted, (km?.totalSales?.pctDiff >= 0 ? '+' : '') + km?.totalSales?.pctDiff.toFixed(2) + '%'],
+      ['Total Pesanan Berhasil (Confirmed Orders)', km?.confirmedOrders?.formatted, (km?.confirmedOrders?.pctDiff >= 0 ? '+' : '') + km?.confirmedOrders?.pctDiff.toFixed(2) + '%'],
+      ['Total Pembeli (Unique Buyers)', km?.uniqueBuyers?.formatted, (km?.uniqueBuyers?.pctDiff >= 0 ? '+' : '') + km?.uniqueBuyers?.pctDiff.toFixed(2) + '%'],
+      ['Rata-Rata Nilai Belanja (AOV)', km?.salesPerOrder?.formatted, (km?.salesPerOrder?.pctDiff >= 0 ? '+' : '') + km?.salesPerOrder?.pctDiff.toFixed(2) + '%'],
+      ['Total Tayangan Produk (Impressions)', km?.impressions?.formatted, (km?.impressions?.pctDiff >= 0 ? '+' : '') + km?.impressions?.pctDiff.toFixed(2) + '%'],
+      ['Total Klik Produk (Clicks)', km?.clicks?.formatted, (km?.clicks?.pctDiff >= 0 ? '+' : '') + km?.clicks?.pctDiff.toFixed(2) + '%'],
+      ['Rasio Klik (CTR)', km?.ctr?.formatted, (km?.ctr?.pctDiff >= 0 ? '+' : '') + km?.ctr?.pctDiff.toFixed(2) + '%'],
+      [],
+      ['TOP 5 PRODUK TERLARIS', 'OMZET', 'PESANAN', 'UNIT', 'CTR', 'CR (%)']
+    ];
+
+    (data.topProducts || []).forEach(p => {
+      rows.push([p.name, p.salesFormatted, p.orders, p.units, p.ctr, p.conversionRate]);
+    });
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + rows.map(e => e.map(i => `"${String(i || '').replace(/"/g, '""')}"`).join(',')).join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `Ringkasan_Toko_Monture_Outdoor_${selectedPeriodObj?.label || 'export'}_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast && showToast('Laporan CSV berhasil diunduh!', 'success');
+  };
+
+  // Helper render delta badge
+  const renderDelta = (pctDiff, reverse = false) => {
+    if (pctDiff === undefined || pctDiff === null) return null;
+    const isPositive = pctDiff > 0;
+    const isGood = reverse ? !isPositive : isPositive;
+    const color = isGood ? 'var(--color-success, #10B981)' : 'var(--color-danger, #EF4444)';
+    const bg = isGood ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)';
+    const Icon = isPositive ? ArrowUpRight : ArrowDownRight;
+
+    return (
+      <span
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '2px',
+          fontSize: '11px',
+          fontWeight: 700,
+          color,
+          backgroundColor: bg,
+          padding: '2px 6px',
+          borderRadius: '6px',
+          lineHeight: 1
+        }}
+        title="Perubahan dibanding periode sebelumnya"
+      >
+        <Icon size={12} strokeWidth={2.5} />
+        {Math.abs(pctDiff).toFixed(1)}%
+      </span>
+    );
+  };
+
+  // 1. Chart Data: Tren Omzet Historis Toko atau Harian dengan Penanda Transisi PIC
+  const lineChartData = useMemo(() => {
+    // Mode Harian jika dipilih dan ada data harian
+    if (chartViewMode === 'daily' && data?.dailyTrendPoints && data.dailyTrendPoints.length > 0) {
+      const labels = data.dailyTrendPoints.map(p => p.date);
+      const revenues = data.dailyTrendPoints.map(p => p.revenue);
+      return {
+        labels,
+        datasets: [
+          {
+            label: 'Omzet Harian (Real Shopee)',
+            data: revenues,
+            borderColor: '#EE4D2D',
+            backgroundColor: 'rgba(238, 77, 45, 0.12)',
+            fill: true,
+            tension: 0.25,
+            borderWidth: 2.8,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            pointBackgroundColor: '#EE4D2D',
+            pointBorderColor: '#FFFFFF',
+            pointBorderWidth: 1.5
+          }
+        ]
+      };
+    }
+
+    if (!data?.historicalTrends) return null;
+    const labels = data.historicalTrends.map(t => t.month);
+    const revenues = data.historicalTrends.map(t => t.revenue);
+    const adsRev = data.historicalTrends.map(t => t.adsRevenue);
+    const orgRev = data.historicalTrends.map(t => t.organicRevenue);
+
+    // Warna point berbeda antara PIC Lama (Biru) vs PIC Baru (Coral Shopee)
+    const pointColors = data.historicalTrends.map(t => t.pic === 'BARU' ? '#EE4D2D' : '#3B82F6');
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Total Omzet (GMV)',
+          data: revenues,
+          borderColor: '#EE4D2D',
+          backgroundColor: 'rgba(238, 77, 45, 0.12)',
+          fill: true,
+          tension: 0.38,
+          borderWidth: 2.8,
+          pointRadius: 4.5,
+          pointHoverRadius: 7,
+          pointBackgroundColor: pointColors,
+          pointBorderColor: '#FFFFFF',
+          pointBorderWidth: 1.5
+        },
+        {
+          label: 'Omzet Iklan (Paid Ads)',
+          data: adsRev,
+          borderColor: '#F97316',
+          backgroundColor: 'transparent',
+          borderDash: [5, 4],
+          tension: 0.38,
+          borderWidth: 1.8,
+          pointRadius: 2
+        },
+        {
+          label: 'Omzet Organik & Konten',
+          data: orgRev,
+          borderColor: '#10B981',
+          backgroundColor: 'transparent',
+          borderDash: [3, 3],
+          tension: 0.38,
+          borderWidth: 1.8,
+          pointRadius: 2
+        }
+      ]
+    };
+  }, [data, chartViewMode]);
+
+  // 2. Chart Data: Donut Chart Sumber Omzet
+  const doughnutChartData = useMemo(() => {
+    if (!data?.channelBreakdown) return null;
+    const cb = data.channelBreakdown;
+    return {
+      labels: ['Organik & Etalase', 'Iklan Shopee', 'Shopee Video', 'Affiliate', 'Live Stream'],
+      datasets: [
+        {
+          data: [cb.product_card.sales, cb.paid_ads.sales, cb.video.sales, cb.affiliate.sales, cb.live.sales],
+          backgroundColor: [cb.product_card.color, cb.paid_ads.color, cb.video.color, cb.affiliate.color, cb.live.color],
+          borderColor: '#0B0F19',
+          borderWidth: 2.5,
+          hoverOffset: 6
+        }
+      ]
+    };
+  }, [data]);
+
+  if (loading && !data) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', gap: '16px' }}>
+        <RefreshCw size={36} className="animate-spin" style={{ color: 'var(--color-brand-primary)' }} />
+        <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Menghubungkan ke Shopee Data Center API...</span>
+      </div>
+    );
+  }
+
+  const km = data?.keyMetrics;
+  const cb = data?.channelBreakdown;
+  const lp = data?.lifetime;
+  const profile = data?.storeProfile;
+  const bm = data?.picBenchmark;
+
+  return (
+    <div className="store-overview-container" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      
+      {/* 1. Header Filter Bar (Menggunakan ShopeeDataCenterPicker Replika 1:1) */}
+      <div
+        className="glass-card"
+        style={{
+          padding: '16px 20px',
+          borderRadius: '14px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '16px',
+          border: '1px solid rgba(255,255,255,0.08)'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+          {/* Shopee Data Center Dropdown Picker (Termasuk Status Pesanan Dropdown Replika Seller Center) */}
+          <ShopeeDataCenterPicker
+            selectedPeriod={selectedPeriodObj}
+            onChange={(newPeriod) => {
+              setSelectedPeriodObj(newPeriod);
+            }}
+            orderType={orderType}
+            onOrderTypeChange={handleOrderTypeChange}
+          />
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <button
+            onClick={handleSyncLive}
+            disabled={syncing}
+            className="btn-secondary"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', padding: '7px 14px', borderRadius: '8px' }}
+            title="Tarik data live terkini dari Shopee Data Center"
+          >
+            <RefreshCw size={14} className={syncing ? 'animate-spin' : ''} />
+            <span>{syncing ? 'Menyinkron...' : 'Live Sync'}</span>
+          </button>
+
+          <button
+            onClick={handleExportCSV}
+            className="btn-secondary"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', padding: '7px 14px', borderRadius: '8px' }}
+            title="Unduh rekapitulasi performa ke CSV"
+          >
+            <Download size={14} />
+            <span>Export CSV</span>
+          </button>
+        </div>
+      </div>
+
+      {/* 2. Executive Store Milestone & Lifetime Profile */}
+      <div
+        className="glass-card"
+        style={{
+          padding: '22px',
+          borderRadius: '16px',
+          background: 'linear-gradient(135deg, rgba(238, 77, 45, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%)',
+          border: '1px solid rgba(238, 77, 45, 0.25)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div
+              style={{
+                width: '46px',
+                height: '46px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, var(--color-brand-primary) 0%, #D83B1B 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                boxShadow: '0 8px 16px rgba(238, 77, 45, 0.3)'
+              }}
+            >
+              <Store size={24} strokeWidth={2.2} />
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                <h2 style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em', margin: 0 }}>
+                  {profile?.storeName || 'Monture outdoor'}
+                </h2>
+                <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.3)', fontSize: '11px', padding: '2px 8px' }}>
+                  🟢 {profile?.status || 'Aktif'}
+                </span>
+                <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#60A5FA', border: '1px solid rgba(59, 130, 246, 0.3)', fontSize: '11px', padding: '2px 8px' }}>
+                  ID: {profile?.shopId || '1575219792'}
+                </span>
+              </div>
+              <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '4px 0 0 0', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <span>Daftar Toko: <strong style={{ color: 'var(--text-primary)' }}>{profile?.creationDate || '30 September 2024'}</strong></span>
+                <span>•</span>
+                <span>Mulai Penjualan: <strong style={{ color: '#10B981' }}>{profile?.firstSalesDate || '07 Juli 2025'}</strong></span>
+                <span>•</span>
+                <span>Fase Aktif: <strong style={{ color: 'var(--text-primary)' }}>{profile?.activeMonths || 16} Bulan</strong></span>
+              </p>
+            </div>
+          </div>
+
+          {/* Lifetime Metric Cards */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
+              <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)', fontWeight: 600 }}>
+                Total Omzet Sepanjang Masa (Lifetime):
+              </span>
+              <span style={{ fontSize: '20px', fontWeight: 800, color: 'var(--color-brand-primary)', fontFamily: 'var(--font-mono)' }}>
+                {lp?.revenueFormatted || 'Rp 0'}
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
+              <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)', fontWeight: 600 }}>
+                Total Pesanan Selesai:
+              </span>
+              <span style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                {(lp?.orders || 0).toLocaleString('id-ID')} <small style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Pesanan</small>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. MODUL KHUSUS: PIC MARKETING PERFORMANCE BENCHMARK (HEAD-TO-HEAD) */}
+      <section aria-label="Komparasi Kinerja PIC Marketing">
+        <div
+          className="glass-card"
+          style={{
+            padding: '24px',
+            borderRadius: '16px',
+            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.95) 100%)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '18px'
+          }}
+        >
+          {/* Header Komparasi */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', borderBottom: '1px solid rgba(255,255,255,0.08)', pb: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Briefcase size={20} style={{ color: '#38BDF8' }} />
+              <div>
+                <h3 style={{ fontSize: '16px', fontWeight: 800, letterSpacing: '-0.02em', margin: 0 }}>
+                  Evaluasi Kinerja Marketing: PIC Lama vs PIC Baru
+                </h3>
+                <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
+                  Tolok ukur performa rata-rata per bulan dan efisiensi strategi marketing kedua era.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#60A5FA', fontSize: '11px', padding: '3px 9px' }}>
+                👤 PIC Lama: Sep 2024 – Jul 2026
+              </span>
+              <ArrowRight size={14} style={{ color: 'var(--text-muted)' }} />
+              <span className="badge" style={{ backgroundColor: 'rgba(238, 77, 45, 0.15)', color: 'var(--color-brand-primary)', fontSize: '11px', padding: '3px 9px' }}>
+                ⚡ PIC Baru: Agu 2026 – Saat ini
+              </span>
+            </div>
+          </div>
+
+          {/* Cards Head-to-Head */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))', gap: '16px' }}>
+            
+            {/* Kartu Era PIC Lama */}
+            <div
+              style={{
+                backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                border: '1px solid rgba(59, 130, 246, 0.25)',
+                borderRadius: '12px',
+                padding: '18px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: '#60A5FA', textTransform: 'uppercase' }}>
+                  ERA PIC LAMA ({bm?.picLama?.activeMonths} Bulan Aktif)
+                </span>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                  {bm?.picLama?.periodLabel}
+                </span>
+              </div>
+
+              <div style={{ fontSize: '11px', color: '#94A3B8', fontStyle: 'italic', backgroundColor: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '6px' }}>
+                💡 Catatan: {bm?.picLama?.dormantLabel}. Data bulan Juli 2026 dihitung ke PIC Lama sebagai penutupan transisi.
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '4px' }}>
+                <div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Rata-Rata Omzet / Bulan:</span>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                    {bm?.picLama?.avgMonthlyRevenueFormatted}
+                  </div>
+                </div>
+                <div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Rata-Rata Order / Bulan:</span>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                    {bm?.picLama?.avgMonthlyOrders} <small style={{ fontSize: '11px', fontWeight: 500 }}>pesanan</small>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                <div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>AOV Rata-Rata:</span>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#CBD5E1', fontFamily: 'var(--font-mono)' }}>
+                    {bm?.picLama?.aovFormatted}
+                  </div>
+                </div>
+                <div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Rasio Iklan vs Organik:</span>
+                  <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#CBD5E1' }}>
+                    <span style={{ color: '#F97316' }}>{bm?.picLama?.adsRatio}%</span> / <span style={{ color: '#10B981' }}>{bm?.picLama?.organicRatio}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', paddingTop: '6px' }}>
+                Total Akumulasi Omzet: <strong style={{ color: 'var(--text-primary)' }}>{bm?.picLama?.totalRevenueFormatted}</strong> ({bm?.picLama?.totalOrders} Pesanan)
+              </div>
+            </div>
+
+            {/* Kartu Era PIC Baru */}
+            <div
+              style={{
+                backgroundColor: 'rgba(238, 77, 45, 0.05)',
+                border: '1px solid rgba(238, 77, 45, 0.3)',
+                borderRadius: '12px',
+                padding: '18px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--color-brand-primary)', textTransform: 'uppercase' }}>
+                  ERA PIC BARU ({bm?.picBaru?.activeMonths} Bulan Berjalan)
+                </span>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                  {bm?.picBaru?.periodLabel}
+                </span>
+              </div>
+
+              <div style={{ fontSize: '11px', color: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.08)', padding: '6px 10px', borderRadius: '6px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                🚀 Status Pertumbuhan Omzet: <strong>+{bm?.deltas?.avgMonthlyRevenueGrowth}%</strong> dibanding rata-rata bulanan PIC Lama.
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '4px' }}>
+                <div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Rata-Rata Omzet / Bulan:</span>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--color-brand-primary)', fontFamily: 'var(--font-mono)' }}>
+                    {bm?.picBaru?.avgMonthlyRevenueFormatted}
+                  </div>
+                </div>
+                <div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Rata-Rata Order / Bulan:</span>
+                  <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                    {bm?.picBaru?.avgMonthlyOrders} <small style={{ fontSize: '11px', fontWeight: 500 }}>pesanan</small>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                <div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>AOV Rata-Rata:</span>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#10B981', fontFamily: 'var(--font-mono)' }}>
+                    {bm?.picBaru?.aovFormatted} <small style={{ color: '#10B981', fontSize: '10px' }}>({bm?.deltas?.aovGrowth >= 0 ? '+' : ''}{bm?.deltas?.aovGrowth}%)</small>
+                  </div>
+                </div>
+                <div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Rasio Iklan vs Organik:</span>
+                  <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#CBD5E1' }}>
+                    <span style={{ color: '#F97316' }}>{bm?.picBaru?.adsRatio}%</span> / <span style={{ color: '#10B981' }}>{bm?.picBaru?.organicRatio}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', paddingTop: '6px' }}>
+                Total Akumulasi Omzet: <strong style={{ color: 'var(--text-primary)' }}>{bm?.picBaru?.totalRevenueFormatted}</strong> ({bm?.picBaru?.totalOrders} Pesanan)
+              </div>
+            </div>
+
+          </div>
+
+          {/* Delta Growth Score Summary */}
+          <div
+            style={{
+              padding: '12px 16px',
+              backgroundColor: 'rgba(255,255,255,0.03)',
+              borderRadius: '10px',
+              border: '1px solid rgba(255,255,255,0.06)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '12px',
+              fontSize: '12px'
+            }}
+          >
+            <span style={{ color: 'var(--text-muted)' }}>
+              Hasil Evaluasi PIC Baru:
+            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+              <span>Omzet/Bulan: <strong style={{ color: '#10B981' }}>+{bm?.deltas?.avgMonthlyRevenueGrowth}%</strong> 🟢</span>
+              <span>•</span>
+              <span>Pesanan/Bulan: <strong style={{ color: '#10B981' }}>+{bm?.deltas?.avgMonthlyOrdersGrowth}%</strong> 🟢</span>
+              <span>•</span>
+              <span>AOV Keranjang: <strong style={{ color: '#10B981' }}>+{bm?.deltas?.aovGrowth}%</strong> 🟢</span>
+              <span>•</span>
+              <span>Ketergantungan Iklan: <strong style={{ color: '#F97316' }}>+{bm?.deltas?.adsRatioDiff}%</strong> 🟡</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. 7 Metrik Kunci Utama (Traffic-Sources Key Metrics Grid) */}
+      <section aria-label="7 Metrik Kunci Performa Toko">
+        <div style={{ marginBottom: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Sparkles size={18} style={{ color: 'var(--color-brand-primary)' }} />
+            <h3 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
+              7 Metrik Kunci Performa Toko ({data?.customLabel || selectedPeriodObj?.label || '30 Hari Terakhir'})
+            </h3>
+          </div>
+          <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Sinkron langsung dari Shopee Data Center</span>
+        </div>
+
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '14px'
+          }}
+        >
+          {/* 1. Total Penjualan Kotor */}
+          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>1. Total Penjualan Kotor</span>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(238, 77, 45, 0.12)', color: 'var(--color-brand-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <TrendingUp size={16} />
+              </div>
+            </div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+              {km?.totalSales?.formatted || 'Rp 0'}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+              {renderDelta(km?.totalSales?.pctDiff)}
+            </div>
+          </div>
+
+          {/* 2. Total Pesanan Berhasil */}
+          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>2. Total Pesanan Berhasil</span>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.12)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <ShoppingBag size={16} />
+              </div>
+            </div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+              {km?.confirmedOrders?.formatted || '0 Pesanan'}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+              {renderDelta(km?.confirmedOrders?.pctDiff)}
+            </div>
+          </div>
+
+          {/* 3. Total Pembeli */}
+          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>3. Total Pembeli</span>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(59, 130, 246, 0.12)', color: '#60A5FA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Users size={16} />
+              </div>
+            </div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+              {km?.uniqueBuyers?.formatted || '0 Pembeli'}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+              {renderDelta(km?.uniqueBuyers?.pctDiff)}
+            </div>
+          </div>
+
+          {/* 4. Rata-Rata Nilai Belanja (AOV) */}
+          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>4. Nilai Belanja / Order (AOV)</span>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.12)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <CreditCard size={16} />
+              </div>
+            </div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+              {km?.salesPerOrder?.formatted || 'Rp 0'}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+              {renderDelta(km?.salesPerOrder?.pctDiff)}
+            </div>
+          </div>
+
+          {/* 5. Total Tayangan Produk */}
+          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>5. Total Tayangan Produk</span>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(139, 92, 246, 0.12)', color: '#8B5CF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Eye size={16} />
+              </div>
+            </div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+              {km?.impressions?.formatted || '0'}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+              {renderDelta(km?.impressions?.pctDiff)}
+            </div>
+          </div>
+
+          {/* 6. Total Klik Produk */}
+          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>6. Total Klik Produk</span>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(6, 182, 212, 0.12)', color: '#06B6D4', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <MousePointer size={16} />
+              </div>
+            </div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+              {km?.clicks?.formatted || '0'}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+              {renderDelta(km?.clicks?.pctDiff)}
+            </div>
+          </div>
+
+          {/* 7. Rasio Klik (CTR) */}
+          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>7. Rasio Klik (CTR)</span>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(236, 72, 153, 0.12)', color: '#EC4899', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Percent size={16} />
+              </div>
+            </div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+              {km?.ctr?.formatted || '0%'}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+              {renderDelta(km?.ctr?.pctDiff)}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Visualisasi Grafik: Tren Pertumbuhan Omzet + Donut Sumber Omzet */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', gap: '20px' }}>
+        
+        {/* Grafik Garis Tren Omzet Bulanan */}
+        <div className="glass-card" style={{ padding: '22px', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <TrendingUp size={18} style={{ color: 'var(--color-brand-primary)' }} />
+              <h3 style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
+                {chartViewMode === 'daily' && data?.dailyTrendPoints?.length > 0
+                  ? `Grafik Tren Harian (${data.customLabel || 'Bulan Terpilih'})`
+                  : 'Grafik Tren Omzet Toko (Sejak Berdiri)'}
+              </h3>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              {data?.dailyTrendPoints && data.dailyTrendPoints.length > 0 && (
+                <div style={{ display: 'flex', background: 'rgba(255,255,255,0.06)', borderRadius: '8px', padding: '3px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <button
+                    onClick={() => setChartViewMode('monthly')}
+                    style={{
+                      background: chartViewMode === 'monthly' ? 'var(--color-brand-primary)' : 'transparent',
+                      color: chartViewMode === 'monthly' ? '#fff' : 'var(--text-muted)',
+                      border: 'none',
+                      borderRadius: '6px',
+                      padding: '4px 10px',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    Tren Bulanan Toko
+                  </button>
+                  <button
+                    onClick={() => setChartViewMode('daily')}
+                    style={{
+                      background: chartViewMode === 'daily' ? 'var(--color-brand-primary)' : 'transparent',
+                      color: chartViewMode === 'daily' ? '#fff' : 'var(--text-muted)',
+                      border: 'none',
+                      borderRadius: '6px',
+                      padding: '4px 10px',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    Tren Harian ({data.dailyTrendPoints.length} Hari)
+                  </button>
+                </div>
+              )}
+              {chartViewMode === 'monthly' && (
+                <>
+                  <span className="badge" style={{ fontSize: '10.5px', background: 'rgba(59, 130, 246, 0.15)', color: '#60A5FA' }}>
+                    🔵 PIC Lama (s/d Jul 2026)
+                  </span>
+                  <span className="badge" style={{ fontSize: '10.5px', background: 'rgba(238, 77, 45, 0.15)', color: 'var(--color-brand-primary)' }}>
+                    🔴 PIC Baru (Agu 2026+)
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div style={{ height: '280px', position: 'relative' }}>
+            {lineChartData && (
+              <Line
+                data={lineChartData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                      labels: { color: '#94A3B8', font: { size: 11, family: 'Inter' }, boxWidth: 12, padding: 14 }
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: (ctx) => ` ${ctx.dataset.label}: Rp ${Number(ctx.raw || 0).toLocaleString('id-ID')}`
+                      }
+                    }
+                  },
+                  scales: {
+                    x: {
+                      grid: { color: 'rgba(255,255,255,0.04)' },
+                      ticks: { color: '#64748B', font: { size: 10 } }
+                    },
+                    y: {
+                      grid: { color: 'rgba(255,255,255,0.04)' },
+                      ticks: {
+                        color: '#64748B',
+                        font: { size: 10 },
+                        callback: (v) => `Rp ${(v / 1000000).toFixed(1)}M`
+                      }
+                    }
+                  }
+                }}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Ringkasan Sumber Omzet (Donut Chart) */}
+        <div className="glass-card" style={{ padding: '22px', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Layers size={18} style={{ color: '#8B5CF6' }} />
+              <h3 style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
+                Ringkasan Sumber Omzet (Kontribusi Channel)
+              </h3>
+            </div>
+            <span className="badge" style={{ fontSize: '11px', background: 'rgba(139, 92, 246, 0.15)', color: '#A78BFA' }}>
+              Pie / Donut
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', minHeight: '260px' }}>
+            <div style={{ width: '210px', height: '210px', position: 'relative' }}>
+              {doughnutChartData && (
+                <Doughnut
+                  data={doughnutChartData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: {
+                      legend: { display: false },
+                      tooltip: {
+                        callbacks: {
+                          label: (ctx) => ` ${ctx.label}: Rp ${Number(ctx.raw || 0).toLocaleString('id-ID')}`
+                        }
+                      }
+                    }
+                  }}
+                />
+              )}
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  pointerEvents: 'none'
+                }}
+              >
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Total Omzet</span>
+                <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                  Rp {(Number(km?.totalSales?.value || 0) / 1000000).toFixed(2)}M
+                </span>
+              </div>
+            </div>
+
+            {/* Channel Legend Strip */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, minWidth: '190px' }}>
+              {[
+                { label: 'Organik & Pencarian', color: cb?.product_card.color, val: cb?.product_card.sales, ratio: cb?.product_card.ratio },
+                { label: 'Iklan Shopee Ads', color: cb?.paid_ads.color, val: cb?.paid_ads.sales, ratio: cb?.paid_ads.ratio },
+                { label: 'Shopee Video', color: cb?.video.color, val: cb?.video.sales, ratio: cb?.video.ratio },
+                { label: 'Shopee Affiliate', color: cb?.affiliate.color, val: cb?.affiliate.sales, ratio: cb?.affiliate.ratio },
+                { label: 'Live Streaming', color: cb?.live.color, val: cb?.live.sales, ratio: cb?.live.ratio }
+              ].map((item, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: item.color }} />
+                    <span style={{ color: 'var(--text-secondary)' }}>{item.label}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <strong style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                      Rp {((item.val || 0) / 1000000).toFixed(2)}M
+                    </strong>
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)', width: '42px', textAlign: 'right' }}>
+                      ({(item.ratio || 0).toFixed(1)}%)
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 6. Top 5 Produk Terlaris Toko (Product-Rankings API) */}
+      <section aria-label="Peringkat 5 Produk Terlaris Toko">
+        <div className="glass-card" style={{ padding: '22px', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Award size={18} style={{ color: '#F59E0B' }} />
+              <h3 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
+                Top 5 Produk Terlaris Toko Monture Outdoor
+              </h3>
+            </div>
+            <span className="badge" style={{ backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#F59E0B', fontSize: '11px', padding: '3px 8px' }}>
+              🏆 Peringkat Penjualan Terkonfirmasi
+            </span>
+          </div>
+
+          <div style={{ overflowX: 'auto' }}>
+            <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12.5px' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', textAlign: 'left', color: 'var(--text-muted)' }}>
+                  <th style={{ padding: '10px 12px', width: '50px', textAlign: 'center' }}>Rank</th>
+                  <th style={{ padding: '10px 12px' }}>Produk</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'right' }}>Penjualan</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center' }}>Pesanan</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center' }}>Unit</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center' }}>Add to Cart</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center' }}>CTR</th>
+                  <th style={{ padding: '10px 12px', textAlign: 'center' }}>Konversi (CR)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(data?.topProducts || []).map((prod) => (
+                  <tr key={prod.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background 0.15s' }}>
+                    <td style={{ padding: '12px', textAlign: 'center' }}>
+                      <span
+                        style={{
+                          width: '24px',
+                          height: '24px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderRadius: '6px',
+                          fontSize: '12px',
+                          fontWeight: 800,
+                          backgroundColor: prod.rank === 1 ? 'rgba(245, 158, 11, 0.2)' : prod.rank === 2 ? 'rgba(148, 163, 184, 0.2)' : prod.rank === 3 ? 'rgba(205, 127, 50, 0.2)' : 'rgba(255,255,255,0.06)',
+                          color: prod.rank === 1 ? '#F59E0B' : prod.rank === 2 ? '#E2E8F0' : prod.rank === 3 ? '#D97706' : 'var(--text-muted)'
+                        }}
+                      >
+                        {prod.rank}
+                      </span>
+                    </td>
+                    <td style={{ padding: '12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        {prod.image ? (
+                          <img
+                            src={prod.image}
+                            alt={prod.name}
+                            style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.1)' }}
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                          />
+                        ) : (
+                          <div style={{ width: '42px', height: '42px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <ShoppingBag size={18} style={{ color: 'var(--text-muted)' }} />
+                          </div>
+                        )}
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                          <span style={{ fontWeight: 600, color: 'var(--text-primary)', maxWidth: '420px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {prod.name}
+                          </span>
+                          <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                            ID: {prod.id}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td style={{ padding: '12px', textAlign: 'right', fontWeight: 800, color: 'var(--color-brand-primary)', fontFamily: 'var(--font-mono)' }}>
+                      {prod.salesFormatted}
+                    </td>
+                    <td style={{ padding: '12px', textAlign: 'center', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
+                      {prod.orders}
+                    </td>
+                    <td style={{ padding: '12px', textAlign: 'center', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
+                      {prod.units}
+                    </td>
+                    <td style={{ padding: '12px', textAlign: 'center', fontWeight: 600, color: '#60A5FA', fontFamily: 'var(--font-mono)' }}>
+                      {prod.addToCart}
+                    </td>
+                    <td style={{ padding: '12px', textAlign: 'center', fontFamily: 'var(--font-mono)' }}>
+                      {prod.ctr}
+                    </td>
+                    <td style={{ padding: '12px', textAlign: 'center' }}>
+                      <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981', padding: '2px 8px', fontSize: '11px' }}>
+                        {prod.conversionRate}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  );
+}

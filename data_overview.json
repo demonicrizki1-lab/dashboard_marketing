@@ -1,0 +1,541 @@
+{
+  "period": "month",
+  "startTime": 1780246800,
+  "endTime": 1782838800,
+  "customLabel": "Bulan Juni 2026",
+  "lastUpdated": "2026-10-03T14:59:38.105Z",
+  "isRealShopeeData": true,
+  "storeProfile": {
+    "storeName": "Monture outdoor",
+    "shopId": "1575219792",
+    "creationDate": "30 September 2024",
+    "firstSalesDate": "7 Juli 2025",
+    "activeMonths": 15,
+    "status": "Aktif / Operasional"
+  },
+  "lifetime": {
+    "revenue": 43586515,
+    "revenueFormatted": "Rp 43.586.515",
+    "orders": 255,
+    "aov": 170928,
+    "aovFormatted": "Rp 170.928"
+  },
+  "dailyTrendPoints": [
+    {
+      "timestamp": 1780246800,
+      "date": "1 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1780333200,
+      "date": "2 Jun",
+      "revenue": 140999
+    },
+    {
+      "timestamp": 1780419600,
+      "date": "3 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1780506000,
+      "date": "4 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1780592400,
+      "date": "5 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1780678800,
+      "date": "6 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1780765200,
+      "date": "7 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1780851600,
+      "date": "8 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1780938000,
+      "date": "9 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1781024400,
+      "date": "10 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1781110800,
+      "date": "11 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1781197200,
+      "date": "12 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1781283600,
+      "date": "13 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1781370000,
+      "date": "14 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1781456400,
+      "date": "15 Jun",
+      "revenue": 140999
+    },
+    {
+      "timestamp": 1781542800,
+      "date": "16 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1781629200,
+      "date": "17 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1781715600,
+      "date": "18 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1781802000,
+      "date": "19 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1781888400,
+      "date": "20 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1781974800,
+      "date": "21 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1782061200,
+      "date": "22 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1782147600,
+      "date": "23 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1782234000,
+      "date": "24 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1782320400,
+      "date": "25 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1782406800,
+      "date": "26 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1782493200,
+      "date": "27 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1782579600,
+      "date": "28 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1782666000,
+      "date": "29 Jun",
+      "revenue": 0
+    },
+    {
+      "timestamp": 1782752400,
+      "date": "30 Jun",
+      "revenue": 0
+    }
+  ],
+  "keyMetrics": {
+    "totalSales": {
+      "value": 281998,
+      "formatted": "Rp 281.998",
+      "pctDiff": -56.21128669854052,
+      "label": "Total Penjualan Kotor (Total Sales)"
+    },
+    "confirmedOrders": {
+      "value": 2,
+      "formatted": "2 Pesanan",
+      "pctDiff": -50,
+      "label": "Total Pesanan Berhasil (Confirmed Orders)"
+    },
+    "uniqueBuyers": {
+      "value": 3,
+      "formatted": "3 Pembeli",
+      "pctDiff": -40,
+      "label": "Total Pembeli (Unique Buyers)"
+    },
+    "salesPerOrder": {
+      "value": 140999,
+      "formatted": "Rp 140.999",
+      "pctDiff": 7.780736976549198,
+      "label": "Rata-Rata Nilai Belanja (AOV / Sales per Order)"
+    },
+    "impressions": {
+      "value": 13032,
+      "formatted": "13.032",
+      "pctDiff": 0.3542276297551209,
+      "label": "Total Tayangan Produk (Impressions)"
+    },
+    "clicks": {
+      "value": 606,
+      "formatted": "606",
+      "pctDiff": 1.3377926421404682,
+      "label": "Total Klik Produk (Clicks)"
+    },
+    "ctr": {
+      "value": 4.65,
+      "formatted": "4.65%",
+      "pctDiff": 0.0451328942147361,
+      "label": "Rasio Klik (CTR)"
+    }
+  },
+  "channelBreakdown": {
+    "paid_ads": {
+      "label": "Iklan Berbayar (Shopee Ads)",
+      "sales": 0,
+      "ratio": 0,
+      "color": "#EE4D2D"
+    },
+    "product_card": {
+      "label": "Organik & Pencarian Produk",
+      "sales": 506998,
+      "ratio": 100,
+      "color": "#10B981"
+    },
+    "video": {
+      "label": "Shopee Video",
+      "sales": 0,
+      "ratio": 0,
+      "color": "#8B5CF6"
+    },
+    "affiliate": {
+      "label": "Shopee Affiliate",
+      "sales": 0,
+      "ratio": 0,
+      "color": "#F59E0B"
+    },
+    "live": {
+      "label": "Shopee Live Streaming",
+      "sales": 0,
+      "ratio": 0,
+      "color": "#06B6D4"
+    }
+  },
+  "topProducts": [
+    {
+      "rank": 1,
+      "id": 40657856676,
+      "name": "Monture - Rompi Pria Puffer Gelembung Outdoor Big Size Jumbo Premium M - 6XL",
+      "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztd-mtnnv1vvcg74b9",
+      "sales": 506998,
+      "salesFormatted": "Rp 506.998",
+      "orders": 3,
+      "units": 3,
+      "clicks": 606,
+      "ctr": "4.89%",
+      "conversionRate": "0.50%",
+      "addToCart": 31
+    },
+    {
+      "rank": 2,
+      "id": 27188887941,
+      "name": "Monture - Rompi Gelembung Driver Big Size Jumbo M - 6XL Premium Anti Angin",
+      "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztd-mtnq0cgrl53b93",
+      "sales": 0,
+      "salesFormatted": "Rp 0",
+      "orders": 0,
+      "units": 0,
+      "clicks": 0,
+      "ctr": "0%",
+      "conversionRate": "0%",
+      "addToCart": 0
+    },
+    {
+      "rank": 3,
+      "id": 27238665579,
+      "name": "Monture Jaket Gunung Cagoule Pria Waterproof Anti Angin Hiking Premium",
+      "image": "https://down-id.img.susercontent.com/file/id-11134207-7ra0t-mc67et2lcz4ye4",
+      "sales": 0,
+      "salesFormatted": "Rp 0",
+      "orders": 0,
+      "units": 0,
+      "clicks": 0,
+      "ctr": "0%",
+      "conversionRate": "0%",
+      "addToCart": 0
+    },
+    {
+      "rank": 4,
+      "id": 28043618164,
+      "name": "Monture Jaket Gorpcore Waterproof Hiking Outdoor Outland Series",
+      "image": "https://down-id.img.susercontent.com/file/id-11134207-82251-mhpwu8i4tfk5cd",
+      "sales": 0,
+      "salesFormatted": "Rp 0",
+      "orders": 0,
+      "units": 0,
+      "clicks": 0,
+      "ctr": "0%",
+      "conversionRate": "0%",
+      "addToCart": 0
+    },
+    {
+      "rank": 5,
+      "id": 28989261353,
+      "name": "Monture Jaket Pria Puffer Gelembung Original Jaket Musim Dingin Premium",
+      "image": "https://down-id.img.susercontent.com/file/id-11134207-7ra0h-mcq5gfemzj8800",
+      "sales": 0,
+      "salesFormatted": "Rp 0",
+      "orders": 0,
+      "units": 0,
+      "clicks": 0,
+      "ctr": "0%",
+      "conversionRate": "0%",
+      "addToCart": 0
+    }
+  ],
+  "orderPerformance": {
+    "cancelledSales": 225000,
+    "cancelledSalesFormatted": "Rp 225.000",
+    "cancelledOrders": 1,
+    "returnRefundSales": 0,
+    "returnRefundOrders": 0
+  },
+  "historicalTrends": [
+    {
+      "month": "Sep 2024",
+      "mCode": "2024-09",
+      "revenue": 0,
+      "orders": 0,
+      "adsRevenue": 0,
+      "organicRevenue": 0,
+      "pic": "LAMA",
+      "note": "Pendaftaran Toko"
+    },
+    {
+      "month": "Jan 2025",
+      "mCode": "2025-01",
+      "revenue": 0,
+      "orders": 0,
+      "adsRevenue": 0,
+      "organicRevenue": 0,
+      "pic": "LAMA",
+      "note": "Persiapan Toko"
+    },
+    {
+      "month": "Jul 2025",
+      "mCode": "2025-07",
+      "revenue": 1914589,
+      "orders": 15,
+      "adsRevenue": 0,
+      "organicRevenue": 1914589,
+      "pic": "LAMA",
+      "note": "Awal Penjualan (7 Juli 2025)"
+    },
+    {
+      "month": "Agu 2025",
+      "mCode": "2025-08",
+      "revenue": 960890,
+      "orders": 10,
+      "adsRevenue": 0,
+      "organicRevenue": 960890,
+      "pic": "LAMA"
+    },
+    {
+      "month": "Sep 2025",
+      "mCode": "2025-09",
+      "revenue": 1417322,
+      "orders": 7,
+      "adsRevenue": 0,
+      "organicRevenue": 1417322,
+      "pic": "LAMA"
+    },
+    {
+      "month": "Okt 2025",
+      "mCode": "2025-10",
+      "revenue": 1002693,
+      "orders": 7,
+      "adsRevenue": 0,
+      "organicRevenue": 1002693,
+      "pic": "LAMA"
+    },
+    {
+      "month": "Nov 2025",
+      "mCode": "2025-11",
+      "revenue": 5337168,
+      "orders": 26,
+      "adsRevenue": 0,
+      "organicRevenue": 5337168,
+      "pic": "LAMA",
+      "note": "Promo 11.11"
+    },
+    {
+      "month": "Des 2025",
+      "mCode": "2025-12",
+      "revenue": 2650932,
+      "orders": 17,
+      "adsRevenue": 0,
+      "organicRevenue": 2650932,
+      "pic": "LAMA",
+      "note": "Promo 12.12"
+    },
+    {
+      "month": "Jan 2026",
+      "mCode": "2026-01",
+      "revenue": 2708984,
+      "orders": 19,
+      "adsRevenue": 0,
+      "organicRevenue": 2708984,
+      "pic": "LAMA"
+    },
+    {
+      "month": "Feb 2026",
+      "mCode": "2026-02",
+      "revenue": 2463983,
+      "orders": 17,
+      "adsRevenue": 0,
+      "organicRevenue": 2463983,
+      "pic": "LAMA"
+    },
+    {
+      "month": "Mar 2026",
+      "mCode": "2026-03",
+      "revenue": 2350987,
+      "orders": 15,
+      "adsRevenue": 0,
+      "organicRevenue": 2350987,
+      "pic": "LAMA",
+      "note": "Data Real Kriteria Utama"
+    },
+    {
+      "month": "Apr 2026",
+      "mCode": "2026-04",
+      "revenue": 699995,
+      "orders": 4,
+      "adsRevenue": 0,
+      "organicRevenue": 559996,
+      "pic": "LAMA",
+      "note": "Penjualan Organik"
+    },
+    {
+      "month": "Mei 2026",
+      "mCode": "2026-05",
+      "revenue": 783996,
+      "orders": 5,
+      "adsRevenue": 0,
+      "organicRevenue": 783996,
+      "pic": "LAMA"
+    },
+    {
+      "month": "Jun 2026",
+      "mCode": "2026-06",
+      "revenue": 506998,
+      "orders": 3,
+      "adsRevenue": 0,
+      "organicRevenue": 506998,
+      "pic": "LAMA"
+    },
+    {
+      "month": "Jul 2026",
+      "mCode": "2026-07",
+      "revenue": 0,
+      "orders": 0,
+      "adsRevenue": 0,
+      "organicRevenue": 0,
+      "pic": "LAMA",
+      "note": "Transisi / Handover"
+    },
+    {
+      "month": "Agu 2026",
+      "mCode": "2026-08",
+      "revenue": 7871740,
+      "orders": 54,
+      "adsRevenue": 7618480,
+      "organicRevenue": 7319230,
+      "pic": "BARU",
+      "note": "Shopee Ads Aktif"
+    },
+    {
+      "month": "Sep 2026",
+      "mCode": "2026-09",
+      "revenue": 6192746,
+      "orders": 27,
+      "adsRevenue": 5337984,
+      "organicRevenue": 5575332,
+      "pic": "BARU"
+    },
+    {
+      "month": "Okt 2026",
+      "mCode": "2026-10",
+      "revenue": 6723492,
+      "orders": 29,
+      "adsRevenue": 5535719,
+      "organicRevenue": 6106078,
+      "pic": "BARU",
+      "note": "Berjalan s/d 3 Okt"
+    }
+  ],
+  "picBenchmark": {
+    "picLama": {
+      "periodLabel": "September 2024 – Juli 2026",
+      "dormantLabel": "Sep 2024 – Mar 2026: Persiapan Toko (0 Transaksi)",
+      "activeMonths": 12,
+      "totalRevenue": 22798537,
+      "totalRevenueFormatted": "Rp 22.798.537",
+      "avgMonthlyRevenue": 1899878,
+      "avgMonthlyRevenueFormatted": "Rp 1.899.878",
+      "totalOrders": 145,
+      "avgMonthlyOrders": 12.1,
+      "aov": 157231,
+      "aovFormatted": "Rp 157.231",
+      "adsRatio": 0,
+      "organicRatio": 99.4
+    },
+    "picBaru": {
+      "periodLabel": "Agustus 2026 – Saat ini",
+      "activeMonths": 3,
+      "totalRevenue": 20787978,
+      "totalRevenueFormatted": "Rp 20.787.978",
+      "avgMonthlyRevenue": 6929326,
+      "avgMonthlyRevenueFormatted": "Rp 6.929.326",
+      "totalOrders": 110,
+      "avgMonthlyOrders": 36.7,
+      "aov": 188982,
+      "aovFormatted": "Rp 188.982",
+      "adsRatio": 89,
+      "organicRatio": 91.4
+    },
+    "deltas": {
+      "avgMonthlyRevenueGrowth": 264.7,
+      "avgMonthlyOrdersGrowth": 203.4,
+      "aovGrowth": 20.2,
+      "adsRatioDiff": 89
+    }
+  }
+}

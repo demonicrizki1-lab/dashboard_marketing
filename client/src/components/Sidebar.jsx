@@ -13,7 +13,7 @@ import {
 
 export default function Sidebar({ storeInfo, onOpenSettings, activeTab, setActiveTab }) {
   const navItems = [
-    { id: 'module1', label: '1. Ringkasan Bisnis', icon: BarChart3, badge: 'Segera', disabled: true },
+    { id: 'module1', label: '1. Ringkasan Bisnis (Overview)', icon: BarChart3, badge: 'Aktif', disabled: false },
     { id: 'module2', label: '2. Performa Iklan', icon: TrendingUp, badge: 'Aktif', disabled: false },
     { id: 'module3', label: '3. Master Data SKU & Margin', icon: Package, badge: 'Aktif', disabled: false },
     { id: 'module4', label: '4. Program Promosi', icon: Tag, badge: 'Segera', disabled: true },

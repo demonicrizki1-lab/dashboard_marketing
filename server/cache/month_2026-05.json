@@ -1,0 +1,4024 @@
+{
+  "mCode": "2026-05",
+  "year": 2026,
+  "monthIndex": 4,
+  "startTime": 1777568400,
+  "endTime": 1780246800,
+  "traffic": {
+    "overview": {
+      "total_sales": 783996,
+      "total_sales_pct_diff": 0.12000228573061236,
+      "product_card": 783996,
+      "product_card_pct_diff": 0.40000285716326545,
+      "product_card_ratio": 1,
+      "live": 0,
+      "live_pct_diff": 0,
+      "live_ratio": 0,
+      "video": 0,
+      "video_pct_diff": 0,
+      "video_ratio": 0,
+      "affiliate": 0,
+      "affiliate_pct_diff": -1,
+      "affiliate_ratio": 0,
+      "paid_ads": 0,
+      "paid_ads_pct_diff": 0,
+      "paid_ads_ratio": 0
+    },
+    "product_card": {
+      "total": {
+        "source": "psd_label_product_card",
+        "sales_ratio": 1,
+        "orders_ratio": 1,
+        "product_clicks_ratio": 1,
+        "content_views_ratio": 0,
+        "video_views_ratio": 0,
+        "live_views_ratio": 0,
+        "product_impressions_ratio": 1,
+        "sales": 783996,
+        "orders": 5,
+        "units": 5,
+        "buyers": 5,
+        "product_clicks": 598,
+        "unique_product_clicks": 412,
+        "sales_per_order": 156799.2,
+        "ctr": 0.046049591868165714,
+        "product_clicks_to_orders_rate": 0.008361204013377926,
+        "sales_pct_diff": 0.40000285716326545,
+        "orders_pct_diff": 0.25,
+        "units_pct_diff": 0.25,
+        "buyers_pct_diff": 0.25,
+        "product_clicks_pct_diff": 0.15891472868217055,
+        "unique_product_clicks_pct_diff": 0.14763231197771587,
+        "ctr_pct_diff": -0.0006303429970414484,
+        "sales_per_order_pct_diff": 0.12000228573061245,
+        "product_clicks_to_orders_rate_pct_diff": 0.0006092660288818021,
+        "product_impressions": 12986,
+        "product_impressions_pct_diff": 0.1747783607743803,
+        "unique_product_impressions": 6557,
+        "unique_product_impressions_pct_diff": 0.2002562694490207
+      },
+      "breakdown": [
+        {
+          "source": "psd_label_recommendation",
+          "sales_ratio": 0.35714212827616465,
+          "orders_ratio": 0.4,
+          "product_clicks_ratio": 0.5484949832775919,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.3866471584783613,
+          "sales": 279998,
+          "orders": 2,
+          "units": 2,
+          "buyers": 2,
+          "product_clicks": 328,
+          "unique_product_clicks": 229,
+          "sales_per_order": 139999,
+          "ctr": 0.06532563234415455,
+          "product_clicks_to_orders_rate": 0.006097560975609756,
+          "product_impressions": 5021,
+          "unique_product_impressions": 2144
+        },
+        {
+          "source": "psd_label_shop",
+          "sales_ratio": 0.17857106413808232,
+          "orders_ratio": 0.2,
+          "product_clicks_ratio": 0.011705685618729096,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.005698444478669336,
+          "sales": 139999,
+          "orders": 1,
+          "units": 1,
+          "buyers": 1,
+          "product_clicks": 7,
+          "unique_product_clicks": 6,
+          "sales_per_order": 139999,
+          "ctr": 0.0945945945945946,
+          "product_clicks_to_orders_rate": 0.14285714285714285,
+          "product_impressions": 74,
+          "unique_product_impressions": 13
+        },
+        {
+          "source": "psd_label_my_purchase",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0.011705685618729096,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.0012320961034960726,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 7,
+          "unique_product_clicks": 4,
+          "sales_per_order": 0,
+          "ctr": 0.4375,
+          "product_clicks_to_orders_rate": 0,
+          "product_impressions": 16,
+          "unique_product_impressions": 7
+        },
+        {
+          "source": "psd_label_promotion",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.00007700600646850454,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 0,
+          "unique_product_clicks": 0,
+          "sales_per_order": 0,
+          "ctr": 0,
+          "product_clicks_to_orders_rate": 0,
+          "product_impressions": 1,
+          "unique_product_impressions": 1
+        },
+        {
+          "source": "psd_label_search",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0.38294314381270905,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.5757739103650085,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 229,
+          "unique_product_clicks": 188,
+          "sales_per_order": 0,
+          "ctr": 0.03062725692122509,
+          "product_clicks_to_orders_rate": 0,
+          "product_impressions": 7477,
+          "unique_product_impressions": 4693
+        },
+        {
+          "source": "psd_label_shopping_cart",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0.03678929765886288,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.021253657785307255,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 22,
+          "unique_product_clicks": 15,
+          "sales_per_order": 0,
+          "ctr": 0.07971014492753623,
+          "product_clicks_to_orders_rate": 0,
+          "product_impressions": 276,
+          "unique_product_impressions": 85
+        },
+        {
+          "source": "psd_label_others",
+          "sales_ratio": 0.46428680758575297,
+          "orders_ratio": 0.4,
+          "product_clicks_ratio": 0.008361204013377926,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.009317726782689049,
+          "sales": 363999,
+          "orders": 2,
+          "units": 2,
+          "buyers": 2,
+          "product_clicks": 5,
+          "unique_product_clicks": 4,
+          "sales_per_order": 181999.5,
+          "ctr": 0.04132231404958678,
+          "product_clicks_to_orders_rate": 0.4,
+          "product_impressions": 121,
+          "unique_product_impressions": 86
+        }
+      ]
+    },
+    "live": {
+      "total": {
+        "source": "psd_label_seller_live",
+        "sales_ratio": 0,
+        "orders_ratio": 0,
+        "product_clicks_ratio": 0,
+        "content_views_ratio": 0,
+        "video_views_ratio": 0,
+        "live_views_ratio": 0,
+        "product_impressions_ratio": 0,
+        "sales": 0,
+        "orders": 0,
+        "units": 0,
+        "buyers": 0,
+        "product_clicks": 0,
+        "unique_product_clicks": 0,
+        "sales_per_order": 0,
+        "ctr": 0,
+        "product_clicks_to_orders_rate": 0,
+        "sales_pct_diff": 0,
+        "orders_pct_diff": 0,
+        "units_pct_diff": 0,
+        "buyers_pct_diff": 0,
+        "product_clicks_pct_diff": 0,
+        "unique_product_clicks_pct_diff": 0,
+        "ctr_pct_diff": 0,
+        "sales_per_order_pct_diff": 0,
+        "product_clicks_to_orders_rate_pct_diff": 0,
+        "live_views": 0,
+        "live_views_pct_diff": 0,
+        "live_viewers": 0,
+        "live_viewers_pct_diff": 0
+      },
+      "breakdown": []
+    },
+    "video": {
+      "total": {
+        "source": "psd_label_seller_video",
+        "sales_ratio": 0,
+        "orders_ratio": 0,
+        "product_clicks_ratio": 0,
+        "content_views_ratio": 0,
+        "video_views_ratio": 0,
+        "live_views_ratio": 0,
+        "product_impressions_ratio": 0,
+        "sales": 0,
+        "orders": 0,
+        "units": 0,
+        "buyers": 0,
+        "product_clicks": 0,
+        "unique_product_clicks": 0,
+        "sales_per_order": 0,
+        "ctr": 0,
+        "product_clicks_to_orders_rate": 0,
+        "sales_pct_diff": 0,
+        "orders_pct_diff": 0,
+        "units_pct_diff": 0,
+        "buyers_pct_diff": 0,
+        "product_clicks_pct_diff": 0,
+        "unique_product_clicks_pct_diff": 0,
+        "ctr_pct_diff": 0,
+        "sales_per_order_pct_diff": 0,
+        "product_clicks_to_orders_rate_pct_diff": 0,
+        "video_views": 0,
+        "video_views_pct_diff": 0,
+        "video_viewers": 0,
+        "video_viewers_pct_diff": 0
+      },
+      "breakdown": []
+    },
+    "affiliate": {
+      "total": {
+        "source": "psd_label_affiliate",
+        "sales_ratio": 0,
+        "orders_ratio": 0,
+        "product_clicks_ratio": 1,
+        "content_views_ratio": 1,
+        "video_views_ratio": 0,
+        "live_views_ratio": 0,
+        "product_impressions_ratio": 0,
+        "sales": 0,
+        "orders": 0,
+        "units": 0,
+        "buyers": 0,
+        "product_clicks": 98,
+        "unique_product_clicks": 64,
+        "sales_per_order": 0,
+        "ctr": 0.06068111455108359,
+        "product_clicks_to_orders_rate": 0,
+        "sales_pct_diff": -1,
+        "orders_pct_diff": -1,
+        "units_pct_diff": -1,
+        "buyers_pct_diff": -1,
+        "product_clicks_pct_diff": -0.37579617834394907,
+        "unique_product_clicks_pct_diff": -0.37254901960784315,
+        "ctr_pct_diff": -0.016888055409390715,
+        "sales_per_order_pct_diff": -1,
+        "product_clicks_to_orders_rate_pct_diff": -0.006369426751592357,
+        "content_views": 1615,
+        "content_views_pct_diff": -0.20207509881422925,
+        "content_viewers": 414,
+        "content_viewers_pct_diff": -0.2698412698412698
+      },
+      "breakdown": [
+        {
+          "source": "psd_label_affiliate_video",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 1,
+          "content_views_ratio": 1,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 98,
+          "unique_product_clicks": 64,
+          "sales_per_order": 0,
+          "ctr": 0.06068111455108359,
+          "product_clicks_to_orders_rate": 0,
+          "content_views": 1615,
+          "content_viewers": 415
+        }
+      ]
+    },
+    "paid_ads": {
+      "total": {
+        "source": "psd_label_shopee_ads",
+        "sales_ratio": -1000000,
+        "orders_ratio": -1000000,
+        "product_impressions_ratio": -1000000,
+        "product_clicks_ratio": -1000000,
+        "sales": -1000000,
+        "orders": -1000000,
+        "units": -1000000,
+        "product_impressions": -1000000,
+        "product_clicks": -1000000,
+        "ads_expense": -1000000,
+        "ads_roas": -1000000,
+        "live_views": -1000000,
+        "video_views": -1000000,
+        "ctr": -1000000,
+        "conversion": -1000000,
+        "sales_pct_diff": -1000000,
+        "orders_pct_diff": -1000000,
+        "units_pct_diff": -1000000,
+        "product_impressions_pct_diff": -1000000,
+        "product_clicks_pct_diff": -1000000,
+        "ads_expense_pct_diff": -1000000,
+        "ads_roas_pct_diff": -1000000,
+        "live_views_pct_diff": -1000000,
+        "video_views_pct_diff": -1000000,
+        "ctr_pct_diff": -1000000,
+        "conversion_pct_diff": -1000000
+      },
+      "breakdown": []
+    }
+  },
+  "rankings": {
+    "total": 5,
+    "items": [
+      {
+        "id": 40657856676,
+        "name": "Monture - Rompi Pria Puffer Gelembung Outdoor Big Size Jumbo Premium M - 6XL",
+        "image": "id-11134207-81ztd-mtnnv1vvcg74b9",
+        "status": 1,
+        "display_tag_label": "psd_product_status_normal",
+        "unique_product_card_clicks": 388,
+        "product_card_clicks": 575,
+        "product_card_impressions": 11876,
+        "unique_product_card_impressions": 6316,
+        "ctr": 0.0484,
+        "placed_order_conversion_rate": 0.0104,
+        "paid_order_conversion_rate": 0.007,
+        "confirmed_order_conversion_rate": 0.0087,
+        "uv": 368,
+        "pv": 770,
+        "likes": 2,
+        "bounce_visitors": 145,
+        "bounce_rate": 0.394,
+        "search_clicks": 167,
+        "add_to_cart_units": 41,
+        "add_to_cart_buyers": 33,
+        "placed_sales": 923995,
+        "placed_units": 6,
+        "placed_buyers": 6,
+        "placed_orders": 6,
+        "paid_sales": 643997,
+        "paid_units": 4,
+        "paid_buyers": 4,
+        "paid_orders": 4,
+        "confirmed_sales": 783996,
+        "confirmed_units": 5,
+        "confirmed_buyers": 5,
+        "confirmed_orders": 5,
+        "placed_sales_per_order": 153999.1667,
+        "confirmed_sales_per_order": 156799.2,
+        "paid_sales_per_order": 160999.25,
+        "placed_to_paid_buyers_rate": 0.6667,
+        "placed_buyers_to_confirmed_buyers_rate": 0.8333,
+        "uv_to_add_to_cart_rate": 0.0897,
+        "uv_to_placed_buyers_rate": 0.0163,
+        "uv_to_paid_buyers_rate": 0.0109,
+        "uv_to_confirmed_buyers_rate": 0.0136,
+        "repeat_placed_order_rate": 0,
+        "average_days_to_repeat_placed_order": 0,
+        "repeat_paid_order_rate": 0,
+        "average_days_to_repeat_paid_order": 0,
+        "repeat_confirmed_order_rate": 0,
+        "average_days_to_repeat_confirmed_order": 0,
+        "models": null
+      },
+      {
+        "id": 27238665579,
+        "name": "Monture Jaket Gunung Cagoule Pria Waterproof Anti Angin Hiking Premium",
+        "image": "id-11134207-7ra0t-mc67et2lcz4ye4",
+        "status": 8,
+        "display_tag_label": "psd_product_status_unlisted",
+        "unique_product_card_clicks": 0,
+        "product_card_clicks": 0,
+        "product_card_impressions": 1,
+        "unique_product_card_impressions": 1,
+        "ctr": 0,
+        "placed_order_conversion_rate": 0,
+        "paid_order_conversion_rate": 0,
+        "confirmed_order_conversion_rate": 0,
+        "uv": 0,
+        "pv": 0,
+        "likes": 0,
+        "bounce_visitors": 0,
+        "bounce_rate": 0,
+        "search_clicks": 0,
+        "add_to_cart_units": 0,
+        "add_to_cart_buyers": 0,
+        "placed_sales": 0,
+        "placed_units": 0,
+        "placed_buyers": 0,
+        "placed_orders": 0,
+        "paid_sales": 0,
+        "paid_units": 0,
+        "paid_buyers": 0,
+        "paid_orders": 0,
+        "confirmed_sales": 0,
+        "confirmed_units": 0,
+        "confirmed_buyers": 0,
+        "confirmed_orders": 0,
+        "placed_sales_per_order": 0,
+        "confirmed_sales_per_order": 0,
+        "paid_sales_per_order": 0,
+        "placed_to_paid_buyers_rate": 0,
+        "placed_buyers_to_confirmed_buyers_rate": 0,
+        "uv_to_add_to_cart_rate": 0,
+        "uv_to_placed_buyers_rate": 0,
+        "uv_to_paid_buyers_rate": 0,
+        "uv_to_confirmed_buyers_rate": 0,
+        "repeat_placed_order_rate": 0,
+        "average_days_to_repeat_placed_order": 0,
+        "repeat_paid_order_rate": 0,
+        "average_days_to_repeat_paid_order": 0,
+        "repeat_confirmed_order_rate": 0,
+        "average_days_to_repeat_confirmed_order": 0,
+        "models": null
+      },
+      {
+        "id": 28043618164,
+        "name": "Monture Jaket Gorpcore Waterproof Hiking Outdoor Outland Series",
+        "image": "id-11134207-82251-mhpwu8i4tfk5cd",
+        "status": 8,
+        "display_tag_label": "psd_product_status_unlisted",
+        "unique_product_card_clicks": 0,
+        "product_card_clicks": 0,
+        "product_card_impressions": 1,
+        "unique_product_card_impressions": 1,
+        "ctr": 0,
+        "placed_order_conversion_rate": 0,
+        "paid_order_conversion_rate": 0,
+        "confirmed_order_conversion_rate": 0,
+        "uv": 0,
+        "pv": 0,
+        "likes": 0,
+        "bounce_visitors": 0,
+        "bounce_rate": 0,
+        "search_clicks": 0,
+        "add_to_cart_units": 0,
+        "add_to_cart_buyers": 0,
+        "placed_sales": 0,
+        "placed_units": 0,
+        "placed_buyers": 0,
+        "placed_orders": 0,
+        "paid_sales": 0,
+        "paid_units": 0,
+        "paid_buyers": 0,
+        "paid_orders": 0,
+        "confirmed_sales": 0,
+        "confirmed_units": 0,
+        "confirmed_buyers": 0,
+        "confirmed_orders": 0,
+        "placed_sales_per_order": 0,
+        "confirmed_sales_per_order": 0,
+        "paid_sales_per_order": 0,
+        "placed_to_paid_buyers_rate": 0,
+        "placed_buyers_to_confirmed_buyers_rate": 0,
+        "uv_to_add_to_cart_rate": 0,
+        "uv_to_placed_buyers_rate": 0,
+        "uv_to_paid_buyers_rate": 0,
+        "uv_to_confirmed_buyers_rate": 0,
+        "repeat_placed_order_rate": 0,
+        "average_days_to_repeat_placed_order": 0,
+        "repeat_paid_order_rate": 0,
+        "average_days_to_repeat_paid_order": 0,
+        "repeat_confirmed_order_rate": 0,
+        "average_days_to_repeat_confirmed_order": 0,
+        "models": null
+      },
+      {
+        "id": 28989261353,
+        "name": "Monture Jaket Pria Puffer Gelembung Original Jaket Musim Dingin Premium",
+        "image": "id-11134207-7ra0h-mcq5gfemzj8800",
+        "status": 8,
+        "display_tag_label": "psd_product_status_unlisted",
+        "unique_product_card_clicks": 0,
+        "product_card_clicks": 0,
+        "product_card_impressions": 1,
+        "unique_product_card_impressions": 1,
+        "ctr": 0,
+        "placed_order_conversion_rate": 0,
+        "paid_order_conversion_rate": 0,
+        "confirmed_order_conversion_rate": 0,
+        "uv": 0,
+        "pv": 0,
+        "likes": 0,
+        "bounce_visitors": 0,
+        "bounce_rate": 0,
+        "search_clicks": 0,
+        "add_to_cart_units": 0,
+        "add_to_cart_buyers": 0,
+        "placed_sales": 0,
+        "placed_units": 0,
+        "placed_buyers": 0,
+        "placed_orders": 0,
+        "paid_sales": 0,
+        "paid_units": 0,
+        "paid_buyers": 0,
+        "paid_orders": 0,
+        "confirmed_sales": 0,
+        "confirmed_units": 0,
+        "confirmed_buyers": 0,
+        "confirmed_orders": 0,
+        "placed_sales_per_order": 0,
+        "confirmed_sales_per_order": 0,
+        "paid_sales_per_order": 0,
+        "placed_to_paid_buyers_rate": 0,
+        "placed_buyers_to_confirmed_buyers_rate": 0,
+        "uv_to_add_to_cart_rate": 0,
+        "uv_to_placed_buyers_rate": 0,
+        "uv_to_paid_buyers_rate": 0,
+        "uv_to_confirmed_buyers_rate": 0,
+        "repeat_placed_order_rate": 0,
+        "average_days_to_repeat_placed_order": 0,
+        "repeat_paid_order_rate": 0,
+        "average_days_to_repeat_paid_order": 0,
+        "repeat_confirmed_order_rate": 0,
+        "average_days_to_repeat_confirmed_order": 0,
+        "models": null
+      },
+      {
+        "id": 40058480568,
+        "name": "Monture - Rompi Gelembung Fieldwork Big Size Jumbo Premium M - 6XL",
+        "image": "id-11134207-81ztq-mtnpvctwks93e9",
+        "status": 1,
+        "display_tag_label": "psd_product_status_normal",
+        "unique_product_card_clicks": 15,
+        "product_card_clicks": 23,
+        "product_card_impressions": 544,
+        "unique_product_card_impressions": 311,
+        "ctr": 0.0423,
+        "placed_order_conversion_rate": 0,
+        "paid_order_conversion_rate": 0,
+        "confirmed_order_conversion_rate": 0,
+        "uv": 15,
+        "pv": 32,
+        "likes": 0,
+        "bounce_visitors": 8,
+        "bounce_rate": 0.5333,
+        "search_clicks": 10,
+        "add_to_cart_units": 1,
+        "add_to_cart_buyers": 1,
+        "placed_sales": 0,
+        "placed_units": 0,
+        "placed_buyers": 0,
+        "placed_orders": 0,
+        "paid_sales": 0,
+        "paid_units": 0,
+        "paid_buyers": 0,
+        "paid_orders": 0,
+        "confirmed_sales": 0,
+        "confirmed_units": 0,
+        "confirmed_buyers": 0,
+        "confirmed_orders": 0,
+        "placed_sales_per_order": 0,
+        "confirmed_sales_per_order": 0,
+        "paid_sales_per_order": 0,
+        "placed_to_paid_buyers_rate": 0,
+        "placed_buyers_to_confirmed_buyers_rate": 0,
+        "uv_to_add_to_cart_rate": 0.0667,
+        "uv_to_placed_buyers_rate": 0,
+        "uv_to_paid_buyers_rate": 0,
+        "uv_to_confirmed_buyers_rate": 0,
+        "repeat_placed_order_rate": 0,
+        "average_days_to_repeat_placed_order": 0,
+        "repeat_paid_order_rate": 0,
+        "average_days_to_repeat_paid_order": 0,
+        "repeat_confirmed_order_rate": 0,
+        "average_days_to_repeat_confirmed_order": 0,
+        "models": null
+      }
+    ],
+    "need_upload_item": false
+  },
+  "orderPerf": {
+    "cancelled_sales": {
+      "value": 279998,
+      "old_value": 139999,
+      "increment": 139999,
+      "chain_ratio": 1,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 139999
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 139999
+        }
+      ]
+    },
+    "return_refund_sales": {
+      "value": 0,
+      "old_value": 0,
+      "increment": 0,
+      "chain_ratio": 0,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 0
+        }
+      ]
+    },
+    "cancelled_orders": {
+      "value": 2,
+      "old_value": 1,
+      "increment": 1,
+      "chain_ratio": 1,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 1
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 1
+        }
+      ]
+    },
+    "return_refund_orders": {
+      "value": 0,
+      "old_value": 0,
+      "increment": 0,
+      "chain_ratio": 0,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 0
+        }
+      ]
+    }
+  },
+  "fetchedAt": "2026-10-03T13:46:33.265Z",
+  "keyMetrics": {
+    "shop_pv": {
+      "value": 866,
+      "chain_ratio": 0.3468118195956454,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 45
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 39
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 36
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 42
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 27
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 51
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 11
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 24
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 27
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 48
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 31
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 18
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 17
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 7
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 15
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 26
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 15
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 20
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 26
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 18
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 21
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 23
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 52
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 32
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 42
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 13
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 23
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 32
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 18
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 6
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 61
+        }
+      ]
+    },
+    "shop_uv": {
+      "value": 390,
+      "chain_ratio": 0.3087248322147651,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 25
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 15
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 19
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 15
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 17
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 9
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 9
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 17
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 12
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 21
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 13
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 8
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 14
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 6
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 8
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 13
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 10
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 15
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 16
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 13
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 13
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 14
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 24
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 19
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 20
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 10
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 13
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 12
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 10
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 5
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 22
+        }
+      ]
+    },
+    "product_clicks": {
+      "value": 696,
+      "chain_ratio": 0.03417533432392273,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 32
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 29
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 43
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 30
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 26
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 35
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 10
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 21
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 21
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 46
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 26
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 18
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 14
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 8
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 14
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 26
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 15
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 22
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 18
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 16
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 16
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 18
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 31
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 20
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 23
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 16
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 12
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 18
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 18
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 11
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 43
+        }
+      ]
+    },
+    "hybrid_uv": {
+      "value": 734,
+      "chain_ratio": -0.045513654096228866,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 55
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 39
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 60
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 38
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 32
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 21
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 25
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 26
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 25
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 37
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 22
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 23
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 26
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 24
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 23
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 21
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 30
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 29
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 21
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 20
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 20
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 22
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 26
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 28
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 27
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 23
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 22
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 22
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 19
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 19
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 34
+        }
+      ]
+    },
+    "paid_gmv": {
+      "value": 643997,
+      "chain_ratio": 0.533337142884354,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 139999
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 363999
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 139999
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 0
+        }
+      ]
+    },
+    "place_gmv": {
+      "value": 923995,
+      "chain_ratio": 0.32000228573061235,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 139999
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 224000
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 279998
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 139999
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 139999
+        }
+      ]
+    },
+    "paid_orders": {
+      "value": 4,
+      "chain_ratio": 0.3333333333333333,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 1
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 2
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 1
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 0
+        }
+      ]
+    },
+    "place_orders": {
+      "value": 6,
+      "chain_ratio": 0.2,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 1
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 1
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 2
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 1
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 1
+        }
+      ]
+    },
+    "paid_sales_per_order": {
+      "value": 160999.25,
+      "chain_ratio": 0.15000285716326545,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 139999
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 181999.5
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 139999
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 0
+        }
+      ]
+    },
+    "place_sales_per_order": {
+      "value": 153999.16666666666,
+      "chain_ratio": 0.10000190477551023,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 139999
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 224000
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 139999
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 139999
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 139999
+        }
+      ]
+    },
+    "shop_uv_to_paid_buyers_rate": {
+      "value": 0.010256410256410256,
+      "chain_ratio": 0.0001892961624505255,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0.05263157894736842
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 0.14285714285714285
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 0.05
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 0
+        }
+      ]
+    },
+    "shop_uv_to_placed_buyers_rate": {
+      "value": 0.015384615384615385,
+      "chain_ratio": -0.0013939081053175005,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0.08333333333333333
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 0.07142857142857142
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0.08333333333333333
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 0.05
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 0.045454545454545456
+        }
+      ]
+    },
+    "confirmed_gmv": {
+      "value": 783996,
+      "chain_ratio": 0.12000228573061236,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 139999
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 224000
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 139999
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 139999
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 139999
+        }
+      ]
+    },
+    "confirmed_orders": {
+      "value": 5,
+      "chain_ratio": 0,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 1
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 1
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 1
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 1
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 1
+        }
+      ]
+    },
+    "confirmed_sales_per_order": {
+      "value": 156799.2,
+      "chain_ratio": 0.12000228573061245,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 139999
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 224000
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 139999
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 139999
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 139999
+        }
+      ]
+    },
+    "shop_uv_to_confirmed_buyers_rate": {
+      "value": 0.01282051282051282,
+      "chain_ratio": -0.003958010669420066,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0.08333333333333333
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 0.07142857142857142
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0.041666666666666664
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 0.05
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 0.045454545454545456
+        }
+      ]
+    },
+    "product_clicks_to_placed_orders_rate": {
+      "value": 0.008620689655172414,
+      "chain_ratio": 0.0011912691499718197,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0.047619047619047616
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 0.07142857142857142
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0.06451612903225806
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 0.043478260869565216
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 0.023255813953488372
+        }
+      ]
+    },
+    "product_clicks_to_paid_orders_rate": {
+      "value": 0.005747126436781609,
+      "chain_ratio": 0.0012894741336612527,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0.023255813953488372
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 0.14285714285714285
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 0.043478260869565216
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 0
+        }
+      ]
+    },
+    "product_clicks_to_confirmed_orders_rate": {
+      "value": 0.007183908045977011,
+      "chain_ratio": -0.0002455124592235826,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": 0
+        },
+        {
+          "timestamp": 1777654800,
+          "value": 0
+        },
+        {
+          "timestamp": 1777741200,
+          "value": 0
+        },
+        {
+          "timestamp": 1777827600,
+          "value": 0
+        },
+        {
+          "timestamp": 1777914000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778000400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778086800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778173200,
+          "value": 0
+        },
+        {
+          "timestamp": 1778259600,
+          "value": 0.047619047619047616
+        },
+        {
+          "timestamp": 1778346000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778432400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778518800,
+          "value": 0
+        },
+        {
+          "timestamp": 1778605200,
+          "value": 0.07142857142857142
+        },
+        {
+          "timestamp": 1778691600,
+          "value": 0
+        },
+        {
+          "timestamp": 1778778000,
+          "value": 0
+        },
+        {
+          "timestamp": 1778864400,
+          "value": 0
+        },
+        {
+          "timestamp": 1778950800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779037200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779123600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779210000,
+          "value": 0
+        },
+        {
+          "timestamp": 1779296400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779382800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779469200,
+          "value": 0.03225806451612903
+        },
+        {
+          "timestamp": 1779555600,
+          "value": 0
+        },
+        {
+          "timestamp": 1779642000,
+          "value": 0.043478260869565216
+        },
+        {
+          "timestamp": 1779728400,
+          "value": 0
+        },
+        {
+          "timestamp": 1779814800,
+          "value": 0
+        },
+        {
+          "timestamp": 1779901200,
+          "value": 0
+        },
+        {
+          "timestamp": 1779987600,
+          "value": 0
+        },
+        {
+          "timestamp": 1780074000,
+          "value": 0
+        },
+        {
+          "timestamp": 1780160400,
+          "value": 0.023255813953488372
+        }
+      ]
+    },
+    "paid_gmv_without_shopee_rebate": {
+      "value": -1000000,
+      "chain_ratio": -1000000,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777654800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777741200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777827600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777914000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778000400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778086800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778173200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778259600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778346000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778432400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778518800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778605200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778691600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778778000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778864400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778950800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779037200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779123600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779210000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779296400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779382800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779469200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779555600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779642000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779728400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779814800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779901200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779987600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1780074000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1780160400,
+          "value": -1000000
+        }
+      ]
+    },
+    "place_gmv_without_shopee_rebate": {
+      "value": -1000000,
+      "chain_ratio": -1000000,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777654800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777741200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777827600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777914000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778000400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778086800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778173200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778259600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778346000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778432400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778518800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778605200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778691600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778778000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778864400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778950800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779037200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779123600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779210000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779296400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779382800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779469200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779555600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779642000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779728400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779814800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779901200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779987600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1780074000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1780160400,
+          "value": -1000000
+        }
+      ]
+    },
+    "confirmed_gmv_without_shopee_rebate": {
+      "value": -1000000,
+      "chain_ratio": -1000000,
+      "points": [
+        {
+          "timestamp": 1777568400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777654800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777741200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777827600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1777914000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778000400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778086800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778173200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778259600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778346000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778432400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778518800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778605200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778691600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778778000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778864400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1778950800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779037200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779123600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779210000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779296400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779382800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779469200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779555600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779642000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779728400,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779814800,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779901200,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1779987600,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1780074000,
+          "value": -1000000
+        },
+        {
+          "timestamp": 1780160400,
+          "value": -1000000
+        }
+      ]
+    }
+  }
+}

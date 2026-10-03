@@ -1,0 +1,1454 @@
+{
+  "mCode": "2026-09",
+  "year": 2026,
+  "monthIndex": 8,
+  "startTime": 1788195600,
+  "endTime": 1790787600,
+  "traffic": {
+    "overview": {
+      "total_sales": 6192746,
+      "total_sales_pct_diff": -0.21329388419841103,
+      "product_card": 5575332,
+      "product_card_pct_diff": -0.23826249482527534,
+      "product_card_ratio": 0.900300448298703,
+      "live": 0,
+      "live_pct_diff": 0,
+      "live_ratio": 0,
+      "video": 434102,
+      "video_pct_diff": 0.13144629499309302,
+      "video_ratio": 0.07009846681908155,
+      "affiliate": 183312,
+      "affiliate_pct_diff": 0.08571428571428572,
+      "affiliate_ratio": 0.02960108488221542,
+      "paid_ads": 5337984,
+      "paid_ads_pct_diff": -0.2993374006363474,
+      "paid_ads_ratio": 0.8619736704847898
+    },
+    "product_card": {
+      "total": {
+        "source": "psd_label_product_card",
+        "sales_ratio": 1,
+        "orders_ratio": 1,
+        "product_clicks_ratio": 1,
+        "content_views_ratio": 0,
+        "video_views_ratio": 0,
+        "live_views_ratio": 0,
+        "product_impressions_ratio": 1,
+        "sales": 5575332,
+        "orders": 27,
+        "units": 28,
+        "buyers": 27,
+        "product_clicks": 3622,
+        "unique_product_clicks": 2393,
+        "sales_per_order": 206493.77777777778,
+        "ctr": 0.02606149130444168,
+        "product_clicks_to_orders_rate": 0.007454445057979017,
+        "sales_pct_diff": -0.23826249482527534,
+        "orders_pct_diff": -0.5,
+        "units_pct_diff": -0.4909090909090909,
+        "buyers_pct_diff": -0.47058823529411764,
+        "product_clicks_pct_diff": -0.3221036870671907,
+        "unique_product_clicks_pct_diff": -0.2526545908806996,
+        "ctr_pct_diff": 0.0034093749023252767,
+        "sales_per_order_pct_diff": 0.5234750103494494,
+        "product_clicks_to_orders_rate_pct_diff": -0.002652236581549338,
+        "product_impressions": 138979,
+        "product_impressions_pct_diff": -0.4107863587030254,
+        "unique_product_impressions": 57119,
+        "unique_product_impressions_pct_diff": -0.13673185624036513
+      },
+      "breakdown": [
+        {
+          "source": "psd_label_search",
+          "sales_ratio": 0.5638907243550698,
+          "orders_ratio": 0.5555555555555556,
+          "product_clicks_ratio": 0.5610160132523467,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.5542132264586737,
+          "sales": 3143878,
+          "orders": 15,
+          "units": 16,
+          "buyers": 15,
+          "product_clicks": 2032,
+          "unique_product_clicks": 1632,
+          "sales_per_order": 209591.86666666667,
+          "ctr": 0.02638138761944329,
+          "product_clicks_to_orders_rate": 0.0073818897637795275,
+          "product_impressions": 77024,
+          "unique_product_impressions": 36174
+        },
+        {
+          "source": "psd_label_recommendation",
+          "sales_ratio": 0.2558330158634499,
+          "orders_ratio": 0.25925925925925924,
+          "product_clicks_ratio": 0.2965212589729431,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.37258146914282014,
+          "sales": 1426354,
+          "orders": 7,
+          "units": 7,
+          "buyers": 7,
+          "product_clicks": 1074,
+          "unique_product_clicks": 744,
+          "sales_per_order": 203764.85714285713,
+          "ctr": 0.020741198509105656,
+          "product_clicks_to_orders_rate": 0.006517690875232775,
+          "product_impressions": 51781,
+          "unique_product_impressions": 21662
+        },
+        {
+          "source": "psd_label_shop",
+          "sales_ratio": 0.07301358914590199,
+          "orders_ratio": 0.07407407407407407,
+          "product_clicks_ratio": 0.047487575924903366,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.022902740701832652,
+          "sales": 407075,
+          "orders": 2,
+          "units": 2,
+          "buyers": 2,
+          "product_clicks": 172,
+          "unique_product_clicks": 53,
+          "sales_per_order": 203537.5,
+          "ctr": 0.05403707194470625,
+          "product_clicks_to_orders_rate": 0.011627906976744186,
+          "product_impressions": 3183,
+          "unique_product_impressions": 330
+        },
+        {
+          "source": "psd_label_chat",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0.0002760905577029266,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 1,
+          "unique_product_clicks": 1,
+          "sales_per_order": 0,
+          "ctr": 0,
+          "product_clicks_to_orders_rate": 0,
+          "product_impressions": 0,
+          "unique_product_impressions": 0
+        },
+        {
+          "source": "psd_label_my_purchase",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0.015184980673660961,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.0007770958202318336,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 55,
+          "unique_product_clicks": 23,
+          "sales_per_order": 0,
+          "ctr": 0.5092592592592593,
+          "product_clicks_to_orders_rate": 0,
+          "product_impressions": 108,
+          "unique_product_impressions": 33
+        },
+        {
+          "source": "psd_label_promotion",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.0004029385734535433,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 0,
+          "unique_product_clicks": 0,
+          "sales_per_order": 0,
+          "ctr": 0,
+          "product_clicks_to_orders_rate": 0,
+          "product_impressions": 56,
+          "unique_product_impressions": 35
+        },
+        {
+          "source": "psd_label_shopping_cart",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0.022915516289342904,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.008109138790752559,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 83,
+          "unique_product_clicks": 48,
+          "sales_per_order": 0,
+          "ctr": 0.07364685004436557,
+          "product_clicks_to_orders_rate": 0,
+          "product_impressions": 1127,
+          "unique_product_impressions": 217
+        },
+        {
+          "source": "psd_label_others",
+          "sales_ratio": 0.10726267063557829,
+          "orders_ratio": 0.1111111111111111,
+          "product_clicks_ratio": 0.056598564329099946,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0.04101339051223566,
+          "sales": 598025,
+          "orders": 3,
+          "units": 3,
+          "buyers": 3,
+          "product_clicks": 205,
+          "unique_product_clicks": 124,
+          "sales_per_order": 199341.66666666666,
+          "ctr": 0.035964912280701755,
+          "product_clicks_to_orders_rate": 0.014634146341463415,
+          "product_impressions": 5700,
+          "unique_product_impressions": 1693
+        }
+      ]
+    },
+    "live": {
+      "total": {
+        "source": "psd_label_seller_live",
+        "sales_ratio": 0,
+        "orders_ratio": 0,
+        "product_clicks_ratio": 0,
+        "content_views_ratio": 0,
+        "video_views_ratio": 0,
+        "live_views_ratio": 0,
+        "product_impressions_ratio": 0,
+        "sales": 0,
+        "orders": 0,
+        "units": 0,
+        "buyers": 0,
+        "product_clicks": 0,
+        "unique_product_clicks": 0,
+        "sales_per_order": 0,
+        "ctr": 0,
+        "product_clicks_to_orders_rate": 0,
+        "sales_pct_diff": 0,
+        "orders_pct_diff": 0,
+        "units_pct_diff": 0,
+        "buyers_pct_diff": 0,
+        "product_clicks_pct_diff": 0,
+        "unique_product_clicks_pct_diff": 0,
+        "ctr_pct_diff": 0,
+        "sales_per_order_pct_diff": 0,
+        "product_clicks_to_orders_rate_pct_diff": 0,
+        "live_views": 0,
+        "live_views_pct_diff": 0,
+        "live_viewers": 0,
+        "live_viewers_pct_diff": 0
+      },
+      "breakdown": []
+    },
+    "video": {
+      "total": {
+        "source": "psd_label_seller_video",
+        "sales_ratio": 1,
+        "orders_ratio": 1,
+        "product_clicks_ratio": 1,
+        "content_views_ratio": 0,
+        "video_views_ratio": 1,
+        "live_views_ratio": 0,
+        "product_impressions_ratio": 0,
+        "sales": 434102,
+        "orders": 2,
+        "units": 2,
+        "buyers": 2,
+        "product_clicks": 21,
+        "unique_product_clicks": 17,
+        "sales_per_order": 217051,
+        "ctr": 0.08267716535433071,
+        "product_clicks_to_orders_rate": 0.09523809523809523,
+        "sales_pct_diff": 0.13144629499309302,
+        "orders_pct_diff": -0.3333333333333333,
+        "units_pct_diff": -0.3333333333333333,
+        "buyers_pct_diff": -0.3333333333333333,
+        "product_clicks_pct_diff": 0.5,
+        "unique_product_clicks_pct_diff": 0.3076923076923077,
+        "ctr_pct_diff": -0.058736976059810694,
+        "sales_per_order_pct_diff": 0.6971694424896395,
+        "product_clicks_to_orders_rate_pct_diff": -0.11904761904761904,
+        "video_views": 254,
+        "video_views_pct_diff": 1.5656565656565657,
+        "video_viewers": 167,
+        "video_viewers_pct_diff": 1.1688311688311688
+      },
+      "breakdown": [
+        {
+          "source": "psd_label_shop",
+          "sales_ratio": 0.5120916282348388,
+          "orders_ratio": 0.5,
+          "product_clicks_ratio": 0.09523809523809523,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0.15354330708661418,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 222300,
+          "orders": 1,
+          "units": 1,
+          "buyers": 1,
+          "product_clicks": 2,
+          "unique_product_clicks": 2,
+          "sales_per_order": 222300,
+          "ctr": 0.05128205128205128,
+          "product_clicks_to_orders_rate": 0.5,
+          "video_views": 39,
+          "video_viewers": 7
+        },
+        {
+          "source": "psd_label_search",
+          "sales_ratio": 0.48790837176516116,
+          "orders_ratio": 0.5,
+          "product_clicks_ratio": 0.47619047619047616,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0.32677165354330706,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 211802,
+          "orders": 1,
+          "units": 1,
+          "buyers": 1,
+          "product_clicks": 10,
+          "unique_product_clicks": 7,
+          "sales_per_order": 211802,
+          "ctr": 0.12048192771084337,
+          "product_clicks_to_orders_rate": 0.1,
+          "video_views": 83,
+          "video_viewers": 72
+        },
+        {
+          "source": "psd_label_chat",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0.047619047619047616,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 1,
+          "unique_product_clicks": 1,
+          "sales_per_order": 0,
+          "ctr": 0,
+          "product_clicks_to_orders_rate": 0,
+          "video_views": 0,
+          "video_viewers": 0
+        },
+        {
+          "source": "psd_label_creator_profile",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0.01968503937007874,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 0,
+          "unique_product_clicks": 0,
+          "sales_per_order": 0,
+          "ctr": 0,
+          "product_clicks_to_orders_rate": 0,
+          "video_views": 5,
+          "video_viewers": 1
+        },
+        {
+          "source": "psd_label_feature_video",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0.011811023622047244,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 0,
+          "unique_product_clicks": 0,
+          "sales_per_order": 0,
+          "ctr": 0,
+          "product_clicks_to_orders_rate": 0,
+          "video_views": 3,
+          "video_viewers": 2
+        },
+        {
+          "source": "psd_label_homepage_video",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0.047244094488188976,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 0,
+          "unique_product_clicks": 0,
+          "sales_per_order": 0,
+          "ctr": 0,
+          "product_clicks_to_orders_rate": 0,
+          "video_views": 12,
+          "video_viewers": 11
+        },
+        {
+          "source": "psd_label_my_purchase",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0.047619047619047616,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 1,
+          "unique_product_clicks": 1,
+          "sales_per_order": 0,
+          "ctr": 0,
+          "product_clicks_to_orders_rate": 0,
+          "video_views": 0,
+          "video_viewers": 0
+        },
+        {
+          "source": "psd_label_recommendation",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0.23809523809523808,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0.19291338582677164,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 5,
+          "unique_product_clicks": 4,
+          "sales_per_order": 0,
+          "ctr": 0.10204081632653061,
+          "product_clicks_to_orders_rate": 0,
+          "video_views": 49,
+          "video_viewers": 40
+        },
+        {
+          "source": "psd_label_shopping_cart",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0.047619047619047616,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0.023622047244094488,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 1,
+          "unique_product_clicks": 1,
+          "sales_per_order": 0,
+          "ctr": 0.16666666666666666,
+          "product_clicks_to_orders_rate": 0,
+          "video_views": 6,
+          "video_viewers": 4
+        },
+        {
+          "source": "psd_label_video_tab",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0.007874015748031496,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 0,
+          "unique_product_clicks": 0,
+          "sales_per_order": 0,
+          "ctr": 0,
+          "product_clicks_to_orders_rate": 0,
+          "video_views": 2,
+          "video_viewers": 2
+        },
+        {
+          "source": "psd_label_others",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_clicks_ratio": 0.047619047619047616,
+          "content_views_ratio": 0,
+          "video_views_ratio": 0.6023622047244095,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "buyers": 0,
+          "product_clicks": 1,
+          "unique_product_clicks": 1,
+          "sales_per_order": 0,
+          "ctr": 0.006535947712418301,
+          "product_clicks_to_orders_rate": 0,
+          "video_views": 153,
+          "video_viewers": 120
+        }
+      ]
+    },
+    "affiliate": {
+      "total": {
+        "source": "psd_label_affiliate",
+        "sales_ratio": 1,
+        "orders_ratio": 1,
+        "product_clicks_ratio": 1,
+        "content_views_ratio": 1,
+        "video_views_ratio": 0,
+        "live_views_ratio": 0,
+        "product_impressions_ratio": 0,
+        "sales": 183312,
+        "orders": 1,
+        "units": 1,
+        "buyers": 1,
+        "product_clicks": 148,
+        "unique_product_clicks": 117,
+        "sales_per_order": 183312,
+        "ctr": 0.021825689426338297,
+        "product_clicks_to_orders_rate": 0.006756756756756757,
+        "sales_pct_diff": 0.08571428571428572,
+        "orders_pct_diff": 0,
+        "units_pct_diff": 0,
+        "buyers_pct_diff": 0,
+        "product_clicks_pct_diff": 2.020408163265306,
+        "unique_product_clicks_pct_diff": 2.0789473684210527,
+        "ctr_pct_diff": -0.015211347610698738,
+        "sales_per_order_pct_diff": 0.08571428571428572,
+        "product_clicks_to_orders_rate_pct_diff": -0.013651406508549364,
+        "content_views": 6781,
+        "content_views_pct_diff": 4.1254724111866965,
+        "content_viewers": 1839,
+        "content_viewers_pct_diff": 7.246636771300448
+      },
+      "breakdown": [
+        {
+          "source": "psd_label_affiliate_video",
+          "sales_ratio": 1,
+          "orders_ratio": 1,
+          "product_clicks_ratio": 1,
+          "content_views_ratio": 1,
+          "video_views_ratio": 0,
+          "live_views_ratio": 0,
+          "product_impressions_ratio": 0,
+          "sales": 183312,
+          "orders": 1,
+          "units": 1,
+          "buyers": 1,
+          "product_clicks": 148,
+          "unique_product_clicks": 117,
+          "sales_per_order": 183312,
+          "ctr": 0.021825689426338297,
+          "product_clicks_to_orders_rate": 0.006756756756756757,
+          "content_views": 6781,
+          "content_viewers": 1838
+        }
+      ]
+    },
+    "paid_ads": {
+      "total": {
+        "source": "psd_label_shopee_ads",
+        "sales_ratio": -1000000,
+        "orders_ratio": -1000000,
+        "product_impressions_ratio": -1000000,
+        "product_clicks_ratio": -1000000,
+        "sales": -1000000,
+        "orders": -1000000,
+        "units": -1000000,
+        "product_impressions": -1000000,
+        "product_clicks": -1000000,
+        "ads_expense": -1000000,
+        "ads_roas": -1000000,
+        "live_views": -1000000,
+        "video_views": -1000000,
+        "ctr": -1000000,
+        "conversion": -1000000,
+        "sales_pct_diff": -1000000,
+        "orders_pct_diff": -1000000,
+        "units_pct_diff": -1000000,
+        "product_impressions_pct_diff": -1000000,
+        "product_clicks_pct_diff": -1000000,
+        "ads_expense_pct_diff": -1000000,
+        "ads_roas_pct_diff": -1000000,
+        "live_views_pct_diff": -1000000,
+        "video_views_pct_diff": -1000000,
+        "ctr_pct_diff": -1000000,
+        "conversion_pct_diff": -1000000
+      },
+      "breakdown": [
+        {
+          "source": "psd_label_productgmvmax_autobidding_ads",
+          "sales_ratio": 0.571719023511498,
+          "orders_ratio": 0.5384615384615384,
+          "product_impressions_ratio": 0.6130118900926563,
+          "product_clicks_ratio": -1000000,
+          "sales": 3051827,
+          "orders": 14,
+          "units": 15,
+          "product_impressions": 76613,
+          "product_clicks": -1000000,
+          "ads_expense": 1711894.486709995,
+          "ads_roas": 1.7827191007929202,
+          "live_views": 0,
+          "video_views": 580,
+          "ctr": -1000000,
+          "conversion": 0.00018273661128006996
+        },
+        {
+          "source": "psd_label_productgmvmax_customroas_ads",
+          "sales_ratio": 0.42828097648850205,
+          "orders_ratio": 0.46153846153846156,
+          "product_impressions_ratio": 0.36722463153515017,
+          "product_clicks_ratio": -1000000,
+          "sales": 2286157,
+          "orders": 12,
+          "units": 12,
+          "product_impressions": 45895,
+          "product_clicks": -1000000,
+          "ads_expense": 823552.5276099741,
+          "ads_roas": 2.7759698663479786,
+          "live_views": 0,
+          "video_views": 271,
+          "ctr": -1000000,
+          "conversion": 0.0002614663906743654
+        },
+        {
+          "source": "psd_label_product_gmvmax_autobidding_shop_ads",
+          "sales_ratio": 0,
+          "orders_ratio": 0,
+          "product_impressions_ratio": 0.019763478372193506,
+          "product_clicks_ratio": -1000000,
+          "sales": 0,
+          "orders": 0,
+          "units": 0,
+          "product_impressions": 2470,
+          "product_clicks": -1000000,
+          "ads_expense": 44018.383130000126,
+          "ads_roas": 0,
+          "live_views": 0,
+          "video_views": 2,
+          "ctr": -1000000,
+          "conversion": 0
+        }
+      ]
+    }
+  },
+  "rankings": {
+    "total": 5,
+    "items": [
+      {
+        "id": 40657856676,
+        "name": "Monture - Rompi Pria Puffer Gelembung Outdoor Big Size Jumbo Premium M - 6XL",
+        "image": "id-11134207-81ztd-mtnnv1vvcg74b9",
+        "status": 1,
+        "display_tag_label": "psd_product_status_normal",
+        "unique_product_card_clicks": 1404,
+        "product_card_clicks": 1813,
+        "product_card_impressions": 64012,
+        "unique_product_card_impressions": 33448,
+        "ctr": 0.0283,
+        "placed_order_conversion_rate": 0.0116,
+        "paid_order_conversion_rate": 0.0099,
+        "confirmed_order_conversion_rate": 0.011,
+        "uv": 1268,
+        "pv": 2298,
+        "likes": 8,
+        "bounce_visitors": 555,
+        "bounce_rate": 0.4377,
+        "search_clicks": 889,
+        "add_to_cart_units": 119,
+        "add_to_cart_buyers": 85,
+        "placed_sales": 4356912,
+        "placed_units": 22,
+        "placed_buyers": 21,
+        "placed_orders": 21,
+        "paid_sales": 3778821,
+        "paid_units": 19,
+        "paid_buyers": 18,
+        "paid_orders": 18,
+        "confirmed_sales": 4183032,
+        "confirmed_units": 21,
+        "confirmed_buyers": 20,
+        "confirmed_orders": 20,
+        "placed_sales_per_order": 207472,
+        "confirmed_sales_per_order": 209151.6,
+        "paid_sales_per_order": 209934.5,
+        "placed_to_paid_buyers_rate": 0.8571,
+        "placed_buyers_to_confirmed_buyers_rate": 0.9524,
+        "uv_to_add_to_cart_rate": 0.067,
+        "uv_to_placed_buyers_rate": 0.0166,
+        "uv_to_paid_buyers_rate": 0.0142,
+        "uv_to_confirmed_buyers_rate": 0.0158,
+        "repeat_placed_order_rate": 0,
+        "average_days_to_repeat_placed_order": 0,
+        "repeat_paid_order_rate": 0,
+        "average_days_to_repeat_paid_order": 0,
+        "repeat_confirmed_order_rate": 0,
+        "average_days_to_repeat_confirmed_order": 0,
+        "models": null
+      },
+      {
+        "id": 41720970731,
+        "name": "Monture - Rompi Big Size Jumbo Bikers Anti Angin Bahan Premium M - 6XL",
+        "image": "id-11134207-81ztj-mtno1phb3dvm27",
+        "status": 1,
+        "display_tag_label": "psd_product_status_normal",
+        "unique_product_card_clicks": 215,
+        "product_card_clicks": 301,
+        "product_card_impressions": 7587,
+        "unique_product_card_impressions": 4162,
+        "ctr": 0.0397,
+        "placed_order_conversion_rate": 0.0166,
+        "paid_order_conversion_rate": 0.0166,
+        "confirmed_order_conversion_rate": 0.0166,
+        "uv": 206,
+        "pv": 396,
+        "likes": 1,
+        "bounce_visitors": 96,
+        "bounce_rate": 0.466,
+        "search_clicks": 124,
+        "add_to_cart_units": 21,
+        "add_to_cart_buyers": 15,
+        "placed_sales": 927986,
+        "placed_units": 5,
+        "placed_buyers": 5,
+        "placed_orders": 5,
+        "paid_sales": 846210,
+        "paid_units": 5,
+        "paid_buyers": 5,
+        "paid_orders": 5,
+        "confirmed_sales": 927986,
+        "confirmed_units": 5,
+        "confirmed_buyers": 5,
+        "confirmed_orders": 5,
+        "placed_sales_per_order": 185597.2,
+        "confirmed_sales_per_order": 185597.2,
+        "paid_sales_per_order": 169242,
+        "placed_to_paid_buyers_rate": 1,
+        "placed_buyers_to_confirmed_buyers_rate": 1,
+        "uv_to_add_to_cart_rate": 0.0728,
+        "uv_to_placed_buyers_rate": 0.0243,
+        "uv_to_paid_buyers_rate": 0.0243,
+        "uv_to_confirmed_buyers_rate": 0.0243,
+        "repeat_placed_order_rate": 0,
+        "average_days_to_repeat_placed_order": 0,
+        "repeat_paid_order_rate": 0,
+        "average_days_to_repeat_paid_order": 0,
+        "repeat_confirmed_order_rate": 0,
+        "average_days_to_repeat_confirmed_order": 0,
+        "models": null
+      },
+      {
+        "id": 45117599594,
+        "name": "Monture - Makalu Jaket Gropcore Hiking Big Size Jumbo M - 6XL Premium",
+        "image": "id-11134207-81ztc-mtpc2nzox4at34",
+        "status": 1,
+        "display_tag_label": "psd_product_status_normal",
+        "unique_product_card_clicks": 24,
+        "product_card_clicks": 31,
+        "product_card_impressions": 1912,
+        "unique_product_card_impressions": 1254,
+        "ctr": 0.0162,
+        "placed_order_conversion_rate": 0.0323,
+        "paid_order_conversion_rate": 0,
+        "confirmed_order_conversion_rate": 0.0323,
+        "uv": 21,
+        "pv": 31,
+        "likes": 0,
+        "bounce_visitors": 8,
+        "bounce_rate": 0.381,
+        "search_clicks": 15,
+        "add_to_cart_units": 1,
+        "add_to_cart_buyers": 1,
+        "placed_sales": 237861,
+        "placed_units": 1,
+        "placed_buyers": 1,
+        "placed_orders": 1,
+        "paid_sales": 0,
+        "paid_units": 0,
+        "paid_buyers": 0,
+        "paid_orders": 0,
+        "confirmed_sales": 237861,
+        "confirmed_units": 1,
+        "confirmed_buyers": 1,
+        "confirmed_orders": 1,
+        "placed_sales_per_order": 237861,
+        "confirmed_sales_per_order": 237861,
+        "paid_sales_per_order": 0,
+        "placed_to_paid_buyers_rate": 0,
+        "placed_buyers_to_confirmed_buyers_rate": 1,
+        "uv_to_add_to_cart_rate": 0.0476,
+        "uv_to_placed_buyers_rate": 0.0476,
+        "uv_to_paid_buyers_rate": 0,
+        "uv_to_confirmed_buyers_rate": 0.0476,
+        "repeat_placed_order_rate": 0,
+        "average_days_to_repeat_placed_order": 0,
+        "repeat_paid_order_rate": 0,
+        "average_days_to_repeat_paid_order": 0,
+        "repeat_confirmed_order_rate": 0,
+        "average_days_to_repeat_confirmed_order": 0,
+        "models": null
+      },
+      {
+        "id": 51815924865,
+        "name": "Monture - Rompi Puffer Hoodie Fishing Big Size Jumbo M - 6XL Premium",
+        "image": "id-11134207-81ztl-mto7eabr5g5fbc",
+        "status": 1,
+        "display_tag_label": "psd_product_status_normal",
+        "unique_product_card_clicks": 80,
+        "product_card_clicks": 114,
+        "product_card_impressions": 3664,
+        "unique_product_card_impressions": 2169,
+        "ctr": 0.0311,
+        "placed_order_conversion_rate": 0.0088,
+        "paid_order_conversion_rate": 0.0175,
+        "confirmed_order_conversion_rate": 0.0088,
+        "uv": 77,
+        "pv": 137,
+        "likes": 1,
+        "bounce_visitors": 31,
+        "bounce_rate": 0.4026,
+        "search_clicks": 53,
+        "add_to_cart_units": 11,
+        "add_to_cart_buyers": 6,
+        "placed_sales": 231562,
+        "placed_units": 1,
+        "placed_buyers": 1,
+        "placed_orders": 1,
+        "paid_sales": 361972,
+        "paid_units": 2,
+        "paid_buyers": 2,
+        "paid_orders": 2,
+        "confirmed_sales": 231562,
+        "confirmed_units": 1,
+        "confirmed_buyers": 1,
+        "confirmed_orders": 1,
+        "placed_sales_per_order": 231562,
+        "confirmed_sales_per_order": 231562,
+        "paid_sales_per_order": 180986,
+        "placed_to_paid_buyers_rate": 2,
+        "placed_buyers_to_confirmed_buyers_rate": 1,
+        "uv_to_add_to_cart_rate": 0.0779,
+        "uv_to_placed_buyers_rate": 0.013,
+        "uv_to_paid_buyers_rate": 0.026,
+        "uv_to_confirmed_buyers_rate": 0.013,
+        "repeat_placed_order_rate": 0,
+        "average_days_to_repeat_placed_order": 0,
+        "repeat_paid_order_rate": 0,
+        "average_days_to_repeat_paid_order": 0,
+        "repeat_confirmed_order_rate": 0,
+        "average_days_to_repeat_confirmed_order": 0,
+        "models": null
+      },
+      {
+        "id": 50665938893,
+        "name": "Monture - Rompi Puffer Hoodie Bikers Big Size Jumbo M - 6XL Premium",
+        "image": "id-11134207-81ztm-mto7mjswo9vp49",
+        "status": 1,
+        "display_tag_label": "psd_product_status_normal",
+        "unique_product_card_clicks": 28,
+        "product_card_clicks": 37,
+        "product_card_impressions": 992,
+        "unique_product_card_impressions": 594,
+        "ctr": 0.0373,
+        "placed_order_conversion_rate": 0.027,
+        "paid_order_conversion_rate": 0.027,
+        "confirmed_order_conversion_rate": 0.027,
+        "uv": 27,
+        "pv": 40,
+        "likes": 1,
+        "bounce_visitors": 11,
+        "bounce_rate": 0.4074,
+        "search_clicks": 19,
+        "add_to_cart_units": 1,
+        "add_to_cart_buyers": 1,
+        "placed_sales": 222300,
+        "placed_units": 1,
+        "placed_buyers": 1,
+        "placed_orders": 1,
+        "paid_sales": 222300,
+        "paid_units": 1,
+        "paid_buyers": 1,
+        "paid_orders": 1,
+        "confirmed_sales": 222300,
+        "confirmed_units": 1,
+        "confirmed_buyers": 1,
+        "confirmed_orders": 1,
+        "placed_sales_per_order": 222300,
+        "confirmed_sales_per_order": 222300,
+        "paid_sales_per_order": 222300,
+        "placed_to_paid_buyers_rate": 1,
+        "placed_buyers_to_confirmed_buyers_rate": 1,
+        "uv_to_add_to_cart_rate": 0.037,
+        "uv_to_placed_buyers_rate": 0.037,
+        "uv_to_paid_buyers_rate": 0.037,
+        "uv_to_confirmed_buyers_rate": 0.037,
+        "repeat_placed_order_rate": 0,
+        "average_days_to_repeat_placed_order": 0,
+        "repeat_paid_order_rate": 0,
+        "average_days_to_repeat_paid_order": 0,
+        "repeat_confirmed_order_rate": 0,
+        "average_days_to_repeat_confirmed_order": 0,
+        "models": null
+      }
+    ],
+    "need_upload_item": false
+  },
+  "orderPerf": {
+    "cancelled_sales": {
+      "value": 580955,
+      "old_value": 1621880,
+      "increment": -1040925,
+      "chain_ratio": -0.641801489629319,
+      "points": [
+        {
+          "timestamp": 1788195600,
+          "value": 0
+        },
+        {
+          "timestamp": 1788282000,
+          "value": 0
+        },
+        {
+          "timestamp": 1788368400,
+          "value": 0
+        },
+        {
+          "timestamp": 1788454800,
+          "value": 0
+        },
+        {
+          "timestamp": 1788541200,
+          "value": 173880
+        },
+        {
+          "timestamp": 1788627600,
+          "value": 0
+        },
+        {
+          "timestamp": 1788714000,
+          "value": 0
+        },
+        {
+          "timestamp": 1788800400,
+          "value": 0
+        },
+        {
+          "timestamp": 1788886800,
+          "value": 0
+        },
+        {
+          "timestamp": 1788973200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789059600,
+          "value": 0
+        },
+        {
+          "timestamp": 1789146000,
+          "value": 190950
+        },
+        {
+          "timestamp": 1789232400,
+          "value": 0
+        },
+        {
+          "timestamp": 1789318800,
+          "value": 0
+        },
+        {
+          "timestamp": 1789405200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789491600,
+          "value": 0
+        },
+        {
+          "timestamp": 1789578000,
+          "value": 0
+        },
+        {
+          "timestamp": 1789664400,
+          "value": 0
+        },
+        {
+          "timestamp": 1789750800,
+          "value": 0
+        },
+        {
+          "timestamp": 1789837200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789923600,
+          "value": 0
+        },
+        {
+          "timestamp": 1790010000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790096400,
+          "value": 0
+        },
+        {
+          "timestamp": 1790182800,
+          "value": 0
+        },
+        {
+          "timestamp": 1790269200,
+          "value": 216125
+        },
+        {
+          "timestamp": 1790355600,
+          "value": 0
+        },
+        {
+          "timestamp": 1790442000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790528400,
+          "value": 0
+        },
+        {
+          "timestamp": 1790614800,
+          "value": 0
+        },
+        {
+          "timestamp": 1790701200,
+          "value": 0
+        }
+      ]
+    },
+    "return_refund_sales": {
+      "value": 0,
+      "old_value": 130410,
+      "increment": -130410,
+      "chain_ratio": -1,
+      "points": [
+        {
+          "timestamp": 1788195600,
+          "value": 0
+        },
+        {
+          "timestamp": 1788282000,
+          "value": 0
+        },
+        {
+          "timestamp": 1788368400,
+          "value": 0
+        },
+        {
+          "timestamp": 1788454800,
+          "value": 0
+        },
+        {
+          "timestamp": 1788541200,
+          "value": 0
+        },
+        {
+          "timestamp": 1788627600,
+          "value": 0
+        },
+        {
+          "timestamp": 1788714000,
+          "value": 0
+        },
+        {
+          "timestamp": 1788800400,
+          "value": 0
+        },
+        {
+          "timestamp": 1788886800,
+          "value": 0
+        },
+        {
+          "timestamp": 1788973200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789059600,
+          "value": 0
+        },
+        {
+          "timestamp": 1789146000,
+          "value": 0
+        },
+        {
+          "timestamp": 1789232400,
+          "value": 0
+        },
+        {
+          "timestamp": 1789318800,
+          "value": 0
+        },
+        {
+          "timestamp": 1789405200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789491600,
+          "value": 0
+        },
+        {
+          "timestamp": 1789578000,
+          "value": 0
+        },
+        {
+          "timestamp": 1789664400,
+          "value": 0
+        },
+        {
+          "timestamp": 1789750800,
+          "value": 0
+        },
+        {
+          "timestamp": 1789837200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789923600,
+          "value": 0
+        },
+        {
+          "timestamp": 1790010000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790096400,
+          "value": 0
+        },
+        {
+          "timestamp": 1790182800,
+          "value": 0
+        },
+        {
+          "timestamp": 1790269200,
+          "value": 0
+        },
+        {
+          "timestamp": 1790355600,
+          "value": 0
+        },
+        {
+          "timestamp": 1790442000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790528400,
+          "value": 0
+        },
+        {
+          "timestamp": 1790614800,
+          "value": 0
+        },
+        {
+          "timestamp": 1790701200,
+          "value": 0
+        }
+      ]
+    },
+    "cancelled_orders": {
+      "value": 3,
+      "old_value": 12,
+      "increment": -9,
+      "chain_ratio": -0.75,
+      "points": [
+        {
+          "timestamp": 1788195600,
+          "value": 0
+        },
+        {
+          "timestamp": 1788282000,
+          "value": 0
+        },
+        {
+          "timestamp": 1788368400,
+          "value": 0
+        },
+        {
+          "timestamp": 1788454800,
+          "value": 0
+        },
+        {
+          "timestamp": 1788541200,
+          "value": 1
+        },
+        {
+          "timestamp": 1788627600,
+          "value": 0
+        },
+        {
+          "timestamp": 1788714000,
+          "value": 0
+        },
+        {
+          "timestamp": 1788800400,
+          "value": 0
+        },
+        {
+          "timestamp": 1788886800,
+          "value": 0
+        },
+        {
+          "timestamp": 1788973200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789059600,
+          "value": 0
+        },
+        {
+          "timestamp": 1789146000,
+          "value": 1
+        },
+        {
+          "timestamp": 1789232400,
+          "value": 0
+        },
+        {
+          "timestamp": 1789318800,
+          "value": 0
+        },
+        {
+          "timestamp": 1789405200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789491600,
+          "value": 0
+        },
+        {
+          "timestamp": 1789578000,
+          "value": 0
+        },
+        {
+          "timestamp": 1789664400,
+          "value": 0
+        },
+        {
+          "timestamp": 1789750800,
+          "value": 0
+        },
+        {
+          "timestamp": 1789837200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789923600,
+          "value": 0
+        },
+        {
+          "timestamp": 1790010000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790096400,
+          "value": 0
+        },
+        {
+          "timestamp": 1790182800,
+          "value": 0
+        },
+        {
+          "timestamp": 1790269200,
+          "value": 1
+        },
+        {
+          "timestamp": 1790355600,
+          "value": 0
+        },
+        {
+          "timestamp": 1790442000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790528400,
+          "value": 0
+        },
+        {
+          "timestamp": 1790614800,
+          "value": 0
+        },
+        {
+          "timestamp": 1790701200,
+          "value": 0
+        }
+      ]
+    },
+    "return_refund_orders": {
+      "value": 0,
+      "old_value": 1,
+      "increment": -1,
+      "chain_ratio": -1,
+      "points": [
+        {
+          "timestamp": 1788195600,
+          "value": 0
+        },
+        {
+          "timestamp": 1788282000,
+          "value": 0
+        },
+        {
+          "timestamp": 1788368400,
+          "value": 0
+        },
+        {
+          "timestamp": 1788454800,
+          "value": 0
+        },
+        {
+          "timestamp": 1788541200,
+          "value": 0
+        },
+        {
+          "timestamp": 1788627600,
+          "value": 0
+        },
+        {
+          "timestamp": 1788714000,
+          "value": 0
+        },
+        {
+          "timestamp": 1788800400,
+          "value": 0
+        },
+        {
+          "timestamp": 1788886800,
+          "value": 0
+        },
+        {
+          "timestamp": 1788973200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789059600,
+          "value": 0
+        },
+        {
+          "timestamp": 1789146000,
+          "value": 0
+        },
+        {
+          "timestamp": 1789232400,
+          "value": 0
+        },
+        {
+          "timestamp": 1789318800,
+          "value": 0
+        },
+        {
+          "timestamp": 1789405200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789491600,
+          "value": 0
+        },
+        {
+          "timestamp": 1789578000,
+          "value": 0
+        },
+        {
+          "timestamp": 1789664400,
+          "value": 0
+        },
+        {
+          "timestamp": 1789750800,
+          "value": 0
+        },
+        {
+          "timestamp": 1789837200,
+          "value": 0
+        },
+        {
+          "timestamp": 1789923600,
+          "value": 0
+        },
+        {
+          "timestamp": 1790010000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790096400,
+          "value": 0
+        },
+        {
+          "timestamp": 1790182800,
+          "value": 0
+        },
+        {
+          "timestamp": 1790269200,
+          "value": 0
+        },
+        {
+          "timestamp": 1790355600,
+          "value": 0
+        },
+        {
+          "timestamp": 1790442000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790528400,
+          "value": 0
+        },
+        {
+          "timestamp": 1790614800,
+          "value": 0
+        },
+        {
+          "timestamp": 1790701200,
+          "value": 0
+        }
+      ]
+    }
+  },
+  "fetchedAt": "2026-10-03T13:46:33.816Z"
+}
