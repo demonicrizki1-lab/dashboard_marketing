@@ -6,7 +6,8 @@ export default function ShopeeDataCenterPicker({
   onChange, 
   lastUpdated,
   orderType = 'paid',
-  onOrderTypeChange
+  onOrderTypeChange,
+  showLiveBadge = false
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isOrderTypeOpen, setIsOrderTypeOpen] = useState(false);
@@ -804,25 +805,27 @@ export default function ShopeeDataCenterPicker({
         )}
       </div>
 
-      {/* Indikator Live Connection (Pill Kompak) */}
-      <div
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '6px',
-          padding: '5px 10px',
-          borderRadius: '20px',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
-          border: '1px solid rgba(16, 185, 129, 0.25)',
-          fontSize: '11px',
-          fontWeight: 600,
-          color: '#10B981'
-        }}
-        title="Terhubung langsung ke Shopee Seller Center Data Center API"
-      >
-        <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#10B981', boxShadow: '0 0 6px #10B981' }} />
-        <span>Shopee API Live</span>
-      </div>
+      {/* Indikator Live Connection (Pill Kompak, opsional) */}
+      {showLiveBadge && (
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '5px 10px',
+            borderRadius: '20px',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            border: '1px solid rgba(16, 185, 129, 0.25)',
+            fontSize: '11px',
+            fontWeight: 600,
+            color: '#10B981'
+          }}
+          title="Terhubung langsung ke Shopee Seller Center Data Center API"
+        >
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#10B981', boxShadow: '0 0 6px #10B981' }} />
+          <span>Shopee API Live</span>
+        </div>
+      )}
     </div>
   );
 }

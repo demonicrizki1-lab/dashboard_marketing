@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import ShopeeDataCenterPicker from './ShopeeDataCenterPicker';
 import {
   Briefcase,
   TrendingUp,

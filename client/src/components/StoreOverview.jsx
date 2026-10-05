@@ -329,12 +329,11 @@ export default function StoreOverview({ showToast, storeInfo }) {
   return (
     <div className="store-overview-container" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
-      {/* 1. Header Filter Bar (Menggunakan ShopeeDataCenterPicker Replika 1:1) */}
-      {/* 1. Header Filter Bar (Zona 1: Filter Bar & Status Koneksi Terpadu) */}
+      {/* 1. Header Filter Bar (Zona 1: Quick Presets + Shopee Data Center Picker + Utilitas Terpadu) */}
       <div
         className="glass-card"
         style={{
-          padding: '14px 20px',
+          padding: '12px 18px',
           borderRadius: '14px',
           display: 'flex',
           alignItems: 'center',
@@ -342,11 +341,13 @@ export default function StoreOverview({ showToast, storeInfo }) {
           flexWrap: 'wrap',
           gap: '12px',
           border: '1px solid rgba(255, 255, 255, 0.08)',
-          background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%)'
+          background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.45) 0%, rgba(15, 23, 42, 0.65) 100%)',
+          boxShadow: '0 4px 20px -8px rgba(0,0,0,0.4)'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-          {/* Shopee Data Center Dropdown Picker (Termasuk Status Pesanan Dropdown Replika Seller Center) */}
+        {/* Sisi Kiri: Shopee Data Center Picker + Quick Preset Chips */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          {/* Shopee Data Center Dropdown Picker */}
           <ShopeeDataCenterPicker
             selectedPeriod={selectedPeriodObj}
             onChange={(newPeriod) => {
@@ -354,10 +355,96 @@ export default function StoreOverview({ showToast, storeInfo }) {
             }}
             orderType={orderType}
             onOrderTypeChange={handleOrderTypeChange}
+            showLiveBadge={false}
           />
+
+          {/* Pemisah Vertikal */}
+          <div style={{ width: '1px', height: '22px', backgroundColor: 'rgba(255, 255, 255, 0.12)', margin: '0 2px' }} />
+
+          {/* Quick Preset Shortcut Chips (Akses Cepat Harian/Mingguan/Bulanan) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+            {[
+              { id: 'Real-time', period: 'real_time', label: 'Hari Ini' },
+              { id: 'Kemarin', period: 'yesterday', label: 'Kemarin' },
+              { id: '7 hari sebelumnya.', period: 'past7days', label: '7 Hari' },
+              { id: '30 hari sebelumnya.', period: 'past30days', label: '30 Hari' }
+            ].map(preset => {
+              const isActive = selectedPeriodObj?.id === preset.id || selectedPeriodObj?.period === preset.period || selectedPeriodObj?.label === preset.id;
+              return (
+                <button
+                  key={preset.id}
+                  onClick={() => {
+                    const nowSec = Math.floor(Date.now() / 1000);
+                    let sTime = null;
+                    let eTime = null;
+                    if (preset.id === 'Kemarin') {
+                      const today0 = Math.floor(new Date().setHours(0,0,0,0) / 1000);
+                      sTime = today0 - 86400;
+                      eTime = today0 - 1;
+                    } else if (preset.id === 'Real-time') {
+                      sTime = Math.floor(new Date().setHours(0,0,0,0) / 1000);
+                      eTime = nowSec;
+                    } else if (preset.id === '7 hari sebelumnya.') {
+                      sTime = nowSec - 7 * 86400;
+                      eTime = nowSec;
+                    } else if (preset.id === '30 hari sebelumnya.') {
+                      sTime = nowSec - 30 * 86400;
+                      eTime = nowSec;
+                    }
+
+                    const newPeriod = {
+                      id: preset.id,
+                      period: preset.period,
+                      startTime: sTime,
+                      endTime: eTime,
+                      label: preset.id
+                    };
+                    setSelectedPeriodObj(newPeriod);
+                  }}
+                  className={`badge ${isActive ? 'active' : ''}`}
+                  style={{
+                    cursor: 'pointer',
+                    padding: '5px 11px',
+                    fontSize: '11.5px',
+                    fontWeight: isActive ? 700 : 500,
+                    backgroundColor: isActive ? 'rgba(238, 77, 45, 0.16)' : 'rgba(255, 255, 255, 0.04)',
+                    color: isActive ? 'var(--color-brand-primary)' : 'var(--text-secondary)',
+                    border: isActive ? '1px solid var(--color-brand-primary)' : '1px solid rgba(255, 255, 255, 0.08)',
+                    borderRadius: '8px',
+                    transition: 'all 0.15s ease'
+                  }}
+                  title={`Pindah cepat ke periode ${preset.label}`}
+                >
+                  {preset.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        {/* Sisi Kanan: Aksi Segarkan & Export CSV */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => fetchOverview(selectedPeriodObj, true, orderType)}
+            className="btn-secondary"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '11.5px',
+              padding: '6px 12px',
+              borderRadius: '8px',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              color: 'var(--text-secondary)',
+              cursor: 'pointer'
+            }}
+            title="Muat ulang data live terkini dari Shopee"
+          >
+            <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
+            <span>Segarkan</span>
+          </button>
+
           <button
             onClick={handleExportCSV}
             className="btn-secondary"
@@ -365,18 +452,17 @@ export default function StoreOverview({ showToast, storeInfo }) {
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              fontSize: '12px',
-              padding: '7px 14px',
+              fontSize: '11.5px',
+              padding: '6px 12px',
               borderRadius: '8px',
               backgroundColor: 'rgba(255, 255, 255, 0.05)',
               border: '1px solid rgba(255, 255, 255, 0.12)',
               color: 'var(--text-secondary)',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease'
+              cursor: 'pointer'
             }}
             title="Unduh rekapitulasi performa ke CSV"
           >
-            <Download size={14} />
+            <Download size={13} />
             <span>Export CSV</span>
           </button>
         </div>
