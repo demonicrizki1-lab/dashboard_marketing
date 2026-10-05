@@ -319,10 +319,14 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
   const scorecardMetrics = useMemo(() => {
     // Skenario A: Jika PIC Baru aktif dalam filter (atau membandingkan terhadap baseline):
     if (picBaruStats.hasData) {
+      const lamaOrdInt = Math.round(Number(picLamaStats.avgMonthlyOrders));
+      const baruOrdInt = Math.round(Number(picBaruStats.avgMonthlyOrders));
+      const adsPctNum = Number(picBaruStats.adsRatio);
       return {
         card1: {
           title: 'Pertumbuhan Omzet / Bulan',
           value: `${picBaruStats.revGrowth}%`,
+          badge: !picBaruStats.revGrowth.startsWith('-') ? '🚀 Akselerasi Omzet' : '📉 Penurunan Omzet',
           isPositive: !picBaruStats.revGrowth.startsWith('-'),
           subtitle: `Dari ${picLamaStats.avgMonthlyRevenueFormatted} → ${picBaruStats.avgMonthlyRevenueFormatted}/bln`,
           icon: TrendingUp,
@@ -332,8 +336,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         card2: {
           title: 'Pertumbuhan Pesanan / Bulan',
           value: `${picBaruStats.ordGrowth}%`,
+          badge: '📦 Volume Penjualan',
           isPositive: !picBaruStats.ordGrowth.startsWith('-'),
-          subtitle: `Dari ${picLamaStats.avgMonthlyOrders} order → ${picBaruStats.avgMonthlyOrders} order/bln`,
+          subtitle: `Dari ${lamaOrdInt} order → ${baruOrdInt} order/bln`,
           icon: ShoppingBag,
           color: '#10B981',
           bg: 'rgba(16, 185, 129, 0.12)'
@@ -341,6 +346,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         card3: {
           title: 'Peningkatan Nilai Belanja (AOV)',
           value: `${picBaruStats.aovGrowth}%`,
+          badge: '💎 Daya Beli Keranjang',
           isPositive: !picBaruStats.aovGrowth.startsWith('-'),
           subtitle: `Dari ${picLamaStats.aovFormatted} → ${picBaruStats.aovFormatted}`,
           icon: CreditCard,
@@ -350,31 +356,37 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         card4: {
           title: 'Ketergantungan Belanja Iklan',
           value: `${picBaruStats.adsRatio}%`,
+          badge: adsPctNum > 50 ? '⚠️ Iklan Dominan' : '🛡️ Organik Dominan',
           isPositive: null,
-          subtitle: `Rasio era lama: ${picLamaStats.adsRatio}% → era baru: ${picBaruStats.adsRatio}%`,
+          subtitle: `Iklan: ${picBaruStats.adsRatio}% • Organik: ${picBaruStats.organicRatio}%`,
           icon: Percent,
-          color: '#F59E0B',
-          bg: 'rgba(245, 158, 11, 0.12)'
+          color: adsPctNum > 50 ? '#F59E0B' : '#10B981',
+          bg: adsPctNum > 50 ? 'rgba(245, 158, 11, 0.12)' : 'rgba(16, 185, 129, 0.12)',
+          adsRatio: adsPctNum,
+          organicRatio: Number(picBaruStats.organicRatio)
         }
       };
     }
 
     // Skenario B: Jika filter HANYA memilih era PIC Lama (misal: Tahun 2025):
+    const lamaOrdInt = Math.round(Number(picLamaStats.avgMonthlyOrders));
     return {
       card1: {
         title: 'Rata-Rata Omzet / Bulan',
         value: picLamaStats.avgMonthlyRevenueFormatted,
+        badge: '👤 Era PIC Lama',
         isPositive: true,
-        subtitle: `Total Omzet Periode Ini: ${picLamaStats.totalRevenueFormatted}`,
+        subtitle: `Total Omzet Periode: ${picLamaStats.totalRevenueFormatted}`,
         icon: TrendingUp,
         color: '#3B82F6',
         bg: 'rgba(59, 130, 246, 0.12)'
       },
       card2: {
         title: 'Rata-Rata Pesanan / Bulan',
-        value: `${picLamaStats.avgMonthlyOrders} pesanan`,
+        value: `${lamaOrdInt} pesanan`,
+        badge: '📦 Volume Penjualan',
         isPositive: true,
-        subtitle: `Total Pesanan Periode Ini: ${picLamaStats.totalOrders} pesanan`,
+        subtitle: `Total Terfilter: ${picLamaStats.totalOrders} pesanan`,
         icon: ShoppingBag,
         color: '#3B82F6',
         bg: 'rgba(59, 130, 246, 0.12)'
@@ -382,6 +394,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
       card3: {
         title: 'Nilai Belanja Rata-Rata (AOV)',
         value: picLamaStats.aovFormatted,
+        badge: '💎 Nilai Keranjang',
         isPositive: true,
         subtitle: 'Rata-rata nilai belanja keranjang terfilter',
         icon: CreditCard,
@@ -391,12 +404,33 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
       card4: {
         title: 'Rasio Iklan vs Organik',
         value: `${picLamaStats.adsRatio}% / ${picLamaStats.organicRatio}%`,
+        badge: '🌱 Organik Murni',
         isPositive: null,
         subtitle: 'Toko murni mengandalkan penjualan organik',
         icon: Percent,
         color: '#10B981',
-        bg: 'rgba(16, 185, 129, 0.12)'
+        bg: 'rgba(16, 185, 129, 0.12)',
+        adsRatio: Number(picLamaStats.adsRatio),
+        organicRatio: Number(picLamaStats.organicRatio)
       }
+    };
+  }, [picBaruStats, picLamaStats]);
+
+  // Perhitungan Selisih Pertumbuhan Bersih (Net Growth Impact PIC Baru vs PIC Lama)
+  const netDeltas = useMemo(() => {
+    if (!picBaruStats.hasData) return null;
+    const revDelta = picBaruStats.avgMonthlyRevenue - picLamaStats.avgMonthlyRevenue;
+    const lamaOrdInt = Math.round(Number(picLamaStats.avgMonthlyOrders));
+    const baruOrdInt = Math.round(Number(picBaruStats.avgMonthlyOrders));
+    const ordDelta = baruOrdInt - lamaOrdInt;
+    const aovDelta = picBaruStats.aov - picLamaStats.aov;
+    return {
+      revDelta,
+      revDeltaFormatted: (revDelta >= 0 ? '+Rp ' : '-Rp ') + Math.abs(revDelta).toLocaleString('id-ID'),
+      ordDelta,
+      ordDeltaFormatted: (ordDelta >= 0 ? '+' : '') + ordDelta,
+      aovDelta,
+      aovDeltaFormatted: (aovDelta >= 0 ? '+Rp ' : '-Rp ') + Math.abs(aovDelta).toLocaleString('id-ID')
     };
   }, [picBaruStats, picLamaStats]);
 
@@ -534,6 +568,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
 
     const labels = filteredTrends.map(t => t.month);
     const pointColors = filteredTrends.map(t => t.pic === 'BARU' ? '#EE4D2D' : '#3B82F6');
+    // Highlight titik Agustus 2026 (titik transisi serah terima PIC)
+    const gmvPointRadii = filteredTrends.map(t => t.mCode === '2026-08' ? 7.5 : (t.pic === 'BARU' ? 5 : 4));
 
     const datasets = [];
 
@@ -546,8 +582,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         fill: true,
         tension: 0.35,
         borderWidth: 2.8,
-        pointRadius: 4.5,
-        pointHoverRadius: 7,
+        pointRadius: gmvPointRadii,
+        pointHoverRadius: 8,
         pointBackgroundColor: pointColors,
         pointBorderColor: '#FFFFFF',
         pointBorderWidth: 1.5
@@ -563,7 +599,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         borderDash: [5, 4],
         tension: 0.35,
         borderWidth: 2,
-        pointRadius: 3,
+        pointRadius: gmvPointRadii.map(r => Math.max(2.5, r - 1.5)),
+        pointHoverRadius: 6,
         pointBackgroundColor: '#F97316'
       });
     }
@@ -577,7 +614,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         borderDash: [3, 3],
         tension: 0.35,
         borderWidth: 2,
-        pointRadius: 3,
+        pointRadius: gmvPointRadii.map(r => Math.max(2.5, r - 1.5)),
+        pointHoverRadius: 6,
         pointBackgroundColor: '#10B981'
       });
     }
@@ -599,127 +637,78 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
   return (
     <div className="evaluation-container" style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
       
-      {/* 1. Executive Header Bar */}
-      <div
-        className="glass-card"
-        style={{
-          padding: '20px 24px',
-          borderRadius: '16px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '16px',
-          background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%)',
-          border: '1px solid rgba(255, 255, 255, 0.1)'
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div
-            style={{
-              width: '46px',
-              height: '46px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              boxShadow: '0 8px 16px rgba(2, 132, 199, 0.3)'
-            }}
-          >
-            <Briefcase size={24} strokeWidth={2.2} />
-          </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-              <h2 style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em', margin: 0, color: 'var(--text-primary)' }}>
-                Laporan Kinerja PIC & Tim Marketing
-              </h2>
-              <span className="badge" style={{ backgroundColor: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8', border: '1px solid rgba(56, 189, 248, 0.3)', fontSize: '11px', padding: '2px 8px' }}>
-                Executive Benchmark
-              </span>
-            </div>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
-              Analisis komparatif efisiensi dan pertumbuhan strategi: <strong>PIC Lama (Sep 2024 – Jul 2026)</strong> vs <strong>PIC Baru (Agu 2026 – Saat ini)</strong>
-            </p>
-          </div>
-        </div>
-
-        {/* Action Buttons: Refresh, Print PDF, Export CSV */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-          <button
-            onClick={() => fetchEvaluationData(selectedPeriodObj, true, orderType)}
-            className="btn-secondary"
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', padding: '7px 14px', borderRadius: '8px' }}
-            title="Muat ulang data evaluasi terkini dari Shopee API"
-          >
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-            <span>Segarkan</span>
-          </button>
-
-          <button
-            onClick={handlePrint}
-            className="btn-secondary"
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', padding: '7px 14px', borderRadius: '8px' }}
-            title="Cetak atau simpan ke PDF"
-          >
-            <Printer size={14} />
-            <span>Cetak / PDF</span>
-          </button>
-
-          <button
-            onClick={handleExportCSV}
-            className="btn-secondary"
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', padding: '7px 14px', borderRadius: '8px' }}
-            title="Unduh rekapitulasi evaluasi kinerja ke CSV"
-          >
-            <Download size={14} />
-            <span>Export CSV</span>
-          </button>
-        </div>
-      </div>
-
-      {/* 2. Filter Bar Periode Evaluasi Interaktif */}
-      <section aria-label="Filter Periode Evaluasi Kinerja">
+      {/* 1. Executive Toolbar & Filter Bar Terpadu (Zona 1) */}
+      <section aria-label="Toolbar dan Filter Evaluasi Kinerja PIC">
         <div
           className="glass-card"
           style={{
-            padding: '16px 20px',
+            padding: '14px 20px',
             borderRadius: '14px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '14px',
+            gap: '12px',
             border: '1px solid rgba(255, 255, 255, 0.08)',
             background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%)'
           }}
         >
-          {/* Baris 1: ShopeeDataCenterPicker + Presets */}
+          {/* Main Row: Title Badge + Shopee Picker + Presets + Actions */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
             
-            {/* Sisi Kiri: Shopee Data Center Dropdown & Preset Pills */}
+            {/* Left Section: Icon Badge + ShopeeDataCenterPicker + Presets */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
               
-              {/* Dropdown Shopee Data Center Replika */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <ShopeeDataCenterPicker
-                  selectedPeriod={selectedPeriodObj}
-                  onChange={(newPeriod) => {
-                    setSelectedPeriodObj(newPeriod);
-                    setActivePeriodFilter('datacenter');
-                    fetchEvaluationData(newPeriod, false, orderType);
+              {/* Badge Icon & Label */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div
+                  style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '10px',
+                    background: 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+                    boxShadow: '0 4px 12px rgba(2, 132, 199, 0.3)',
+                    flexShrink: 0
                   }}
-                  orderType={orderType}
-                  onOrderTypeChange={(newOrderType) => {
-                    setOrderType(newOrderType);
-                    fetchEvaluationData(selectedPeriodObj, false, newOrderType);
-                  }}
-                />
+                >
+                  <Briefcase size={18} strokeWidth={2.2} />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                      Benchmark PIC
+                    </span>
+                    <span className="badge" style={{ backgroundColor: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8', border: '1px solid rgba(56, 189, 248, 0.25)', fontSize: '10px', padding: '1px 6px' }}>
+                      Executive Audit
+                    </span>
+                  </div>
+                </div>
               </div>
 
               {/* Separator Divider */}
-              <div style={{ width: '1px', height: '26px', backgroundColor: 'rgba(255, 255, 255, 0.12)' }} />
+              <div style={{ width: '1px', height: '24px', backgroundColor: 'rgba(255, 255, 255, 0.12)' }} />
 
-              {/* Quick Era & Year Preset Pills */}
+              {/* Shopee Data Center Dropdown Picker */}
+              <ShopeeDataCenterPicker
+                selectedPeriod={selectedPeriodObj}
+                onChange={(newPeriod) => {
+                  setSelectedPeriodObj(newPeriod);
+                  setActivePeriodFilter('datacenter');
+                  fetchEvaluationData(newPeriod, false, orderType);
+                }}
+                orderType={orderType}
+                onOrderTypeChange={(newOrderType) => {
+                  setOrderType(newOrderType);
+                  fetchEvaluationData(selectedPeriodObj, false, newOrderType);
+                }}
+              />
+
+              {/* Separator Divider */}
+              <div style={{ width: '1px', height: '24px', backgroundColor: 'rgba(255, 255, 255, 0.12)' }} />
+
+              {/* Quick Era Preset Pills */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                 {[
                   { id: 'all', label: '🌟 Semua (Lifetime)' },
@@ -728,7 +717,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   { id: '2026', label: '📅 Tahun 2026' },
                   { id: '2025', label: '🗓️ Tahun 2025' },
                   { id: 'last_3m', label: '📊 3 Bulan Terakhir' },
-                  { id: 'custom', label: '📆 Rentang Kustom' }
+                  { id: 'custom', label: '📆 Kustom' }
                 ].map(p => {
                   const isSelected = activePeriodFilter === p.id;
                   return (
@@ -783,8 +772,10 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
 
             </div>
 
-            {/* Sisi Kanan: Status Data Terfilter */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Right Section: Status Pill & Action Buttons */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              
+              {/* Filtered Data Pill */}
               <div
                 style={{
                   fontSize: '11.5px',
@@ -800,14 +791,46 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               >
                 <Clock size={13} style={{ color: 'var(--color-brand-primary)' }} />
                 <span>
-                  Data Terfilter: <strong style={{ color: 'var(--text-primary)' }}>{filteredTrends.length} Bulan</strong> ({filteredStats.totalOrders} Pesanan)
+                  <strong style={{ color: 'var(--text-primary)' }}>{filteredTrends.length} Bulan</strong> ({filteredStats.totalOrders} Order)
                 </span>
               </div>
+
+              {/* Action Buttons: Segarkan, Cetak PDF, Export CSV */}
+              <button
+                onClick={() => fetchEvaluationData(selectedPeriodObj, true, orderType)}
+                className="btn-secondary"
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', padding: '6px 12px', borderRadius: '8px' }}
+                title="Muat ulang data evaluasi terkini dari Shopee API"
+              >
+                <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
+                <span>Segarkan</span>
+              </button>
+
+              <button
+                onClick={handlePrint}
+                className="btn-secondary"
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', padding: '6px 12px', borderRadius: '8px' }}
+                title="Cetak atau simpan ke PDF"
+              >
+                <Printer size={13} />
+                <span>Cetak</span>
+              </button>
+
+              <button
+                onClick={handleExportCSV}
+                className="btn-secondary"
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', padding: '6px 12px', borderRadius: '8px' }}
+                title="Unduh rekapitulasi evaluasi kinerja ke CSV"
+              >
+                <Download size={13} />
+                <span>CSV</span>
+              </button>
+
             </div>
 
           </div>
 
-          {/* Baris 2 (Kondisional): Form Rentang Bulan Kustom */}
+          {/* Conditional Sub-Row: Custom Month Range Form */}
           {activePeriodFilter === 'custom' && (
             <div
               style={{
@@ -815,29 +838,29 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 alignItems: 'center',
                 gap: '12px',
                 flexWrap: 'wrap',
-                padding: '12px 16px',
-                borderRadius: '10px',
+                padding: '10px 14px',
+                borderRadius: '8px',
                 backgroundColor: 'rgba(238, 77, 45, 0.05)',
                 border: '1px solid rgba(238, 77, 45, 0.25)'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-brand-primary)' }}>
                 <SlidersHorizontal size={14} />
-                <span style={{ fontSize: '12px', fontWeight: 700 }}>Tentukan Rentang Bulan:</span>
+                <span style={{ fontSize: '11.5px', fontWeight: 700 }}>Pilih Rentang Bulan:</span>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Mulai:</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Mulai:</span>
                 <select
                   value={customStartMonth}
                   onChange={(e) => setCustomStartMonth(e.target.value)}
                   style={{
-                    padding: '6px 10px',
+                    padding: '5px 8px',
                     borderRadius: '6px',
                     backgroundColor: '#1E293B',
                     color: '#FFFFFF',
                     border: '1px solid rgba(255, 255, 255, 0.15)',
-                    fontSize: '12px',
+                    fontSize: '11.5px',
                     fontWeight: 600,
                     cursor: 'pointer'
                   }}
@@ -850,20 +873,20 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 </select>
               </div>
 
-              <ArrowRight size={14} style={{ color: 'var(--text-muted)' }} />
+              <ArrowRight size={13} style={{ color: 'var(--text-muted)' }} />
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Sampai:</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Sampai:</span>
                 <select
                   value={customEndMonth}
                   onChange={(e) => setCustomEndMonth(e.target.value)}
                   style={{
-                    padding: '6px 10px',
+                    padding: '5px 8px',
                     borderRadius: '6px',
                     backgroundColor: '#1E293B',
                     color: '#FFFFFF',
                     border: '1px solid rgba(255, 255, 255, 0.15)',
-                    fontSize: '12px',
+                    fontSize: '11.5px',
                     fontWeight: 600,
                     cursor: 'pointer'
                   }}
@@ -890,7 +913,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 }}
                 className="btn-primary"
                 style={{
-                  padding: '6px 14px',
+                  padding: '5px 12px',
                   fontSize: '11.5px',
                   borderRadius: '6px',
                   cursor: 'pointer'
@@ -901,15 +924,15 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             </div>
           )}
 
-          {/* Banner Informasi Periode Terpilih */}
+          {/* Sub-Row: Breadcrumb & Active Filter Info */}
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              fontSize: '11.5px',
+              fontSize: '11px',
               color: 'var(--text-muted)',
-              paddingTop: '8px',
+              paddingTop: '6px',
               borderTop: '1px solid rgba(255, 255, 255, 0.05)',
               flexWrap: 'wrap',
               gap: '8px'
@@ -934,13 +957,13 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   background: 'transparent',
                   border: 'none',
                   color: '#60A5FA',
-                  fontSize: '11.5px',
+                  fontSize: '11px',
                   fontWeight: 600,
                   cursor: 'pointer',
                   textDecoration: 'underline'
                 }}
               >
-                Reset ke Semua Periode (Sepanjang Masa)
+                Reset ke Semua Periode (Lifetime)
               </button>
             )}
           </div>
@@ -948,98 +971,179 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         </div>
       </section>
 
-      {/* 3. Executive Scorecards Dinamis (100% Menyesuaikan Filter Terpilih) */}
+      {/* 2. Executive Scorecards Dinamis (Zona 2: 100% Menyesuaikan Filter Terpilih) */}
       <section aria-label="Ringkasan Kinerja Utama">
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
             gap: '14px'
           }}
         >
           {/* Card 1: Omzet / Bulan */}
-          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
-                {scorecardMetrics.card1.title}
-              </span>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card1.bg, color: scorecardMetrics.card1.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <TrendingUp size={16} />
+          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+                  {scorecardMetrics.card1.title}
+                </span>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card1.bg, color: scorecardMetrics.card1.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <TrendingUp size={16} />
+                </div>
+              </div>
+              <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card1.color, fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {scorecardMetrics.card1.value}
               </div>
             </div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card1.color, fontFamily: 'var(--font-mono)' }}>
-              {scorecardMetrics.card1.value}
-            </div>
-            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-              {scorecardMetrics.card1.subtitle}
+            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                {scorecardMetrics.card1.subtitle}
+              </span>
+              <span className="badge" style={{ backgroundColor: scorecardMetrics.card1.bg, color: scorecardMetrics.card1.color, fontSize: '10px', padding: '1px 6px', borderRadius: '5px' }}>
+                {scorecardMetrics.card1.badge}
+              </span>
             </div>
           </div>
 
           {/* Card 2: Pesanan / Bulan */}
-          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
-                {scorecardMetrics.card2.title}
-              </span>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card2.bg, color: scorecardMetrics.card2.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <ShoppingBag size={16} />
+          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+                  {scorecardMetrics.card2.title}
+                </span>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card2.bg, color: scorecardMetrics.card2.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <ShoppingBag size={16} />
+                </div>
+              </div>
+              <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card2.color, fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {scorecardMetrics.card2.value}
               </div>
             </div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card2.color, fontFamily: 'var(--font-mono)' }}>
-              {scorecardMetrics.card2.value}
-            </div>
-            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-              {scorecardMetrics.card2.subtitle}
+            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                {scorecardMetrics.card2.subtitle}
+              </span>
+              <span className="badge" style={{ backgroundColor: scorecardMetrics.card2.bg, color: scorecardMetrics.card2.color, fontSize: '10px', padding: '1px 6px', borderRadius: '5px' }}>
+                {scorecardMetrics.card2.badge}
+              </span>
             </div>
           </div>
 
           {/* Card 3: Nilai Belanja Rata-Rata (AOV) */}
-          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
-                {scorecardMetrics.card3.title}
-              </span>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card3.bg, color: scorecardMetrics.card3.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <CreditCard size={16} />
+          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+                  {scorecardMetrics.card3.title}
+                </span>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card3.bg, color: scorecardMetrics.card3.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CreditCard size={16} />
+                </div>
+              </div>
+              <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card3.color, fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {scorecardMetrics.card3.value}
               </div>
             </div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card3.color, fontFamily: 'var(--font-mono)' }}>
-              {scorecardMetrics.card3.value}
-            </div>
-            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-              {scorecardMetrics.card3.subtitle}
+            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                {scorecardMetrics.card3.subtitle}
+              </span>
+              <span className="badge" style={{ backgroundColor: scorecardMetrics.card3.bg, color: scorecardMetrics.card3.color, fontSize: '10px', padding: '1px 6px', borderRadius: '5px' }}>
+                {scorecardMetrics.card3.badge}
+              </span>
             </div>
           </div>
 
           {/* Card 4: Ketergantungan Iklan / Rasio */}
-          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
-                {scorecardMetrics.card4.title}
-              </span>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card4.bg, color: scorecardMetrics.card4.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Percent size={16} />
+          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+                  {scorecardMetrics.card4.title}
+                </span>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card4.bg, color: scorecardMetrics.card4.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Percent size={16} />
+                </div>
+              </div>
+              <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card4.color, fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {scorecardMetrics.card4.value}
+              </div>
+              {/* Mini 2-tone Bar (Ads vs Organic) */}
+              <div style={{ height: '4px', width: '100%', borderRadius: '2px', backgroundColor: 'rgba(255,255,255,0.06)', display: 'flex', overflow: 'hidden', marginTop: '8px' }}>
+                <div style={{ width: `${scorecardMetrics.card4.adsRatio}%`, backgroundColor: '#F97316' }} title={`Iklan: ${scorecardMetrics.card4.adsRatio}%`} />
+                <div style={{ width: `${scorecardMetrics.card4.organicRatio}%`, backgroundColor: '#10B981' }} title={`Organik: ${scorecardMetrics.card4.organicRatio}%`} />
               </div>
             </div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card4.color, fontFamily: 'var(--font-mono)' }}>
-              {scorecardMetrics.card4.value}
-            </div>
-            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-              {scorecardMetrics.card4.subtitle}
+            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                {scorecardMetrics.card4.subtitle}
+              </span>
+              <span className="badge" style={{ backgroundColor: scorecardMetrics.card4.bg, color: scorecardMetrics.card4.color, fontSize: '10px', padding: '1px 6px', borderRadius: '5px' }}>
+                {scorecardMetrics.card4.badge}
+              </span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 4. Kartu Head-to-Head Komparasi (PIC Lama vs PIC Baru) - 100% Mengikuti Filter */}
+      {/* 3. Kartu Head-to-Head Komparasi (Zona 3: PIC Lama vs PIC Baru) */}
       <section aria-label="Head to Head Komparasi Era PIC">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
+        {/* Net Growth Impact Bridge (Hanya Tampil Jika Era PIC Baru Memiliki Data Pembanding) */}
+        {netDeltas && (
+          <div
+            className="glass-card"
+            style={{
+              padding: '12px 18px',
+              borderRadius: '12px',
+              background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.08) 0%, rgba(238, 77, 45, 0.08) 100%)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '12px',
+              marginBottom: '16px'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Sparkles size={16} style={{ color: '#F59E0B' }} />
+              <span style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary)' }}>
+                Net Growth Impact (Akselerasi PIC Baru):
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Net Omzet:</span>
+                <span style={{ fontSize: '13px', fontWeight: 800, color: '#10B981', fontFamily: 'var(--font-mono)' }}>
+                  {netDeltas.revDeltaFormatted} /bln ({picBaruStats.revGrowth}%)
+                </span>
+              </div>
+              <div style={{ width: '1px', height: '14px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Net Order:</span>
+                <span style={{ fontSize: '13px', fontWeight: 800, color: '#10B981', fontFamily: 'var(--font-mono)' }}>
+                  {netDeltas.ordDeltaFormatted} order /bln ({picBaruStats.ordGrowth}%)
+                </span>
+              </div>
+              <div style={{ width: '1px', height: '14px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Net AOV:</span>
+                <span style={{ fontSize: '13px', fontWeight: 800, color: '#60A5FA', fontFamily: 'var(--font-mono)' }}>
+                  {netDeltas.aovDeltaFormatted} ({picBaruStats.aovGrowth}%)
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '18px' }}>
           
           {/* KARTU ERA PIC LAMA */}
           <div
             className="glass-card"
             style={{
-              padding: '24px',
+              padding: '22px',
               borderRadius: '16px',
               backgroundColor: 'rgba(59, 130, 246, 0.04)',
               border: activePeriodFilter === 'pic_lama' 
@@ -1048,7 +1152,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               boxShadow: activePeriodFilter === 'pic_lama' ? '0 0 24px rgba(59, 130, 246, 0.25)' : 'none',
               display: 'flex',
               flexDirection: 'column',
-              gap: '16px',
+              gap: '14px',
               transition: 'all 0.2s ease',
               opacity: picBaruStats.hasData && !picLamaStats.hasData ? 0.9 : 1
             }}
@@ -1084,12 +1188,24 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Order / Bulan:</span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                  {picLamaStats.avgMonthlyOrders} <small style={{ fontSize: '12px', fontWeight: 500 }}>pesanan</small>
+                  {Math.round(Number(picLamaStats.avgMonthlyOrders))} <small style={{ fontSize: '12px', fontWeight: 500 }}>pesanan</small>
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            {/* Horizontal Stacked Bar (Ads vs Organic Split) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
+                <span style={{ color: '#F97316', fontWeight: 700 }}>Iklan: {picLamaStats.adsRatio}%</span>
+                <span style={{ color: '#10B981', fontWeight: 700 }}>Organik: {picLamaStats.organicRatio}%</span>
+              </div>
+              <div style={{ height: '6px', borderRadius: '3px', backgroundColor: 'rgba(255,255,255,0.06)', display: 'flex', overflow: 'hidden' }}>
+                <div style={{ width: `${picLamaStats.adsRatio}%`, backgroundColor: '#F97316' }} />
+                <div style={{ width: `${picLamaStats.organicRatio}%`, backgroundColor: '#10B981' }} />
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Nilai Belanja Rata-Rata (AOV):</span>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: '#CBD5E1', fontFamily: 'var(--font-mono)' }}>
@@ -1097,9 +1213,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 </div>
               </div>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rasio Iklan vs Organik:</span>
-                <div style={{ fontSize: '14px', fontWeight: 700 }}>
-                  <span style={{ color: '#F97316' }}>{picLamaStats.adsRatio}%</span> / <span style={{ color: '#10B981' }}>{picLamaStats.organicRatio}%</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Total Pesanan:</span>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: '#CBD5E1', fontFamily: 'var(--font-mono)' }}>
+                  {picLamaStats.totalOrders} order
                 </div>
               </div>
             </div>
@@ -1113,7 +1229,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           <div
             className="glass-card"
             style={{
-              padding: '24px',
+              padding: '22px',
               borderRadius: '16px',
               backgroundColor: 'rgba(238, 77, 45, 0.04)',
               border: activePeriodFilter === 'pic_baru' 
@@ -1122,7 +1238,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               boxShadow: activePeriodFilter === 'pic_baru' ? '0 0 24px rgba(238, 77, 45, 0.3)' : 'none',
               display: 'flex',
               flexDirection: 'column',
-              gap: '16px',
+              gap: '14px',
               transition: 'all 0.2s ease',
               opacity: picBaruStats.isNotYetActive ? 0.6 : 1
             }}
@@ -1158,12 +1274,24 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Order / Bulan:</span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                  {picBaruStats.avgMonthlyOrders} <small style={{ fontSize: '12px', fontWeight: 500 }}>pesanan</small>
+                  {Math.round(Number(picBaruStats.avgMonthlyOrders))} <small style={{ fontSize: '12px', fontWeight: 500 }}>pesanan</small>
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            {/* Horizontal Stacked Bar (Ads vs Organic Split) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
+                <span style={{ color: '#F97316', fontWeight: 700 }}>Iklan: {picBaruStats.adsRatio}%</span>
+                <span style={{ color: '#10B981', fontWeight: 700 }}>Organik: {picBaruStats.organicRatio}%</span>
+              </div>
+              <div style={{ height: '6px', borderRadius: '3px', backgroundColor: 'rgba(255,255,255,0.06)', display: 'flex', overflow: 'hidden' }}>
+                <div style={{ width: `${picBaruStats.adsRatio}%`, backgroundColor: '#F97316' }} />
+                <div style={{ width: `${picBaruStats.organicRatio}%`, backgroundColor: '#10B981' }} />
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Nilai Belanja Rata-Rata (AOV):</span>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: '#38BDF8', fontFamily: 'var(--font-mono)' }}>
@@ -1171,9 +1299,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 </div>
               </div>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rasio Iklan vs Organik:</span>
-                <div style={{ fontSize: '14px', fontWeight: 700 }}>
-                  <span style={{ color: '#F97316' }}>{picBaruStats.adsRatio}%</span> / <span style={{ color: '#10B981' }}>{picBaruStats.organicRatio}%</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Total Pesanan:</span>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: '#CBD5E1', fontFamily: 'var(--font-mono)' }}>
+                  {picBaruStats.totalOrders} order
                 </div>
               </div>
             </div>
@@ -1186,7 +1314,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         </div>
       </section>
 
-      {/* 5. Grafik Garis Komparatif Tren Omzet */}
+      {/* 4. Grafik Garis Komparatif Tren Omzet (Zona 4) */}
       <section aria-label="Grafik Tren Omzet Komparatif">
         <div
           className="glass-card"
@@ -1202,11 +1330,14 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           {/* Header Grafik & Metric Toggle Tabs */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                 <TrendingUp size={18} style={{ color: 'var(--color-brand-primary)' }} />
                 <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
                   Grafik Pertumbuhan Omzet Toko ({filteredTrends.length} Bulan Terpilih)
                 </h3>
+                <span className="badge" style={{ backgroundColor: 'rgba(238, 77, 45, 0.12)', color: 'var(--color-brand-primary)', border: '1px solid rgba(238, 77, 45, 0.25)', fontSize: '10.5px', padding: '2px 8px' }}>
+                  ⚡ Titik Balik Transisi: Agustus 2026
+                </span>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
                 Visualisasi titik balik akselerasi penjualan dan pergeseran saluran akuisisi pemasaran.
@@ -1243,8 +1374,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           </div>
 
           {/* Legenda Keterangan Era PIC */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '18px', fontSize: '11.5px', color: 'var(--text-secondary)', padding: '8px 12px', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
-            <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>Panduan Titik Grafik:</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '18px', fontSize: '11.5px', color: 'var(--text-secondary)', padding: '8px 14px', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '8px', flexWrap: 'wrap' }}>
+            <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>Panduan Titik & Era:</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#3B82F6', display: 'inline-block' }} />
               <span>Titik Biru: Era PIC Lama (Organik)</span>
@@ -1252,6 +1383,10 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#EE4D2D', display: 'inline-block' }} />
               <span>Titik Oranye: Era PIC Baru (Shopee Ads)</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '14px', height: '14px', borderRadius: '50%', backgroundColor: '#EE4D2D', border: '2px solid #FFFFFF', display: 'inline-block' }} />
+              <span>Titik Besar: Transisi Serah Terima (Agu 2026)</span>
             </div>
           </div>
 
@@ -1288,6 +1423,16 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                         label: function (ctx) {
                           const val = ctx.raw || 0;
                           return ` ${ctx.dataset.label}: Rp ${val.toLocaleString('id-ID')}`;
+                        },
+                        afterBody: function (items) {
+                          const gmvItem = items.find(i => i.dataset.label && i.dataset.label.includes('GMV'));
+                          const adsItem = items.find(i => i.dataset.label && i.dataset.label.includes('Iklan'));
+                          if (gmvItem && adsItem && gmvItem.raw > 0) {
+                            const adsPct = ((adsItem.raw / gmvItem.raw) * 100).toFixed(1);
+                            const orgPct = (100 - adsPct).toFixed(1);
+                            return [` Komposisi: ${adsPct}% Iklan • ${orgPct}% Organik`];
+                          }
+                          return [];
                         }
                       }
                     }
@@ -1317,7 +1462,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         </div>
       </section>
 
-      {/* 6. Accordion Audit Bulanan (Matriks Penjualan per Bulan) */}
+      {/* 5. Accordion Audit Bulanan (Zona 5: Matriks Penjualan per Bulan + MoM Growth) */}
       <section aria-label="Rincian Audit Bulanan Toko">
         <div
           className="glass-card"
@@ -1332,7 +1477,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             onClick={() => setIsAccordionOpen(!isAccordionOpen)}
             style={{
               width: '100%',
-              padding: '18px 24px',
+              padding: '16px 22px',
               background: 'transparent',
               border: 'none',
               display: 'flex',
@@ -1359,23 +1504,28 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 <FileText size={18} />
               </div>
               <div>
-                <h3 style={{ fontSize: '15px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
-                  Rincian Riwayat Bulanan Toko ({filteredTrends.length} Bulan Terdata)
-                </h3>
-                <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
-                  Matriks audit penjualan bulan per bulan sejak transaksi pertama Juli 2025 s/d saat ini.
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                  <h3 style={{ fontSize: '15px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+                    Rincian Audit Bulanan Toko ({filteredTrends.length} Bulan Terdata)
+                  </h3>
+                  <span className="badge" style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: 'var(--text-secondary)', fontSize: '10.5px', padding: '2px 8px' }}>
+                    Total: Rp {filteredStats.totalRevenue.toLocaleString('id-ID')} • {filteredStats.totalOrders} Order
+                  </span>
+                </div>
+                <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', margin: '3px 0 0 0' }}>
+                  Matriks audit bulan ke bulan dengan indikator pertumbuhan MoM sejak transaksi pertama Juli 2025 s/d saat ini.
                 </p>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span className="badge" style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: 'var(--text-secondary)', fontSize: '11px', padding: '4px 10px' }}>
                 {isAccordionOpen ? 'Tutup Rincian' : 'Buka Rincian Tabel'}
               </span>
               <div
                 style={{
-                  width: '32px',
-                  height: '32px',
+                  width: '30px',
+                  height: '30px',
                   borderRadius: '8px',
                   background: 'rgba(255,255,255,0.06)',
                   display: 'flex',
@@ -1384,21 +1534,22 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   color: 'var(--text-secondary)'
                 }}
               >
-                {isAccordionOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                {isAccordionOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </div>
             </div>
           </button>
 
-          {/* Isi Accordion (Tabel Data) */}
+          {/* Isi Accordion (Tabel Data dengan MoM %) */}
           {isAccordionOpen && (
-            <div style={{ padding: '0 24px 24px 24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-              <div style={{ overflowX: 'auto', marginTop: '16px' }}>
+            <div style={{ padding: '0 22px 22px 22px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ overflowX: 'auto', marginTop: '14px' }}>
                 <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', textAlign: 'left', color: 'var(--text-muted)' }}>
                       <th style={{ padding: '10px 12px' }}>Bulan</th>
                       <th style={{ padding: '10px 12px', textAlign: 'center' }}>Era PIC</th>
                       <th style={{ padding: '10px 12px', textAlign: 'right' }}>Total Omzet (GMV)</th>
+                      <th style={{ padding: '10px 12px', textAlign: 'center' }}>MoM %</th>
                       <th style={{ padding: '10px 12px', textAlign: 'center' }}>Pesanan</th>
                       <th style={{ padding: '10px 12px', textAlign: 'right' }}>Omzet Iklan</th>
                       <th style={{ padding: '10px 12px', textAlign: 'right' }}>Omzet Organik</th>
@@ -1410,12 +1561,19 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                     {filteredTrends.map((t, idx) => {
                       const isBaru = t.pic === 'BARU';
                       const adsPct = t.revenue > 0 ? ((t.adsRevenue / t.revenue) * 100).toFixed(1) : 0;
+                      // Hitung MoM terhadap bulan sebelumnya
+                      const prevRev = idx > 0 ? filteredTrends[idx - 1]?.revenue : null;
+                      const momPct = prevRev && prevRev > 0 
+                        ? (((t.revenue - prevRev) / prevRev) * 100).toFixed(1) 
+                        : null;
+
                       return (
                         <tr
                           key={idx}
                           style={{
                             borderBottom: '1px solid rgba(255,255,255,0.04)',
                             backgroundColor: isBaru ? 'rgba(238, 77, 45, 0.03)' : 'transparent',
+                            borderLeft: isBaru ? '3px solid var(--color-brand-primary)' : '3px solid transparent',
                             transition: 'background 0.15s'
                           }}
                         >
@@ -1428,7 +1586,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                               style={{
                                 backgroundColor: isBaru ? 'rgba(238, 77, 45, 0.15)' : 'rgba(59, 130, 246, 0.15)',
                                 color: isBaru ? 'var(--color-brand-primary)' : '#60A5FA',
-                                fontSize: '10.5px',
+                                fontSize: '10px',
                                 padding: '2px 8px'
                               }}
                             >
@@ -1437,6 +1595,18 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                           </td>
                           <td style={{ padding: '12px', textAlign: 'right', fontWeight: 800, color: isBaru ? 'var(--color-brand-primary)' : 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
                             Rp {t.revenue.toLocaleString('id-ID')}
+                          </td>
+                          <td style={{ padding: '12px', textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: '11px' }}>
+                            {momPct !== null ? (
+                              <span style={{
+                                color: Number(momPct) > 0 ? '#10B981' : Number(momPct) < 0 ? '#EF4444' : '#94A3B8',
+                                fontWeight: 700
+                              }}>
+                                {Number(momPct) > 0 ? `+${momPct}%` : `${momPct}%`}
+                              </span>
+                            ) : (
+                              <span style={{ color: '#64748B' }}>-</span>
+                            )}
                           </td>
                           <td style={{ padding: '12px', textAlign: 'center', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
                             {t.orders}
@@ -1448,7 +1618,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                             Rp {t.organicRevenue.toLocaleString('id-ID')}
                           </td>
                           <td style={{ padding: '12px', textAlign: 'center', fontWeight: 600 }}>
-                            <span style={{ color: adsPct > 50 ? '#F97316' : 'var(--text-muted)' }}>
+                            <span style={{ color: Number(adsPct) > 50 ? '#F97316' : 'var(--text-muted)' }}>
                               {adsPct}%
                             </span>
                           </td>
@@ -1467,6 +1637,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                       </td>
                       <td style={{ padding: '12px', textAlign: 'right', color: 'var(--color-brand-primary)', fontFamily: 'var(--font-mono)' }}>
                         Rp {filteredStats.totalRevenue.toLocaleString('id-ID')}
+                      </td>
+                      <td style={{ padding: '12px', textAlign: 'center', color: '#10B981', fontSize: '11px' }}>
+                        Avg MoM
                       </td>
                       <td style={{ padding: '12px', textAlign: 'center', color: '#10B981', fontFamily: 'var(--font-mono)' }}>
                         {filteredStats.totalOrders}
@@ -1492,7 +1665,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         </div>
       </section>
 
-      {/* 7. Executive Takeaways & Rekomendasi Manajerial */}
+      {/* 6. Executive Takeaways & Rekomendasi Manajerial (Zona 6) */}
       <section aria-label="Kesimpulan Eksekutif dan Rekomendasi">
         <div
           className="glass-card"
@@ -1508,7 +1681,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Award size={18} style={{ color: '#F59E0B' }} />
-            <h3 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
               Kesimpulan Eksekutif & Rekomendasi Strategis Toko
             </h3>
           </div>
@@ -1521,7 +1694,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 <span style={{ fontSize: '13px', fontWeight: 700, color: '#10B981' }}>Skalabilitas Omzet Terbukti</span>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
-                Ekspansi marketing di era PIC Baru berhasil mendongkrak omzet bulanan hingga <strong>{picBaruStats.revGrowth}%</strong> (rata-rata {picBaruStats.avgMonthlyRevenueFormatted}/bln) dan order <strong>{picBaruStats.ordGrowth}%</strong> dibanding era lama.
+                Ekspansi marketing di era PIC Baru berhasil mendongkrak omzet bulanan hingga <strong>{picBaruStats.revGrowth}%</strong> (rata-rata {picBaruStats.avgMonthlyRevenueFormatted}/bln) dan order <strong>{picBaruStats.ordGrowth}%</strong> dibanding acuan era lama.
               </p>
             </div>
 
@@ -1540,10 +1713,10 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: 'rgba(59, 130, 246, 0.06)', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
                 <Target size={16} style={{ color: '#60A5FA' }} />
-                <span style={{ fontSize: '13px', fontWeight: 700, color: '#60A5FA' }}>Rekomendasi Langkah Berikutnya</span>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: '#60A5FA' }}>Rekomendasi Diversifikasi Organik</span>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
-                Seimbangkan akuisisi berbayar dengan optimasi listing SEO organik dan program repeat buyer untuk mengamankan margin laba bersih jangka panjang.
+                Seimbangkan akuisisi berbayar dengan optimasi listing SEO organik dan program repeat buyer dari Modul 2 untuk mengamankan margin laba bersih jangka panjang.
               </p>
             </div>
           </div>
