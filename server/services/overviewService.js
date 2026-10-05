@@ -74,9 +74,9 @@ const REAL_HISTORICAL_MONTHS = [
   { month: 'Mei 2026', mCode: '2026-05', revenue: 783996, orders: 5, adsRevenue: 0, organicRevenue: 783996, pic: 'LAMA' },
   { month: 'Jun 2026', mCode: '2026-06', revenue: 506998, orders: 3, adsRevenue: 0, organicRevenue: 506998, pic: 'LAMA' },
   { month: 'Jul 2026', mCode: '2026-07', revenue: 0, orders: 0, adsRevenue: 0, organicRevenue: 0, pic: 'LAMA', note: 'Transisi / Handover' },
-  { month: 'Agu 2026', mCode: '2026-08', revenue: 7871740, orders: 54, adsRevenue: 7618480, organicRevenue: 7319230, pic: 'BARU', note: 'Shopee Ads Aktif' },
-  { month: 'Sep 2026', mCode: '2026-09', revenue: 6192746, orders: 27, adsRevenue: 5337984, organicRevenue: 5575332, pic: 'BARU' },
-  { month: 'Okt 2026', mCode: '2026-10', revenue: 6766793, orders: 32, adsRevenue: 4614089, organicRevenue: 5314858, pic: 'BARU', note: 'Data Live Shopee API' }
+  { month: 'Agu 2026', mCode: '2026-08', revenue: 7871740, orders: 54, adsRevenue: 7618480, organicRevenue: 253260, pic: 'BARU', note: 'Shopee Ads Aktif' },
+  { month: 'Sep 2026', mCode: '2026-09', revenue: 6192746, orders: 27, adsRevenue: 5337984, organicRevenue: 854762, pic: 'BARU' },
+  { month: 'Okt 2026', mCode: '2026-10', revenue: 6766793, orders: 32, adsRevenue: 4614089, organicRevenue: 2152704, pic: 'BARU', note: 'Data Live Shopee API' }
 ];
 
 // Fetch Single Month Data with file cache
