@@ -128,7 +128,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
   const allTrends = data?.historicalTrends || [];
   const profile = data?.storeProfile;
 
-  // Filter trends berdasarkan filter periode yang dipilih
+  // 1. Filter trends dinamis berdasarkan opsi filter yang dipilih
   const filteredTrends = useMemo(() => {
     if (!allTrends || allTrends.length === 0) return [];
 
@@ -155,6 +155,11 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           return allTrends.filter(t => t.mCode === selectedPeriodObj.startMonth);
         } else if (selectedPeriodObj?.type === 'year') {
           return allTrends.filter(t => t.mCode && t.mCode.startsWith(String(selectedPeriodObj.year)));
+        } else if (selectedPeriodObj?.period === 'past30days' || selectedPeriodObj?.id === '30 hari sebelumnya.') {
+          // 30 hari sebelumnya mencakup bulan-bulan aktif terkini
+          return allTrends.filter(t => t.mCode >= '2026-08');
+        } else if (selectedPeriodObj?.period === 'past7days' || selectedPeriodObj?.period === 'yesterday' || selectedPeriodObj?.period === 'real_time') {
+          return allTrends.slice(-1); // Bulan berjalan terkini
         }
         return allTrends;
       case 'all':
@@ -163,7 +168,239 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
     }
   }, [allTrends, activePeriodFilter, customStartMonth, customEndMonth, selectedPeriodObj]);
 
-  // Statistik Agregasi Metrik Terfilter
+  // Pisahkan bulan-bulan terfilter untuk PIC Lama dan PIC Baru
+  const picLamaMonths = useMemo(() => {
+    return filteredTrends.filter(t => t.pic === 'LAMA');
+  }, [filteredTrends]);
+
+  const picBaruMonths = useMemo(() => {
+    return filteredTrends.filter(t => t.pic === 'BARU');
+  }, [filteredTrends]);
+
+  // 2. Perhitungan Statistik Dinamis untuk KARTU ERA PIC LAMA
+  const picLamaStats = useMemo(() => {
+    // Jika ada bulan untuk PIC Lama dalam filter:
+    if (picLamaMonths.length > 0) {
+      const activeMonthsList = picLamaMonths.filter(t => t.revenue > 0);
+      const monthsCount = activeMonthsList.length || picLamaMonths.length || 1;
+      const totalRevenue = picLamaMonths.reduce((s, t) => s + (t.revenue || 0), 0);
+      const totalOrders = picLamaMonths.reduce((s, t) => s + (t.orders || 0), 0);
+      const totalAdsRevenue = picLamaMonths.reduce((s, t) => s + (t.adsRevenue || 0), 0);
+      const totalOrganicRevenue = picLamaMonths.reduce((s, t) => s + (t.organicRevenue || 0), 0);
+      const avgMonthlyRevenue = Math.round(totalRevenue / monthsCount);
+      const avgMonthlyOrders = (totalOrders / monthsCount).toFixed(1);
+      const aov = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
+      const adsRatio = totalRevenue > 0 ? ((totalAdsRevenue / totalRevenue) * 100).toFixed(1) : '0';
+      const organicRatio = totalRevenue > 0 ? ((totalOrganicRevenue / totalRevenue) * 100).toFixed(1) : '100';
+
+      const firstMonth = picLamaMonths[0]?.month;
+      const lastMonth = picLamaMonths[picLamaMonths.length - 1]?.month;
+      const periodLabel = firstMonth === lastMonth ? firstMonth : `${firstMonth} – ${lastMonth}`;
+
+      return {
+        hasData: true,
+        isBaseline: false,
+        periodLabel,
+        badgeText: `👤 ERA PIC LAMA (${monthsCount} Bulan Terfilter)`,
+        statusText: `${monthsCount} Bulan di Filter Ini`,
+        totalRevenue,
+        totalRevenueFormatted: 'Rp ' + totalRevenue.toLocaleString('id-ID'),
+        avgMonthlyRevenue,
+        avgMonthlyRevenueFormatted: 'Rp ' + avgMonthlyRevenue.toLocaleString('id-ID'),
+        totalOrders,
+        avgMonthlyOrders,
+        aov,
+        aovFormatted: 'Rp ' + aov.toLocaleString('id-ID'),
+        adsRatio,
+        organicRatio,
+        description: `Akumulasi performa PIC Lama pada rentang ${periodLabel} (${monthsCount} bulan aktif).`
+      };
+    }
+
+    // Jika filter hanya memilih era PIC Baru (misal: "Era PIC Baru" atau bulan September 2026):
+    // Tampilkan PIC Lama sebagai kartu acuan benchmark baseline
+    return {
+      hasData: false,
+      isBaseline: true,
+      periodLabel: 'Sep 2024 – Jul 2026 (Acuan Baseline)',
+      badgeText: '👤 ERA PIC LAMA (Acuan Baseline Historis)',
+      statusText: '12 Bulan Baseline',
+      totalRevenue: bm?.picLama?.totalRevenue || 22798537,
+      totalRevenueFormatted: bm?.picLama?.totalRevenueFormatted || 'Rp 22.798.537',
+      avgMonthlyRevenue: bm?.picLama?.avgMonthlyRevenue || 1899878,
+      avgMonthlyRevenueFormatted: bm?.picLama?.avgMonthlyRevenueFormatted || 'Rp 1.899.878',
+      totalOrders: bm?.picLama?.totalOrders || 145,
+      avgMonthlyOrders: bm?.picLama?.avgMonthlyOrders || 12.1,
+      aov: bm?.picLama?.aov || 157231,
+      aovFormatted: bm?.picLama?.aovFormatted || 'Rp 157.231',
+      adsRatio: bm?.picLama?.adsRatio || 0,
+      organicRatio: bm?.picLama?.organicRatio || 99.4,
+      description: 'Menampilkan data acuan rata-rata era PIC Lama sebagai tolak ukur evaluasi pertumbuhan.'
+    };
+  }, [picLamaMonths, bm]);
+
+  // 3. Perhitungan Statistik Dinamis untuk KARTU ERA PIC BARU
+  const picBaruStats = useMemo(() => {
+    // Jika ada bulan untuk PIC Baru dalam filter:
+    if (picBaruMonths.length > 0) {
+      const activeMonthsList = picBaruMonths.filter(t => t.revenue > 0);
+      const monthsCount = activeMonthsList.length || picBaruMonths.length || 1;
+      const totalRevenue = picBaruMonths.reduce((s, t) => s + (t.revenue || 0), 0);
+      const totalOrders = picBaruMonths.reduce((s, t) => s + (t.orders || 0), 0);
+      const totalAdsRevenue = picBaruMonths.reduce((s, t) => s + (t.adsRevenue || 0), 0);
+      const totalOrganicRevenue = picBaruMonths.reduce((s, t) => s + (t.organicRevenue || 0), 0);
+      const avgMonthlyRevenue = Math.round(totalRevenue / monthsCount);
+      const avgMonthlyOrders = (totalOrders / monthsCount).toFixed(1);
+      const aov = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
+      const adsRatio = totalRevenue > 0 ? ((totalAdsRevenue / totalRevenue) * 100).toFixed(1) : '0';
+      const organicRatio = totalRevenue > 0 ? ((totalOrganicRevenue / totalRevenue) * 100).toFixed(1) : '100';
+
+      const firstMonth = picBaruMonths[0]?.month;
+      const lastMonth = picBaruMonths[picBaruMonths.length - 1]?.month;
+      const periodLabel = firstMonth === lastMonth ? firstMonth : `${firstMonth} – ${lastMonth}`;
+
+      // Hitung pertumbuhan terhadap PIC Lama (periode terfilter atau baseline)
+      const baseRev = picLamaStats.avgMonthlyRevenue > 0 ? picLamaStats.avgMonthlyRevenue : 1899878;
+      const baseOrd = Number(picLamaStats.avgMonthlyOrders) > 0 ? Number(picLamaStats.avgMonthlyOrders) : 12.1;
+      const baseAov = picLamaStats.aov > 0 ? picLamaStats.aov : 157231;
+
+      const revGrowthNum = (((avgMonthlyRevenue - baseRev) / baseRev) * 100).toFixed(1);
+      const ordGrowthNum = (((Number(avgMonthlyOrders) - baseOrd) / baseOrd) * 100).toFixed(1);
+      const aovGrowthNum = (((aov - baseAov) / baseAov) * 100).toFixed(1);
+
+      return {
+        hasData: true,
+        isNotYetActive: false,
+        periodLabel,
+        badgeText: `⚡ ERA PIC BARU (${monthsCount} Bulan Terfilter)`,
+        statusText: `${monthsCount} Bulan Berjalan 🚀`,
+        totalRevenue,
+        totalRevenueFormatted: 'Rp ' + totalRevenue.toLocaleString('id-ID'),
+        avgMonthlyRevenue,
+        avgMonthlyRevenueFormatted: 'Rp ' + avgMonthlyRevenue.toLocaleString('id-ID'),
+        totalOrders,
+        avgMonthlyOrders,
+        aov,
+        aovFormatted: 'Rp ' + aov.toLocaleString('id-ID'),
+        adsRatio,
+        organicRatio,
+        revGrowth: Number(revGrowthNum) >= 0 ? `+${revGrowthNum}` : `${revGrowthNum}`,
+        ordGrowth: Number(ordGrowthNum) >= 0 ? `+${ordGrowthNum}` : `${ordGrowthNum}`,
+        aovGrowth: Number(aovGrowthNum) >= 0 ? `+${aovGrowthNum}` : `${aovGrowthNum}`,
+        description: `Omzet meningkat ${Number(revGrowthNum) >= 0 ? '+' + revGrowthNum + '%' : revGrowthNum + '%'} dibanding acuan PIC Lama (${picLamaStats.avgMonthlyRevenueFormatted}/bln).`
+      };
+    }
+
+    // Jika filter hanya memilih era sebelum Agustus 2026 (misal: "Tahun 2025" atau "Era PIC Lama"):
+    return {
+      hasData: false,
+      isNotYetActive: true,
+      periodLabel: 'Agustus 2026 – Saat ini',
+      badgeText: '⚡ ERA PIC BARU (Belum Menjabat)',
+      statusText: 'Belum Menjabat',
+      totalRevenue: 0,
+      totalRevenueFormatted: 'Rp 0',
+      avgMonthlyRevenue: 0,
+      avgMonthlyRevenueFormatted: 'Rp 0',
+      totalOrders: 0,
+      avgMonthlyOrders: '0',
+      aov: 0,
+      aovFormatted: 'Rp 0',
+      adsRatio: '0',
+      organicRatio: '0',
+      revGrowth: '0',
+      ordGrowth: '0',
+      aovGrowth: '0',
+      description: 'PIC Baru belum aktif menjabat pada periode ini (Mulai aktif bertugas per Agustus 2026).'
+    };
+  }, [picBaruMonths, picLamaStats]);
+
+  // 4. Perhitungan Dinamis untuk 4 SCORECARDS ATAS (Mengikuti Filter)
+  const scorecardMetrics = useMemo(() => {
+    // Skenario A: Jika PIC Baru aktif dalam filter (atau membandingkan terhadap baseline):
+    if (picBaruStats.hasData) {
+      return {
+        card1: {
+          title: 'Pertumbuhan Omzet / Bulan',
+          value: `${picBaruStats.revGrowth}%`,
+          isPositive: !picBaruStats.revGrowth.startsWith('-'),
+          subtitle: `Dari ${picLamaStats.avgMonthlyRevenueFormatted} → ${picBaruStats.avgMonthlyRevenueFormatted}/bln`,
+          icon: TrendingUp,
+          color: '#10B981',
+          bg: 'rgba(16, 185, 129, 0.12)'
+        },
+        card2: {
+          title: 'Pertumbuhan Pesanan / Bulan',
+          value: `${picBaruStats.ordGrowth}%`,
+          isPositive: !picBaruStats.ordGrowth.startsWith('-'),
+          subtitle: `Dari ${picLamaStats.avgMonthlyOrders} order → ${picBaruStats.avgMonthlyOrders} order/bln`,
+          icon: ShoppingBag,
+          color: '#10B981',
+          bg: 'rgba(16, 185, 129, 0.12)'
+        },
+        card3: {
+          title: 'Peningkatan Nilai Belanja (AOV)',
+          value: `${picBaruStats.aovGrowth}%`,
+          isPositive: !picBaruStats.aovGrowth.startsWith('-'),
+          subtitle: `Dari ${picLamaStats.aovFormatted} → ${picBaruStats.aovFormatted}`,
+          icon: CreditCard,
+          color: '#60A5FA',
+          bg: 'rgba(59, 130, 246, 0.12)'
+        },
+        card4: {
+          title: 'Ketergantungan Belanja Iklan',
+          value: `${picBaruStats.adsRatio}%`,
+          isPositive: null,
+          subtitle: `Rasio era lama: ${picLamaStats.adsRatio}% → era baru: ${picBaruStats.adsRatio}%`,
+          icon: Percent,
+          color: '#F59E0B',
+          bg: 'rgba(245, 158, 11, 0.12)'
+        }
+      };
+    }
+
+    // Skenario B: Jika filter HANYA memilih era PIC Lama (misal: Tahun 2025):
+    return {
+      card1: {
+        title: 'Rata-Rata Omzet / Bulan',
+        value: picLamaStats.avgMonthlyRevenueFormatted,
+        isPositive: true,
+        subtitle: `Total Omzet Periode Ini: ${picLamaStats.totalRevenueFormatted}`,
+        icon: TrendingUp,
+        color: '#3B82F6',
+        bg: 'rgba(59, 130, 246, 0.12)'
+      },
+      card2: {
+        title: 'Rata-Rata Pesanan / Bulan',
+        value: `${picLamaStats.avgMonthlyOrders} pesanan`,
+        isPositive: true,
+        subtitle: `Total Pesanan Periode Ini: ${picLamaStats.totalOrders} pesanan`,
+        icon: ShoppingBag,
+        color: '#3B82F6',
+        bg: 'rgba(59, 130, 246, 0.12)'
+      },
+      card3: {
+        title: 'Nilai Belanja Rata-Rata (AOV)',
+        value: picLamaStats.aovFormatted,
+        isPositive: true,
+        subtitle: 'Rata-rata nilai belanja keranjang terfilter',
+        icon: CreditCard,
+        color: '#60A5FA',
+        bg: 'rgba(59, 130, 246, 0.12)'
+      },
+      card4: {
+        title: 'Rasio Iklan vs Organik',
+        value: `${picLamaStats.adsRatio}% / ${picLamaStats.organicRatio}%`,
+        isPositive: null,
+        subtitle: 'Toko murni mengandalkan penjualan organik',
+        icon: Percent,
+        color: '#10B981',
+        bg: 'rgba(16, 185, 129, 0.12)'
+      }
+    };
+  }, [picBaruStats, picLamaStats]);
+
+  // Statistik Keseluruhan Terfilter untuk Footer Accordion & Export CSV
   const filteredStats = useMemo(() => {
     if (!filteredTrends || filteredTrends.length === 0) {
       return {
@@ -184,8 +421,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
     const totalOrders = filteredTrends.reduce((acc, t) => acc + (t.orders || 0), 0);
     const totalAdsRevenue = filteredTrends.reduce((acc, t) => acc + (t.adsRevenue || 0), 0);
     const totalOrganicRevenue = filteredTrends.reduce((acc, t) => acc + (t.organicRevenue || 0), 0);
-    const avgMonthlyRevenue = monthsCount > 0 ? Math.round(totalRevenue / monthsCount) : 0;
-    const avgMonthlyOrders = monthsCount > 0 ? (totalOrders / monthsCount).toFixed(1) : '0';
+    const activeMonthsCount = filteredTrends.filter(t => t.revenue > 0).length || monthsCount;
+    const avgMonthlyRevenue = Math.round(totalRevenue / activeMonthsCount);
+    const avgMonthlyOrders = (totalOrders / activeMonthsCount).toFixed(1);
     const aov = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
     const adsRatio = totalRevenue > 0 ? ((totalAdsRevenue / totalRevenue) * 100).toFixed(1) : '0';
     const organicRatio = totalRevenue > 0 ? ((totalOrganicRevenue / totalRevenue) * 100).toFixed(1) : '100';
@@ -247,14 +485,14 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
       ['Omzet Iklan Berbayar', `Rp ${filteredStats.totalAdsRevenue.toLocaleString('id-ID')} (${filteredStats.adsRatio}%)`],
       ['Omzet Organik', `Rp ${filteredStats.totalOrganicRevenue.toLocaleString('id-ID')} (${filteredStats.organicRatio}%)`],
       [],
-      ['RINGKASAN BENCHMARK HEAD-TO-HEAD (LIFETIME)'],
-      ['Metrik', 'Era PIC Lama (Sep 2024 - Jul 2026)', 'Era PIC Baru (Agu 2026 - Saat ini)', 'Pertumbuhan (%)'],
-      ['Rata-Rata Omzet / Bulan', bm?.picLama?.avgMonthlyRevenueFormatted, bm?.picBaru?.avgMonthlyRevenueFormatted, `+${bm?.deltas?.avgMonthlyRevenueGrowth}%`],
-      ['Rata-Rata Pesanan / Bulan', `${bm?.picLama?.avgMonthlyOrders} pesanan`, `${bm?.picBaru?.avgMonthlyOrders} pesanan`, `+${bm?.deltas?.avgMonthlyOrdersGrowth}%`],
-      ['Nilai Belanja Rata-Rata (AOV)', bm?.picLama?.aovFormatted, bm?.picBaru?.aovFormatted, `+${bm?.deltas?.aovGrowth}%`],
-      ['Rasio Iklan vs Organik', `${bm?.picLama?.adsRatio}% / ${bm?.picLama?.organicRatio}%`, `${bm?.picBaru?.adsRatio}% / ${bm?.picBaru?.organicRatio}%`, `${bm?.deltas?.adsRatioDiff}%`],
-      ['Total Akumulasi Omzet', bm?.picLama?.totalRevenueFormatted, bm?.picBaru?.totalRevenueFormatted, '-'],
-      ['Total Akumulasi Pesanan', `${bm?.picLama?.totalOrders} pesanan`, `${bm?.picBaru?.totalOrders} pesanan`, '-'],
+      ['RINGKASAN BENCHMARK DUA ERA (DINAMIS TERFILTER)'],
+      ['Metrik', `Era PIC Lama (${picLamaStats.periodLabel})`, `Era PIC Baru (${picBaruStats.periodLabel})`, 'Pertumbuhan'],
+      ['Rata-Rata Omzet / Bulan', picLamaStats.avgMonthlyRevenueFormatted, picBaruStats.avgMonthlyRevenueFormatted, `${picBaruStats.revGrowth}%`],
+      ['Rata-Rata Pesanan / Bulan', `${picLamaStats.avgMonthlyOrders} pesanan`, `${picBaruStats.avgMonthlyOrders} pesanan`, `${picBaruStats.ordGrowth}%`],
+      ['Nilai Belanja Rata-Rata (AOV)', picLamaStats.aovFormatted, picBaruStats.aovFormatted, `${picBaruStats.aovGrowth}%`],
+      ['Rasio Iklan vs Organik', `${picLamaStats.adsRatio}% / ${picLamaStats.organicRatio}%`, `${picBaruStats.adsRatio}% / ${picBaruStats.organicRatio}%`, '-'],
+      ['Total Akumulasi Omzet', picLamaStats.totalRevenueFormatted, picBaruStats.totalRevenueFormatted, '-'],
+      ['Total Akumulasi Pesanan', `${picLamaStats.totalOrders} pesanan`, `${picBaruStats.totalOrders} pesanan`, '-'],
       [],
       ['RINCIAN RIWAYAT BULANAN TOKO (TERFILTER)'],
       ['Bulan', 'Era PIC', 'Total Omzet (Rp)', 'Total Pesanan', 'Omzet Iklan (Rp)', 'Omzet Organik (Rp)', 'Rasio Iklan (%)', 'Catatan Milestone']
@@ -710,158 +948,90 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
         </div>
       </section>
 
-      {/* 3. Executive Scorecards */}
+      {/* 3. Executive Scorecards Dinamis (100% Menyesuaikan Filter Terpilih) */}
       <section aria-label="Ringkasan Kinerja Utama">
-        {/* Mode 1: Benchmark Pertumbuhan (Jika 'all' / Lifetime) */}
-        {!isFiltered ? (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
-              gap: '14px'
-            }}
-          >
-            {/* Card 1: Omzet/Bulan Growth */}
-            <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Pertumbuhan Omzet / Bulan</span>
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.12)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <TrendingUp size={16} />
-                </div>
-              </div>
-              <div style={{ fontSize: '24px', fontWeight: 800, color: '#10B981', fontFamily: 'var(--font-mono)' }}>
-                +{bm?.deltas?.avgMonthlyRevenueGrowth}%
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                Dari {bm?.picLama?.avgMonthlyRevenueFormatted} &rarr; <strong>{bm?.picBaru?.avgMonthlyRevenueFormatted}</strong>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+            gap: '14px'
+          }}
+        >
+          {/* Card 1: Omzet / Bulan */}
+          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+                {scorecardMetrics.card1.title}
+              </span>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card1.bg, color: scorecardMetrics.card1.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <TrendingUp size={16} />
               </div>
             </div>
-
-            {/* Card 2: Orders/Bulan Growth */}
-            <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Pertumbuhan Pesanan / Bulan</span>
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.12)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <ShoppingBag size={16} />
-                </div>
-              </div>
-              <div style={{ fontSize: '24px', fontWeight: 800, color: '#10B981', fontFamily: 'var(--font-mono)' }}>
-                +{bm?.deltas?.avgMonthlyOrdersGrowth}%
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                Dari {bm?.picLama?.avgMonthlyOrders} order &rarr; <strong>{bm?.picBaru?.avgMonthlyOrders} order/bln</strong>
-              </div>
+            <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card1.color, fontFamily: 'var(--font-mono)' }}>
+              {scorecardMetrics.card1.value}
             </div>
-
-            {/* Card 3: AOV Growth */}
-            <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Peningkatan Nilai Belanja (AOV)</span>
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(59, 130, 246, 0.12)', color: '#60A5FA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <CreditCard size={16} />
-                </div>
-              </div>
-              <div style={{ fontSize: '24px', fontWeight: 800, color: '#60A5FA', fontFamily: 'var(--font-mono)' }}>
-                +{bm?.deltas?.aovGrowth}%
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                Dari {bm?.picLama?.aovFormatted} &rarr; <strong>{bm?.picBaru?.aovFormatted}</strong>
-              </div>
-            </div>
-
-            {/* Card 4: Ketergantungan Iklan */}
-            <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Ketergantungan Belanja Iklan</span>
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.12)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Percent size={16} />
-                </div>
-              </div>
-              <div style={{ fontSize: '24px', fontWeight: 800, color: '#F59E0B', fontFamily: 'var(--font-mono)' }}>
-                +{bm?.deltas?.adsRatioDiff}%
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                Rasio era lama: {bm?.picLama?.adsRatio}% &rarr; era baru: <strong>{bm?.picBaru?.adsRatio}%</strong>
-              </div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
+              {scorecardMetrics.card1.subtitle}
             </div>
           </div>
-        ) : (
-          /* Mode 2: Metrik Terfilter Spesifik Periode */
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
-              gap: '14px'
-            }}
-          >
-            {/* Card Terfilter 1: Total Omzet Terfilter */}
-            <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden', border: '1px solid rgba(238, 77, 45, 0.3)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Total Omzet Terfilter</span>
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(238, 77, 45, 0.12)', color: 'var(--color-brand-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <TrendingUp size={16} />
-                </div>
-              </div>
-              <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-brand-primary)', fontFamily: 'var(--font-mono)' }}>
-                Rp {filteredStats.totalRevenue.toLocaleString('id-ID')}
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                Rata-rata: <strong>Rp {filteredStats.avgMonthlyRevenue.toLocaleString('id-ID')}</strong> / bulan ({filteredStats.monthsCount} bln)
+
+          {/* Card 2: Pesanan / Bulan */}
+          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+                {scorecardMetrics.card2.title}
+              </span>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card2.bg, color: scorecardMetrics.card2.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <ShoppingBag size={16} />
               </div>
             </div>
-
-            {/* Card Terfilter 2: Total Pesanan Terfilter */}
-            <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Total Pesanan Terfilter</span>
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.12)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <ShoppingBag size={16} />
-                </div>
-              </div>
-              <div style={{ fontSize: '22px', fontWeight: 800, color: '#10B981', fontFamily: 'var(--font-mono)' }}>
-                {filteredStats.totalOrders} <small style={{ fontSize: '13px', fontWeight: 600 }}>pesanan</small>
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                Rata-rata: <strong>{filteredStats.avgMonthlyOrders}</strong> pesanan / bulan
-              </div>
+            <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card2.color, fontFamily: 'var(--font-mono)' }}>
+              {scorecardMetrics.card2.value}
             </div>
-
-            {/* Card Terfilter 3: AOV Terfilter */}
-            <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Nilai Belanja Rata-Rata (AOV)</span>
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(59, 130, 246, 0.12)', color: '#60A5FA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <CreditCard size={16} />
-                </div>
-              </div>
-              <div style={{ fontSize: '22px', fontWeight: 800, color: '#60A5FA', fontFamily: 'var(--font-mono)' }}>
-                Rp {filteredStats.aov.toLocaleString('id-ID')}
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                Rata-rata nilai keranjang per transaksi terfilter
-              </div>
-            </div>
-
-            {/* Card Terfilter 4: Rasio Belanja Iklan vs Organik */}
-            <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Rasio Iklan vs Organik</span>
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.12)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Percent size={16} />
-                </div>
-              </div>
-              <div style={{ fontSize: '20px', fontWeight: 800, color: '#F59E0B', fontFamily: 'var(--font-mono)' }}>
-                {filteredStats.adsRatio}% <small style={{ fontSize: '12px', color: 'var(--text-muted)' }}>/ {filteredStats.organicRatio}%</small>
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
-                Omzet Iklan: <strong>Rp {filteredStats.totalAdsRevenue.toLocaleString('id-ID')}</strong>
-              </div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
+              {scorecardMetrics.card2.subtitle}
             </div>
           </div>
-        )}
+
+          {/* Card 3: Nilai Belanja Rata-Rata (AOV) */}
+          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+                {scorecardMetrics.card3.title}
+              </span>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card3.bg, color: scorecardMetrics.card3.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <CreditCard size={16} />
+              </div>
+            </div>
+            <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card3.color, fontFamily: 'var(--font-mono)' }}>
+              {scorecardMetrics.card3.value}
+            </div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
+              {scorecardMetrics.card3.subtitle}
+            </div>
+          </div>
+
+          {/* Card 4: Ketergantungan Iklan / Rasio */}
+          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
+                {scorecardMetrics.card4.title}
+              </span>
+              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: scorecardMetrics.card4.bg, color: scorecardMetrics.card4.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Percent size={16} />
+              </div>
+            </div>
+            <div style={{ fontSize: '24px', fontWeight: 800, color: scorecardMetrics.card4.color, fontFamily: 'var(--font-mono)' }}>
+              {scorecardMetrics.card4.value}
+            </div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
+              {scorecardMetrics.card4.subtitle}
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* 4. Kartu Head-to-Head Komparasi (PIC Lama vs PIC Baru) */}
+      {/* 4. Kartu Head-to-Head Komparasi (PIC Lama vs PIC Baru) - 100% Mengikuti Filter */}
       <section aria-label="Head to Head Komparasi Era PIC">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '20px' }}>
           
@@ -874,44 +1044,47 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               backgroundColor: 'rgba(59, 130, 246, 0.04)',
               border: activePeriodFilter === 'pic_lama' 
                 ? '2px solid #3B82F6' 
-                : '1px solid rgba(59, 130, 246, 0.25)',
+                : (picLamaStats.isBaseline ? '1px dashed rgba(59, 130, 246, 0.3)' : '1px solid rgba(59, 130, 246, 0.25)'),
               boxShadow: activePeriodFilter === 'pic_lama' ? '0 0 24px rgba(59, 130, 246, 0.25)' : 'none',
               display: 'flex',
               flexDirection: 'column',
               gap: '16px',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              opacity: picBaruStats.hasData && !picLamaStats.hasData ? 0.9 : 1
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(59, 130, 246, 0.15)', paddingBottom: '12px' }}>
               <div>
                 <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#60A5FA', fontSize: '11px', padding: '3px 8px', marginBottom: '6px', display: 'inline-block' }}>
-                  👤 ERA PIC LAMA ({bm?.picLama?.activeMonths} Bulan Aktif Penjualan)
+                  {picLamaStats.badgeText}
                 </span>
                 <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
-                  {bm?.picLama?.periodLabel}
+                  {picLamaStats.periodLabel}
                 </h3>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Status Transisi</span>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#94A3B8' }}>Tutup Buku Juli 2026</div>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Status Evaluasi</span>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: picLamaStats.isBaseline ? '#94A3B8' : '#38BDF8' }}>
+                  {picLamaStats.statusText}
+                </div>
               </div>
             </div>
 
-            <div style={{ fontSize: '11.5px', color: '#94A3B8', backgroundColor: 'rgba(255,255,255,0.03)', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
-              💡 <strong>Karakteristik Strategi:</strong> Toko mengandalkan penjualan murni organik tanpa alokasi biaya iklan berbayar.
+            <div style={{ fontSize: '11.5px', color: '#CBD5E1', backgroundColor: 'rgba(59, 130, 246, 0.06)', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.15)' }}>
+              💡 <strong>Karakteristik Strategi:</strong> {picLamaStats.description}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Omzet / Bulan:</span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                  {bm?.picLama?.avgMonthlyRevenueFormatted}
+                  {picLamaStats.avgMonthlyRevenueFormatted}
                 </div>
               </div>
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Order / Bulan:</span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                  {bm?.picLama?.avgMonthlyOrders} <small style={{ fontSize: '12px', fontWeight: 500 }}>pesanan</small>
+                  {picLamaStats.avgMonthlyOrders} <small style={{ fontSize: '12px', fontWeight: 500 }}>pesanan</small>
                 </div>
               </div>
             </div>
@@ -920,19 +1093,19 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Nilai Belanja Rata-Rata (AOV):</span>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: '#CBD5E1', fontFamily: 'var(--font-mono)' }}>
-                  {bm?.picLama?.aovFormatted}
+                  {picLamaStats.aovFormatted}
                 </div>
               </div>
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rasio Iklan vs Organik:</span>
                 <div style={{ fontSize: '14px', fontWeight: 700 }}>
-                  <span style={{ color: '#F97316' }}>{bm?.picLama?.adsRatio}%</span> / <span style={{ color: '#10B981' }}>{bm?.picLama?.organicRatio}%</span>
+                  <span style={{ color: '#F97316' }}>{picLamaStats.adsRatio}%</span> / <span style={{ color: '#10B981' }}>{picLamaStats.organicRatio}%</span>
                 </div>
               </div>
             </div>
 
             <div style={{ fontSize: '12px', color: 'var(--text-muted)', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-              Total Akumulasi Omzet Era Ini: <strong style={{ color: '#60A5FA' }}>{bm?.picLama?.totalRevenueFormatted}</strong> ({bm?.picLama?.totalOrders} Pesanan Terkonfirmasi)
+              Total Akumulasi Omzet Era Ini: <strong style={{ color: '#60A5FA' }}>{picLamaStats.totalRevenueFormatted}</strong> ({picLamaStats.totalOrders} Pesanan Terkonfirmasi)
             </div>
           </div>
 
@@ -945,44 +1118,47 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               backgroundColor: 'rgba(238, 77, 45, 0.04)',
               border: activePeriodFilter === 'pic_baru' 
                 ? '2px solid var(--color-brand-primary)' 
-                : '1.5px solid rgba(238, 77, 45, 0.35)',
+                : (picBaruStats.isNotYetActive ? '1px dashed rgba(255, 255, 255, 0.15)' : '1.5px solid rgba(238, 77, 45, 0.35)'),
               boxShadow: activePeriodFilter === 'pic_baru' ? '0 0 24px rgba(238, 77, 45, 0.3)' : 'none',
               display: 'flex',
               flexDirection: 'column',
               gap: '16px',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              opacity: picBaruStats.isNotYetActive ? 0.6 : 1
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(238, 77, 45, 0.2)', paddingBottom: '12px' }}>
               <div>
                 <span className="badge" style={{ backgroundColor: 'rgba(238, 77, 45, 0.15)', color: 'var(--color-brand-primary)', fontSize: '11px', padding: '3px 8px', marginBottom: '6px', display: 'inline-block' }}>
-                  ⚡ ERA PIC BARU ({bm?.picBaru?.activeMonths} Bulan Berjalan)
+                  {picBaruStats.badgeText}
                 </span>
                 <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
-                  {bm?.picBaru?.periodLabel}
+                  {picBaruStats.periodLabel}
                 </h3>
               </div>
               <div style={{ textAlign: 'right' }}>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Status Evaluasi</span>
-                <div style={{ fontSize: '12px', fontWeight: 800, color: '#10B981' }}>Aktif & Berjalan 🚀</div>
+                <div style={{ fontSize: '12px', fontWeight: 800, color: picBaruStats.isNotYetActive ? '#94A3B8' : '#10B981' }}>
+                  {picBaruStats.statusText}
+                </div>
               </div>
             </div>
 
             <div style={{ fontSize: '11.5px', color: '#CBD5E1', backgroundColor: 'rgba(238, 77, 45, 0.06)', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(238, 77, 45, 0.15)' }}>
-              🚀 <strong>Status Kinerja:</strong> Omzet meningkat <strong>+{bm?.deltas?.avgMonthlyRevenueGrowth}%</strong> didorong akselerasi Shopee Ads terarah.
+              🚀 <strong>Status Kinerja:</strong> {picBaruStats.description}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Omzet / Bulan:</span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--color-brand-primary)', fontFamily: 'var(--font-mono)' }}>
-                  {bm?.picBaru?.avgMonthlyRevenueFormatted}
+                  {picBaruStats.avgMonthlyRevenueFormatted}
                 </div>
               </div>
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Order / Bulan:</span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                  {bm?.picBaru?.avgMonthlyOrders} <small style={{ fontSize: '12px', fontWeight: 500 }}>pesanan</small>
+                  {picBaruStats.avgMonthlyOrders} <small style={{ fontSize: '12px', fontWeight: 500 }}>pesanan</small>
                 </div>
               </div>
             </div>
@@ -991,19 +1167,19 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Nilai Belanja Rata-Rata (AOV):</span>
                 <div style={{ fontSize: '16px', fontWeight: 700, color: '#38BDF8', fontFamily: 'var(--font-mono)' }}>
-                  {bm?.picBaru?.aovFormatted} <small style={{ fontSize: '11px', color: '#10B981', fontWeight: 700 }}>(+{bm?.deltas?.aovGrowth}%)</small>
+                  {picBaruStats.aovFormatted} {picBaruStats.hasData && <small style={{ fontSize: '11px', color: '#10B981', fontWeight: 700 }}>({picBaruStats.aovGrowth}%)</small>}
                 </div>
               </div>
               <div>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rasio Iklan vs Organik:</span>
                 <div style={{ fontSize: '14px', fontWeight: 700 }}>
-                  <span style={{ color: '#F97316' }}>{bm?.picBaru?.adsRatio}%</span> / <span style={{ color: '#10B981' }}>{bm?.picBaru?.organicRatio}%</span>
+                  <span style={{ color: '#F97316' }}>{picBaruStats.adsRatio}%</span> / <span style={{ color: '#10B981' }}>{picBaruStats.organicRatio}%</span>
                 </div>
               </div>
             </div>
 
             <div style={{ fontSize: '12px', color: 'var(--text-muted)', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-              Total Akumulasi Omzet Era Ini: <strong style={{ color: 'var(--color-brand-primary)' }}>{bm?.picBaru?.totalRevenueFormatted}</strong> ({bm?.picBaru?.totalOrders} Pesanan Terkonfirmasi)
+              Total Akumulasi Omzet Era Ini: <strong style={{ color: 'var(--color-brand-primary)' }}>{picBaruStats.totalRevenueFormatted}</strong> ({picBaruStats.totalOrders} Pesanan Terkonfirmasi)
             </div>
           </div>
 
@@ -1345,7 +1521,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 <span style={{ fontSize: '13px', fontWeight: 700, color: '#10B981' }}>Skalabilitas Omzet Terbukti</span>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
-                Ekspansi marketing di era PIC Baru berhasil mendongkrak omzet bulanan hingga <strong>+{bm?.deltas?.avgMonthlyRevenueGrowth}%</strong> (rata-rata {bm?.picBaru?.avgMonthlyRevenueFormatted}/bln) dan order <strong>+{bm?.deltas?.avgMonthlyOrdersGrowth}%</strong> dibanding era lama.
+                Ekspansi marketing di era PIC Baru berhasil mendongkrak omzet bulanan hingga <strong>{picBaruStats.revGrowth}%</strong> (rata-rata {picBaruStats.avgMonthlyRevenueFormatted}/bln) dan order <strong>{picBaruStats.ordGrowth}%</strong> dibanding era lama.
               </p>
             </div>
 
@@ -1353,7 +1529,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: 'rgba(245, 158, 11, 0.06)', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
                 <AlertTriangle size={16} style={{ color: '#F59E0B' }} />
-                <span style={{ fontSize: '13px', fontWeight: 700, color: '#F59E0B' }}>Monitoring Biaya Iklan ({bm?.picBaru?.adsRatio}%)</span>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: '#F59E0B' }}>Monitoring Biaya Iklan ({picBaruStats.adsRatio}%)</span>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
                 Tingginya porsi omzet iklan menuntut penerapan ketat batas <strong>Plafon CPR 25%</strong> dan <strong>CAC 40%</strong> dari Modul 3 agar toko tidak membakar budget pada campaign yang tidak menguntungkan.
