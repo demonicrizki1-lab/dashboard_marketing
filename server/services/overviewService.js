@@ -645,6 +645,13 @@ function buildConsolidatedOverview({ period, startTime, endTime, orderType = 'pa
     ? productCard.ctr_pct_diff * 100 
     : 0;
 
+  const conversionRate = clicks > 0
+    ? (confirmedOrders / clicks) * 100
+    : (kmVisitors > 0 ? (confirmedOrders / kmVisitors) * 100 : 0);
+  const conversionRatePctDiff = keyMetricsResult.shop_uv_to_confirmed_buyers_rate?.chain_ratio !== undefined && keyMetricsResult.shop_uv_to_confirmed_buyers_rate?.chain_ratio !== -1000000
+    ? keyMetricsResult.shop_uv_to_confirmed_buyers_rate.chain_ratio * 100
+    : (ordersPctDiff || 0);
+
   // Helper untuk ratio channel tanpa sentinel -1000000
   const getCleanRatio = (ratioVal, channelSales, totalSalesVal) => {
     if (ratioVal !== undefined && ratioVal !== null && ratioVal !== -1000000 && !isNaN(ratioVal)) {
@@ -882,6 +889,12 @@ function buildConsolidatedOverview({ period, startTime, endTime, orderType = 'pa
         formatted: ctr.toFixed(2) + '%',
         pctDiff: ctrPctDiff,
         label: 'Rasio Klik (CTR)'
+      },
+      conversionRate: {
+        value: Number(conversionRate.toFixed(2)),
+        formatted: conversionRate.toFixed(2) + '%',
+        pctDiff: conversionRatePctDiff,
+        label: 'Tingkat Konversi Pesanan (CR)'
       }
     },
     channelBreakdown,

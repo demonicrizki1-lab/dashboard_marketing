@@ -313,6 +313,13 @@ export default function StoreOverview({ showToast, storeInfo }) {
   const profile = data?.storeProfile;
   const bm = data?.picBenchmark;
 
+  // 8th Metric: Tingkat Konversi Pesanan (CR)
+  const conversionRateVal = km?.conversionRate?.value !== undefined 
+    ? km.conversionRate.value 
+    : (km?.clicks?.value > 0 ? (km.confirmedOrders?.value / km.clicks.value) * 100 : 0);
+  const conversionRateFormatted = km?.conversionRate?.formatted || (conversionRateVal.toFixed(2) + '%');
+  const conversionRatePctDiff = km?.conversionRate?.pctDiff !== undefined ? km.conversionRate.pctDiff : km?.confirmedOrders?.pctDiff;
+
   return (
     <div className="store-overview-container" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
@@ -369,88 +376,94 @@ export default function StoreOverview({ showToast, storeInfo }) {
         </div>
       </div>
 
-      {/* 2. Executive Store Milestone & Lifetime Profile */}
+      {/* 2. Executive Store Milestone & Lifetime Profile Strip (Zona 2) */}
       <div
         className="glass-card"
         style={{
-          padding: '22px',
-          borderRadius: '16px',
-          background: 'linear-gradient(135deg, rgba(238, 77, 45, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%)',
-          border: '1px solid rgba(238, 77, 45, 0.25)',
+          padding: '12px 18px',
+          borderRadius: '12px',
+          background: 'linear-gradient(135deg, rgba(238, 77, 45, 0.05) 0%, rgba(15, 23, 42, 0.7) 100%)',
+          border: '1px solid rgba(238, 77, 45, 0.18)',
           display: 'flex',
-          flexDirection: 'column',
-          gap: '16px'
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div
-              style={{
-                width: '46px',
-                height: '46px',
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, var(--color-brand-primary) 0%, #D83B1B 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                boxShadow: '0 8px 16px rgba(238, 77, 45, 0.3)'
-              }}
-            >
-              <Store size={24} strokeWidth={2.2} />
+        {/* Left: Store identity & milestones */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '9px',
+              background: 'linear-gradient(135deg, var(--color-brand-primary) 0%, #D83B1B 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              boxShadow: '0 4px 10px rgba(238, 77, 45, 0.25)',
+              flexShrink: 0
+            }}
+          >
+            <Store size={18} strokeWidth={2.2} />
+          </div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <h2 style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: 'var(--text-primary)' }}>
+                {profile?.storeName || 'Monture outdoor'}
+              </h2>
+              <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.25)', fontSize: '10.5px', padding: '1px 7px', borderRadius: '5px' }}>
+                🟢 {profile?.status || 'Aktif'}
+              </span>
+              <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.12)', color: '#60A5FA', border: '1px solid rgba(59, 130, 246, 0.25)', fontSize: '10.5px', padding: '1px 7px', borderRadius: '5px' }}>
+                ID: {profile?.shopId || '1575219792'}
+              </span>
             </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                <h2 style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.02em', margin: 0 }}>
-                  {profile?.storeName || 'Monture outdoor'}
-                </h2>
-                <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.3)', fontSize: '11px', padding: '2px 8px' }}>
-                  🟢 {profile?.status || 'Aktif'}
-                </span>
-                <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#60A5FA', border: '1px solid rgba(59, 130, 246, 0.3)', fontSize: '11px', padding: '2px 8px' }}>
-                  ID: {profile?.shopId || '1575219792'}
-                </span>
-              </div>
-              <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '4px 0 0 0', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                <span>Daftar Toko: <strong style={{ color: 'var(--text-primary)' }}>{profile?.creationDate || '30 September 2024'}</strong></span>
-                <span>•</span>
-                <span>Mulai Penjualan: <strong style={{ color: '#10B981' }}>{profile?.firstSalesDate || '07 Juli 2025'}</strong></span>
-                <span>•</span>
-                <span>Fase Aktif: <strong style={{ color: 'var(--text-primary)' }}>{profile?.activeMonths || 16} Bulan</strong></span>
-              </p>
+            <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', margin: '2px 0 0 0', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <span>Daftar Toko: <strong style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{profile?.creationDate || '30 September 2024'}</strong></span>
+              <span style={{ opacity: 0.4 }}>•</span>
+              <span>Mulai Penjualan: <strong style={{ color: '#10B981', fontWeight: 600 }}>{profile?.firstSalesDate || '07 Juli 2025'}</strong></span>
+              <span style={{ opacity: 0.4 }}>•</span>
+              <span>Fase Aktif: <strong style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{profile?.activeMonths || 16} Bulan</strong></span>
             </div>
           </div>
+        </div>
 
-          {/* Lifetime Metric Cards */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+        {/* Right: Lifetime Metric Cards */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
-              <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)', fontWeight: 600 }}>
-                Total Omzet Sepanjang Masa (Lifetime):
+              <span style={{ fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', fontWeight: 600 }}>
+                Total Omzet Lifetime
               </span>
-              <span style={{ fontSize: '20px', fontWeight: 800, color: 'var(--color-brand-primary)', fontFamily: 'var(--font-mono)' }}>
+              <span style={{ fontSize: '15.5px', fontWeight: 800, color: 'var(--color-brand-primary)', fontFamily: 'var(--font-mono)' }}>
                 {lp?.revenueFormatted || 'Rp 0'}
               </span>
             </div>
+          </div>
 
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
-              <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)', fontWeight: 600 }}>
-                Total Pesanan Selesai:
+              <span style={{ fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', fontWeight: 600 }}>
+                Total Pesanan Selesai
               </span>
-              <span style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                {(lp?.orders || 0).toLocaleString('id-ID')} <small style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Pesanan</small>
+              <span style={{ fontSize: '15.5px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                {(lp?.orders || 0).toLocaleString('id-ID')} <span style={{ fontSize: '11px', fontWeight: 500, color: 'var(--text-muted)' }}>order</span>
               </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 3. 7 Metrik Kunci Utama (Traffic-Sources Key Metrics Grid) */}
-      <section aria-label="7 Metrik Kunci Performa Toko">
-        <div style={{ marginBottom: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {/* 3. 8 Metrik Kunci Utama (Zona 3: Symmetric 4x2 Grid) */}
+      <section aria-label="8 Metrik Kunci Performa Toko">
+        <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Sparkles size={18} style={{ color: 'var(--color-brand-primary)' }} />
-            <h3 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
-              7 Metrik Kunci Performa Toko ({data?.customLabel || selectedPeriodObj?.label || '30 Hari Terakhir'})
+            <Sparkles size={16} style={{ color: 'var(--color-brand-primary)' }} />
+            <h3 style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
+              8 Metrik Kunci Performa Toko ({data?.customLabel || selectedPeriodObj?.label || '30 Hari Terakhir'})
             </h3>
           </div>
           <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Sinkron langsung dari Shopee Data Center</span>
@@ -460,125 +473,158 @@ export default function StoreOverview({ showToast, storeInfo }) {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '14px'
+            gap: '12px'
           }}
         >
-          {/* 1. Total Penjualan Kotor */}
-          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>1. Total Penjualan Kotor</span>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(238, 77, 45, 0.12)', color: 'var(--color-brand-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <TrendingUp size={16} />
+          {/* Card 1: Total Penjualan Kotor */}
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Total Penjualan Kotor</span>
+                <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(238, 77, 45, 0.12)', color: 'var(--color-brand-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <TrendingUp size={15} />
+                </div>
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {km?.totalSales?.formatted || 'Rp 0'}
               </div>
             </div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
-              {km?.totalSales?.formatted || 'Rp 0'}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+              <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.totalSales?.pctDiff)}
             </div>
           </div>
 
-          {/* 2. Total Pesanan Berhasil */}
-          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>2. Total Pesanan Berhasil</span>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.12)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <ShoppingBag size={16} />
+          {/* Card 2: Total Pesanan Berhasil */}
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Pesanan Berhasil</span>
+                <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(16, 185, 129, 0.12)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <ShoppingBag size={15} />
+                </div>
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {km?.confirmedOrders?.formatted || '0 Pesanan'}
               </div>
             </div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
-              {km?.confirmedOrders?.formatted || '0 Pesanan'}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+              <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.confirmedOrders?.pctDiff)}
             </div>
           </div>
 
-          {/* 3. Total Pembeli */}
-          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>3. Total Pembeli</span>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(59, 130, 246, 0.12)', color: '#60A5FA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Users size={16} />
+          {/* Card 3: Total Pembeli Unik */}
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Pembeli Unik</span>
+                <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(59, 130, 246, 0.12)', color: '#60A5FA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Users size={15} />
+                </div>
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {km?.uniqueBuyers?.formatted || '0 Pembeli'}
               </div>
             </div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
-              {km?.uniqueBuyers?.formatted || '0 Pembeli'}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+              <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.uniqueBuyers?.pctDiff)}
             </div>
           </div>
 
-          {/* 4. Rata-Rata Nilai Belanja (AOV) */}
-          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>4. Nilai Belanja / Order (AOV)</span>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.12)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <CreditCard size={16} />
+          {/* Card 4: Nilai Belanja / Order (AOV) */}
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Nilai Belanja / Order (AOV)</span>
+                <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(245, 158, 11, 0.12)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CreditCard size={15} />
+                </div>
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {km?.salesPerOrder?.formatted || 'Rp 0'}
               </div>
             </div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
-              {km?.salesPerOrder?.formatted || 'Rp 0'}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+              <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.salesPerOrder?.pctDiff)}
             </div>
           </div>
 
-          {/* 5. Total Tayangan Produk */}
-          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>5. Total Tayangan Produk</span>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(139, 92, 246, 0.12)', color: '#8B5CF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Eye size={16} />
+          {/* Card 5: Total Tayangan Produk */}
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Tayangan Produk</span>
+                <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(139, 92, 246, 0.12)', color: '#8B5CF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Eye size={15} />
+                </div>
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {km?.impressions?.formatted || '0'}
               </div>
             </div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
-              {km?.impressions?.formatted || '0'}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+              <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.impressions?.pctDiff)}
             </div>
           </div>
 
-          {/* 6. Total Klik Produk */}
-          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>6. Total Klik Produk</span>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(6, 182, 212, 0.12)', color: '#06B6D4', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <MousePointer size={16} />
+          {/* Card 6: Total Klik Produk */}
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Klik Produk</span>
+                <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(6, 182, 212, 0.12)', color: '#06B6D4', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <MousePointer size={15} />
+                </div>
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {km?.clicks?.formatted || '0'}
               </div>
             </div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
-              {km?.clicks?.formatted || '0'}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+              <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.clicks?.pctDiff)}
             </div>
           </div>
 
-          {/* 7. Rasio Klik (CTR) */}
-          <div className="glass-card" style={{ padding: '18px', borderRadius: '14px', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>7. Rasio Klik (CTR)</span>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(236, 72, 153, 0.12)', color: '#EC4899', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Percent size={16} />
+          {/* Card 7: Rasio Klik (CTR) */}
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Rasio Klik (CTR)</span>
+                <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(236, 72, 153, 0.12)', color: '#EC4899', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Percent size={15} />
+                </div>
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {km?.ctr?.formatted || '0%'}
               </div>
             </div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
-              {km?.ctr?.formatted || '0%'}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+              <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.ctr?.pctDiff)}
+            </div>
+          </div>
+
+          {/* Card 8: Tingkat Konversi Pesanan (CR) */}
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Konversi Pesanan (CR)</span>
+                <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'rgba(16, 185, 129, 0.12)', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Target size={15} />
+                </div>
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em' }}>
+                {conversionRateFormatted}
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+              <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
+              {renderDelta(conversionRatePctDiff)}
             </div>
           </div>
         </div>

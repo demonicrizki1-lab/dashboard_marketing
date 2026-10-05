@@ -1,9 +1,9 @@
 {
   "period": "past30days",
-  "startTime": 1788599933,
-  "endTime": 1791191933,
+  "startTime": 1788602387,
+  "endTime": 1791194387,
   "customLabel": "30 Hari Sebelumnya",
-  "lastUpdated": "2026-10-05T09:18:53.496Z",
+  "lastUpdated": "2026-10-05T09:59:49.116Z",
   "isRealShopeeData": true,
   "storeProfile": {
     "storeName": "Monture outdoor",
@@ -214,6 +214,12 @@
       "formatted": "2.42%",
       "pctDiff": 0.1516683371257616,
       "label": "Rasio Klik (CTR)"
+    },
+    "conversionRate": {
+      "value": 0.76,
+      "formatted": "0.76%",
+      "pctDiff": -0.421617039132771,
+      "label": "Tingkat Konversi Pesanan (CR)"
     }
   },
   "channelBreakdown": {
