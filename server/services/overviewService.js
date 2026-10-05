@@ -196,10 +196,11 @@ async function getOverviewData({ period = 'past30days', startTime, endTime, orde
   let trafficResult = null;
   let rankingsResult = null;
   let orderPerfResult = null;
+  let keyMetricsResult = null;
+  let sTime = startTime;
+  let eTime = endTime;
 
   if (config.cookie && config.spcCds) {
-    let sTime = startTime;
-    let eTime = endTime;
     const nowSec = Math.floor(Date.now() / 1000);
 
     if (!sTime || !eTime) {
@@ -207,6 +208,10 @@ async function getOverviewData({ period = 'past30days', startTime, endTime, orde
         const today0 = Math.floor(new Date().setHours(0,0,0,0) / 1000);
         sTime = today0 - 86400;
         eTime = today0 - 1;
+      } else if (period === 'real_time') {
+        const today0 = Math.floor(new Date().setHours(0,0,0,0) / 1000);
+        sTime = today0;
+        eTime = nowSec;
       } else if (period === 'past7days') {
         sTime = nowSec - 7 * 86400;
         eTime = nowSec;
@@ -219,6 +224,19 @@ async function getOverviewData({ period = 'past30days', startTime, endTime, orde
       }
     }
 
+    // 1. Fetch Key Metrics (Shopee Core Metrics & Hourly Points)
+    try {
+      const kmUrl = `https://seller.shopee.co.id/api/mydata/v3/dashboard/key-metrics/?SPC_CDS=${config.spcCds}&SPC_CDS_VER=${config.spcCdsVer || '2'}&start_time=${sTime}&end_time=${eTime}&period=${period}&fetag=fetag`;
+      const resKM = await fetch(kmUrl, { headers });
+      const jsonKM = await resKM.json();
+      if (jsonKM.code === 0 && jsonKM.result) {
+        keyMetricsResult = jsonKM.result;
+      }
+    } catch (err) {
+      console.warn('[Overview API] Live key-metrics gagal:', err.message);
+    }
+
+    // 2. Fetch Traffic Sources
     try {
       const trafficUrl = `https://seller.shopee.co.id/api/mydata/v1/dashboard/traffic-sources/?SPC_CDS=${config.spcCds}&SPC_CDS_VER=${config.spcCdsVer || '2'}&start_time=${sTime}&end_time=${eTime}&period=${period}&order_type=${orderType}`;
       const resT = await fetch(trafficUrl, { headers });
@@ -231,6 +249,7 @@ async function getOverviewData({ period = 'past30days', startTime, endTime, orde
       console.warn('[Overview API] Live traffic-sources gagal:', err.message);
     }
 
+    // 3. Fetch Product Rankings
     try {
       const rankUrl = `https://seller.shopee.co.id/api/mydata/v3/dashboard/product-rankings/?SPC_CDS=${config.spcCds}&SPC_CDS_VER=${config.spcCdsVer || '2'}&start_time=${sTime}&end_time=${eTime}&period=${period}&category_type=shopee&category_id=-1&page_size=5&page_num=1&order_type=${orderType}&order_by=confirmed_sales.desc`;
       const resR = await fetch(rankUrl, { headers });
@@ -243,16 +262,19 @@ async function getOverviewData({ period = 'past30days', startTime, endTime, orde
       console.warn('[Overview API] Live product-rankings gagal:', err.message);
     }
 
-    try {
-      const perfUrl = `https://seller.shopee.co.id/api/mydata/dashboard/order-performance/?SPC_CDS=${config.spcCds}&SPC_CDS_VER=${config.spcCdsVer || '2'}&start_time=${sTime}&end_time=${eTime}&period=${period}&fetag=fetag&order_type=${orderType}`;
-      const resP = await fetch(perfUrl, { headers });
-      const jsonP = await resP.json();
-      if (jsonP.code === 0 && jsonP.result) {
-        orderPerfResult = jsonP.result;
-        fs.writeFileSync(DATA_ORDER_PERF_PATH, JSON.stringify(jsonP, null, 2), 'utf8');
+    // 4. Fetch Order Performance (hanya jika bukan real_time karena real_time tidak didukung di endpoint ini)
+    if (period !== 'real_time') {
+      try {
+        const perfUrl = `https://seller.shopee.co.id/api/mydata/dashboard/order-performance/?SPC_CDS=${config.spcCds}&SPC_CDS_VER=${config.spcCdsVer || '2'}&start_time=${sTime}&end_time=${eTime}&period=${period}&fetag=fetag&order_type=${orderType}`;
+        const resP = await fetch(perfUrl, { headers });
+        const jsonP = await resP.json();
+        if (jsonP.code === 0 && jsonP.result) {
+          orderPerfResult = jsonP.result;
+          fs.writeFileSync(DATA_ORDER_PERF_PATH, JSON.stringify(jsonP, null, 2), 'utf8');
+        }
+      } catch (err) {
+        console.warn('[Overview API] Live order-performance gagal:', err.message);
       }
-    } catch (err) {
-      console.warn('[Overview API] Live order-performance gagal:', err.message);
     }
   }
 
@@ -276,13 +298,23 @@ async function getOverviewData({ period = 'past30days', startTime, endTime, orde
     } catch (e) {}
   }
 
+  const presetLabels = {
+    'real_time': 'Real-time',
+    'yesterday': 'Kemarin',
+    'past7days': '7 Hari Sebelumnya',
+    'past30days': '30 Hari Sebelumnya'
+  };
+
   return buildConsolidatedOverview({
     period,
-    startTime,
-    endTime,
+    startTime: sTime,
+    endTime: eTime,
+    orderType,
     trafficResult: trafficResult || {},
     rankingsResult: rankingsResult || {},
-    orderPerfResult: orderPerfResult || {}
+    orderPerfResult: orderPerfResult || {},
+    keyMetricsResult: keyMetricsResult || {},
+    customLabel: presetLabels[period] || period
   });
 }
 
@@ -485,49 +517,105 @@ function buildConsolidatedOverview({ period, startTime, endTime, orderType = 'pa
   const isPaid = orderType === 'paid';
   const isPlace = orderType === 'place' || orderType === 'placed';
 
-  // 7 Metrik Kunci Utama (Fallback ke keyMetricsResult jika traffic-sources kosong)
-  const kmSales = isPlace
-    ? Number(keyMetricsResult.place_gmv?.value !== undefined ? keyMetricsResult.place_gmv?.value : (keyMetricsResult.sales?.value || 0))
-    : (isPaid
-      ? Number(keyMetricsResult.paid_gmv?.value !== undefined ? keyMetricsResult.paid_gmv?.value : (keyMetricsResult.sales?.value || 0))
-      : Number(keyMetricsResult.confirmed_gmv?.value !== undefined ? keyMetricsResult.confirmed_gmv?.value : (keyMetricsResult.paid_gmv?.value || keyMetricsResult.sales?.value || 0)));
+  // 7 Metrik Kunci Utama (Ditarik presisi sesuai status pesanan)
+  let kmSales = undefined;
+  let kmOrders = undefined;
+  let kmAov = undefined;
 
-  const kmOrders = isPlace
-    ? Number(keyMetricsResult.place_orders?.value !== undefined ? keyMetricsResult.place_orders?.value : (keyMetricsResult.orders?.value || 0))
-    : (isPaid
-      ? Number(keyMetricsResult.paid_orders?.value !== undefined ? keyMetricsResult.paid_orders?.value : (keyMetricsResult.orders?.value || 0))
-      : Number(keyMetricsResult.confirmed_orders?.value !== undefined ? keyMetricsResult.confirmed_orders?.value : (keyMetricsResult.paid_orders?.value || keyMetricsResult.orders?.value || 0)));
+  if (isPlace) {
+    if (keyMetricsResult.place_gmv?.value !== undefined) kmSales = Number(keyMetricsResult.place_gmv.value);
+    if (keyMetricsResult.place_orders?.value !== undefined) kmOrders = Number(keyMetricsResult.place_orders.value);
+    if (keyMetricsResult.place_sales_per_order?.value !== undefined) kmAov = Number(keyMetricsResult.place_sales_per_order.value);
+  } else if (isPaid) {
+    if (keyMetricsResult.paid_gmv?.value !== undefined) kmSales = Number(keyMetricsResult.paid_gmv.value);
+    if (keyMetricsResult.paid_orders?.value !== undefined) kmOrders = Number(keyMetricsResult.paid_orders.value);
+    if (keyMetricsResult.paid_sales_per_order?.value !== undefined) kmAov = Number(keyMetricsResult.paid_sales_per_order.value);
+  } else {
+    // confirmed
+    if (keyMetricsResult.confirmed_gmv?.value !== undefined) kmSales = Number(keyMetricsResult.confirmed_gmv.value);
+    if (keyMetricsResult.confirmed_orders?.value !== undefined) kmOrders = Number(keyMetricsResult.confirmed_orders.value);
+    if (keyMetricsResult.confirmed_sales_per_order?.value !== undefined) kmAov = Number(keyMetricsResult.confirmed_sales_per_order.value);
+  }
 
-  const kmBuyers = Number(keyMetricsResult.buyers?.value) || kmOrders;
-  const kmAov = isPlace
-    ? Number(keyMetricsResult.place_sales_per_order?.value || (kmOrders > 0 ? kmSales / kmOrders : 0))
-    : (isPaid
-      ? Number(keyMetricsResult.paid_sales_per_order?.value || (kmOrders > 0 ? kmSales / kmOrders : 0))
-      : Number(keyMetricsResult.confirmed_sales_per_order?.value || keyMetricsResult.paid_sales_per_order?.value || (kmOrders > 0 ? kmSales / kmOrders : 0)));
-  const kmVisitors = Number(keyMetricsResult.shop_uv?.value || keyMetricsResult.visitors?.value);
+  const hasTrafficOverview = overview.total_sales !== undefined;
+  const hasProductCard = productCard.orders !== undefined;
+  const hasLiveSource = kmSales !== undefined || hasTrafficOverview;
+
+  let totalSales = 0;
+  if (kmSales !== undefined) {
+    totalSales = kmSales;
+  } else if (hasTrafficOverview) {
+    totalSales = Number(overview.total_sales);
+  } else {
+    totalSales = 6723492; // Fallback jika benar-benar offline tanpa respon API
+  }
+
+  let confirmedOrders = 0;
+  if (kmOrders !== undefined) {
+    confirmedOrders = kmOrders;
+  } else if (hasProductCard) {
+    confirmedOrders = Number(productCard.orders);
+  } else {
+    confirmedOrders = hasLiveSource ? 0 : 29;
+  }
+
+  let uniqueBuyers = 0;
+  if (productCard.buyers !== undefined) {
+    uniqueBuyers = Number(productCard.buyers);
+  } else if (keyMetricsResult.buyers?.value !== undefined) {
+    uniqueBuyers = Number(keyMetricsResult.buyers.value);
+  } else {
+    uniqueBuyers = confirmedOrders;
+  }
+
+  const salesPerOrder = confirmedOrders > 0 
+    ? Math.round(totalSales / confirmedOrders) 
+    : (kmAov !== undefined ? kmAov : 0);
+
+  const kmVisitors = Number(keyMetricsResult.shop_uv?.value || keyMetricsResult.visitors?.value || 0);
   const kmImpressions = Number(keyMetricsResult.shop_pv?.value || 0);
   const kmClicks = Number(keyMetricsResult.product_clicks?.value || 0);
   const kmCtr = kmImpressions > 0 ? (kmClicks / kmImpressions) * 100 : (Number(keyMetricsResult.shop_uv_to_confirmed_buyers_rate?.value || 0) * 100);
 
-  const totalSales = (isPaid || isPlace) && kmSales > 0 
-    ? kmSales 
-    : (Number(overview.total_sales) > 0 ? Number(overview.total_sales) : (kmSales > 0 ? kmSales : 6723492));
-  const confirmedOrders = (isPaid || isPlace) && kmOrders > 0 
-    ? kmOrders 
-    : (Number(productCard.orders) > 0 ? Number(productCard.orders) : (kmOrders > 0 ? kmOrders : 29));
-  const uniqueBuyers = Number(productCard.buyers) > 0 ? Number(productCard.buyers) : (kmBuyers > 0 ? kmBuyers : confirmedOrders);
-  const salesPerOrder = confirmedOrders > 0 ? totalSales / confirmedOrders : (kmAov > 0 ? kmAov : 210554);
-  const impressions = Number(productCard.product_impressions) > 0 ? Number(productCard.product_impressions) : (kmImpressions > 0 ? kmImpressions : (kmVisitors > 0 ? kmVisitors : 161973));
-  const clicks = Number(productCard.product_clicks) > 0 ? Number(productCard.product_clicks) : (kmClicks > 0 ? kmClicks : 3949);
-  const ctr = Number(productCard.ctr) ? (Number(productCard.ctr) > 1 ? Number(productCard.ctr) : Number(productCard.ctr) * 100) : (kmCtr > 0 ? kmCtr : 2.44);
+  const impressions = Number(productCard.product_impressions) !== undefined && !isNaN(Number(productCard.product_impressions)) && Number(productCard.product_impressions) > 0
+    ? Number(productCard.product_impressions)
+    : (kmImpressions > 0 ? kmImpressions : (kmVisitors > 0 ? kmVisitors : (hasLiveSource ? 0 : 161973)));
 
-  // Percentage differences vs previous period (Fallback to Shopee chain_ratio if available)
-  const kmSalesPctDiff = isPlace
-    ? (keyMetricsResult.place_gmv?.chain_ratio !== undefined && keyMetricsResult.place_gmv?.chain_ratio !== -1000000 ? keyMetricsResult.place_gmv.chain_ratio * 100 : undefined)
-    : (keyMetricsResult.paid_gmv?.chain_ratio !== undefined && keyMetricsResult.paid_gmv?.chain_ratio !== -1000000 ? keyMetricsResult.paid_gmv.chain_ratio * 100 : undefined);
-  const kmOrdersPctDiff = isPlace
-    ? (keyMetricsResult.place_orders?.chain_ratio !== undefined && keyMetricsResult.place_orders?.chain_ratio !== -1000000 ? keyMetricsResult.place_orders.chain_ratio * 100 : undefined)
-    : (keyMetricsResult.paid_orders?.chain_ratio !== undefined && keyMetricsResult.paid_orders?.chain_ratio !== -1000000 ? keyMetricsResult.paid_orders.chain_ratio * 100 : undefined);
+  const clicks = Number(productCard.product_clicks) !== undefined && !isNaN(Number(productCard.product_clicks)) && Number(productCard.product_clicks) > 0
+    ? Number(productCard.product_clicks)
+    : (kmClicks > 0 ? kmClicks : (hasLiveSource ? 0 : 3949));
+
+  const ctr = Number(productCard.ctr)
+    ? (Number(productCard.ctr) > 1 ? Number(productCard.ctr) : Number(productCard.ctr) * 100)
+    : (impressions > 0 ? (clicks / impressions) * 100 : (kmCtr > 0 ? kmCtr : 0));
+
+  // Percentage differences vs previous period (Shopee chain_ratio)
+  let kmSalesPctDiff = undefined;
+  let kmOrdersPctDiff = undefined;
+
+  if (isPlace) {
+    if (keyMetricsResult.place_gmv?.chain_ratio !== undefined && keyMetricsResult.place_gmv?.chain_ratio !== -1000000) {
+      kmSalesPctDiff = keyMetricsResult.place_gmv.chain_ratio * 100;
+    }
+    if (keyMetricsResult.place_orders?.chain_ratio !== undefined && keyMetricsResult.place_orders?.chain_ratio !== -1000000) {
+      kmOrdersPctDiff = keyMetricsResult.place_orders.chain_ratio * 100;
+    }
+  } else if (isPaid) {
+    if (keyMetricsResult.paid_gmv?.chain_ratio !== undefined && keyMetricsResult.paid_gmv?.chain_ratio !== -1000000) {
+      kmSalesPctDiff = keyMetricsResult.paid_gmv.chain_ratio * 100;
+    }
+    if (keyMetricsResult.paid_orders?.chain_ratio !== undefined && keyMetricsResult.paid_orders?.chain_ratio !== -1000000) {
+      kmOrdersPctDiff = keyMetricsResult.paid_orders.chain_ratio * 100;
+    }
+  } else {
+    if (keyMetricsResult.confirmed_gmv?.chain_ratio !== undefined && keyMetricsResult.confirmed_gmv?.chain_ratio !== -1000000) {
+      kmSalesPctDiff = keyMetricsResult.confirmed_gmv.chain_ratio * 100;
+    }
+    if (keyMetricsResult.confirmed_orders?.chain_ratio !== undefined && keyMetricsResult.confirmed_orders?.chain_ratio !== -1000000) {
+      kmOrdersPctDiff = keyMetricsResult.confirmed_orders.chain_ratio * 100;
+    }
+  }
+
   const kmAovPctDiff = keyMetricsResult.paid_sales_per_order?.chain_ratio !== undefined && keyMetricsResult.paid_sales_per_order?.chain_ratio !== -1000000
     ? keyMetricsResult.paid_sales_per_order.chain_ratio * 100 : undefined;
   const kmImpressionsPctDiff = keyMetricsResult.shop_pv?.chain_ratio !== undefined && keyMetricsResult.shop_pv?.chain_ratio !== -1000000
@@ -535,31 +623,43 @@ function buildConsolidatedOverview({ period, startTime, endTime, orderType = 'pa
   const kmClicksPctDiff = keyMetricsResult.product_clicks?.chain_ratio !== undefined && keyMetricsResult.product_clicks?.chain_ratio !== -1000000
     ? keyMetricsResult.product_clicks.chain_ratio * 100 : undefined;
 
-  const totalSalesPctDiff = (isPaid || isPlace) && kmSalesPctDiff !== undefined 
+  const totalSalesPctDiff = kmSalesPctDiff !== undefined 
     ? kmSalesPctDiff 
-    : (overview.total_sales_pct_diff !== undefined && overview.total_sales_pct_diff !== -1000000 ? overview.total_sales_pct_diff * 100 : (kmSalesPctDiff !== undefined ? kmSalesPctDiff : -19.8));
-  const ordersPctDiff = (isPaid || isPlace) && kmOrdersPctDiff !== undefined 
+    : (overview.total_sales_pct_diff !== undefined && overview.total_sales_pct_diff !== -1000000 ? overview.total_sales_pct_diff * 100 : 0);
+  const ordersPctDiff = kmOrdersPctDiff !== undefined 
     ? kmOrdersPctDiff 
-    : (productCard.orders_pct_diff !== undefined && productCard.orders_pct_diff !== -1000000 ? productCard.orders_pct_diff * 100 : (kmOrdersPctDiff !== undefined ? kmOrdersPctDiff : -49.1));
+    : (productCard.orders_pct_diff !== undefined && productCard.orders_pct_diff !== -1000000 ? productCard.orders_pct_diff * 100 : 0);
   const buyersPctDiff = productCard.buyers_pct_diff !== undefined && productCard.buyers_pct_diff !== -1000000
     ? productCard.buyers_pct_diff * 100 
-    : (kmOrdersPctDiff !== undefined ? kmOrdersPctDiff : -46.3);
+    : (ordersPctDiff || 0);
   const salesPerOrderPctDiff = productCard.sales_per_order_pct_diff !== undefined && productCard.sales_per_order_pct_diff !== -1000000
     ? productCard.sales_per_order_pct_diff * 100 
-    : (kmAovPctDiff !== undefined ? kmAovPctDiff : 53.3);
+    : (kmAovPctDiff !== undefined ? kmAovPctDiff : 0);
   const impressionsPctDiff = productCard.product_impressions_pct_diff !== undefined && productCard.product_impressions_pct_diff !== -1000000
     ? productCard.product_impressions_pct_diff * 100 
-    : (kmImpressionsPctDiff !== undefined ? kmImpressionsPctDiff : -34.0);
+    : (kmImpressionsPctDiff !== undefined ? kmImpressionsPctDiff : 0);
   const clicksPctDiff = productCard.product_clicks_pct_diff !== undefined && productCard.product_clicks_pct_diff !== -1000000
     ? productCard.product_clicks_pct_diff * 100 
-    : (kmClicksPctDiff !== undefined ? kmClicksPctDiff : -30.0);
+    : (kmClicksPctDiff !== undefined ? kmClicksPctDiff : 0);
   const ctrPctDiff = productCard.ctr_pct_diff !== undefined && productCard.ctr_pct_diff !== -1000000
     ? productCard.ctr_pct_diff * 100 
-    : 0.14;
+    : 0;
+
+  // Helper untuk ratio channel tanpa sentinel -1000000
+  const getCleanRatio = (ratioVal, channelSales, totalSalesVal) => {
+    if (ratioVal !== undefined && ratioVal !== null && ratioVal !== -1000000 && !isNaN(ratioVal)) {
+      const num = Number(ratioVal);
+      return Number((num <= 1 ? num * 100 : num).toFixed(2));
+    }
+    if (totalSalesVal > 0 && channelSales > 0) {
+      return Number(((channelSales / totalSalesVal) * 100).toFixed(2));
+    }
+    return 0;
+  };
 
   // Channel Breakdown
   const paidAdsSales = Number(overview.paid_ads) || 0;
-  const productCardSales = Number(overview.product_card) || 0;
+  const productCardSales = Number(overview.product_card) || (totalSales > 0 && paidAdsSales === 0 ? totalSales : 0);
   const videoSales = Number(overview.video) || 0;
   const affiliateSales = Number(overview.affiliate) || 0;
   const liveSales = Number(overview.live) || 0;
@@ -568,31 +668,31 @@ function buildConsolidatedOverview({ period, startTime, endTime, orderType = 'pa
     paid_ads: {
       label: 'Iklan Berbayar (Shopee Ads)',
       sales: paidAdsSales,
-      ratio: overview.paid_ads_ratio !== undefined ? Number((overview.paid_ads_ratio * (overview.paid_ads_ratio <= 1 ? 100 : 1)).toFixed(2)) : 82.33,
+      ratio: getCleanRatio(overview.paid_ads_ratio, paidAdsSales, totalSales),
       color: '#EE4D2D'
     },
     product_card: {
       label: 'Organik & Pencarian Produk',
       sales: productCardSales,
-      ratio: overview.product_card_ratio !== undefined ? Number((overview.product_card_ratio * (overview.product_card_ratio <= 1 ? 100 : 1)).toFixed(2)) : 90.82,
+      ratio: getCleanRatio(overview.product_card_ratio, productCardSales, totalSales),
       color: '#10B981'
     },
     video: {
       label: 'Shopee Video',
       sales: videoSales,
-      ratio: overview.video_ratio !== undefined ? Number((overview.video_ratio * (overview.video_ratio <= 1 ? 100 : 1)).toFixed(2)) : 6.46,
+      ratio: getCleanRatio(overview.video_ratio, videoSales, totalSales),
       color: '#8B5CF6'
     },
     affiliate: {
       label: 'Shopee Affiliate',
       sales: affiliateSales,
-      ratio: overview.affiliate_ratio !== undefined ? Number((overview.affiliate_ratio * (overview.affiliate_ratio <= 1 ? 100 : 1)).toFixed(2)) : 2.73,
+      ratio: getCleanRatio(overview.affiliate_ratio, affiliateSales, totalSales),
       color: '#F59E0B'
     },
     live: {
       label: 'Shopee Live Streaming',
       sales: liveSales,
-      ratio: overview.live_ratio !== undefined ? Number((overview.live_ratio * (overview.live_ratio <= 1 ? 100 : 1)).toFixed(2)) : 0,
+      ratio: getCleanRatio(overview.live_ratio, liveSales, totalSales),
       color: '#06B6D4'
     }
   };
@@ -700,6 +800,14 @@ function buildConsolidatedOverview({ period, startTime, endTime, orderType = 'pa
   const lifetimeOrders = historicalTrends.reduce((acc, cur) => acc + cur.orders, 0);
   const lifetimeAov = lifetimeOrders > 0 ? lifetimeRevenue / lifetimeOrders : 0;
 
+  const isRealTime = period === 'real_time';
+  const kmTrendPoints = (
+    (isPlace ? keyMetricsResult.place_gmv?.points : (isPaid ? keyMetricsResult.paid_gmv?.points : keyMetricsResult.confirmed_gmv?.points))
+    || keyMetricsResult.confirmed_gmv?.points
+    || keyMetricsResult.paid_gmv?.points
+    || []
+  );
+
   const result = {
     period,
     startTime,
@@ -722,11 +830,16 @@ function buildConsolidatedOverview({ period, startTime, endTime, orderType = 'pa
       aov: Math.round(lifetimeAov),
       aovFormatted: formatRupiah(lifetimeAov)
     },
-    dailyTrendPoints: (keyMetricsResult.paid_gmv?.points || keyMetricsResult.confirmed_gmv?.points || []).map(p => ({
-      timestamp: p.timestamp,
-      date: new Date(p.timestamp * 1000).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
-      revenue: p.value || 0
-    })),
+    dailyTrendPoints: kmTrendPoints.map(p => {
+      const d = new Date(p.timestamp * 1000);
+      return {
+        timestamp: p.timestamp,
+        date: isRealTime
+          ? d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }).replace(':', '.')
+          : d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
+        revenue: p.value || 0
+      };
+    }),
     keyMetrics: {
       totalSales: {
         value: totalSales,

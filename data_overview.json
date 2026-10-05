@@ -1,9 +1,9 @@
 {
-  "period": "month",
-  "startTime": 1780246800,
-  "endTime": 1782838800,
-  "customLabel": "Bulan Juni 2026",
-  "lastUpdated": "2026-10-03T14:59:38.105Z",
+  "period": "past30days",
+  "startTime": 1788599933,
+  "endTime": 1791191933,
+  "customLabel": "30 Hari Sebelumnya",
+  "lastUpdated": "2026-10-05T09:18:53.496Z",
   "isRealShopeeData": true,
   "storeProfile": {
     "storeName": "Monture outdoor",
@@ -22,223 +22,223 @@
   },
   "dailyTrendPoints": [
     {
-      "timestamp": 1780246800,
-      "date": "1 Jun",
+      "timestamp": 1788541200,
+      "date": "5 Sep",
       "revenue": 0
     },
     {
-      "timestamp": 1780333200,
-      "date": "2 Jun",
-      "revenue": 140999
+      "timestamp": 1788627600,
+      "date": "6 Sep",
+      "revenue": 130410
     },
     {
-      "timestamp": 1780419600,
-      "date": "3 Jun",
+      "timestamp": 1788714000,
+      "date": "7 Sep",
       "revenue": 0
     },
     {
-      "timestamp": 1780506000,
-      "date": "4 Jun",
+      "timestamp": 1788800400,
+      "date": "8 Sep",
       "revenue": 0
     },
     {
-      "timestamp": 1780592400,
-      "date": "5 Jun",
+      "timestamp": 1788886800,
+      "date": "9 Sep",
+      "revenue": 130410
+    },
+    {
+      "timestamp": 1788973200,
+      "date": "10 Sep",
       "revenue": 0
     },
     {
-      "timestamp": 1780678800,
-      "date": "6 Jun",
+      "timestamp": 1789059600,
+      "date": "11 Sep",
       "revenue": 0
     },
     {
-      "timestamp": 1780765200,
-      "date": "7 Jun",
+      "timestamp": 1789146000,
+      "date": "12 Sep",
+      "revenue": 216125
+    },
+    {
+      "timestamp": 1789232400,
+      "date": "13 Sep",
+      "revenue": 216125
+    },
+    {
+      "timestamp": 1789318800,
+      "date": "14 Sep",
+      "revenue": 216125
+    },
+    {
+      "timestamp": 1789405200,
+      "date": "15 Sep",
+      "revenue": 648375
+    },
+    {
+      "timestamp": 1789491600,
+      "date": "16 Sep",
+      "revenue": 190950
+    },
+    {
+      "timestamp": 1789578000,
+      "date": "17 Sep",
+      "revenue": 407075
+    },
+    {
+      "timestamp": 1789664400,
+      "date": "18 Sep",
       "revenue": 0
     },
     {
-      "timestamp": 1780851600,
-      "date": "8 Jun",
+      "timestamp": 1789750800,
+      "date": "19 Sep",
+      "revenue": 190950
+    },
+    {
+      "timestamp": 1789837200,
+      "date": "20 Sep",
       "revenue": 0
     },
     {
-      "timestamp": 1780938000,
-      "date": "9 Jun",
+      "timestamp": 1789923600,
+      "date": "21 Sep",
       "revenue": 0
     },
     {
-      "timestamp": 1781024400,
-      "date": "10 Jun",
+      "timestamp": 1790010000,
+      "date": "22 Sep",
       "revenue": 0
     },
     {
-      "timestamp": 1781110800,
-      "date": "11 Jun",
+      "timestamp": 1790096400,
+      "date": "23 Sep",
+      "revenue": 443364
+    },
+    {
+      "timestamp": 1790182800,
+      "date": "24 Sep",
+      "revenue": 216125
+    },
+    {
+      "timestamp": 1790269200,
+      "date": "25 Sep",
+      "revenue": 211802
+    },
+    {
+      "timestamp": 1790355600,
+      "date": "26 Sep",
       "revenue": 0
     },
     {
-      "timestamp": 1781197200,
-      "date": "12 Jun",
-      "revenue": 0
+      "timestamp": 1790442000,
+      "date": "27 Sep",
+      "revenue": 256272
     },
     {
-      "timestamp": 1781283600,
-      "date": "13 Jun",
-      "revenue": 0
+      "timestamp": 1790528400,
+      "date": "28 Sep",
+      "revenue": 181402
     },
     {
-      "timestamp": 1781370000,
-      "date": "14 Jun",
-      "revenue": 0
+      "timestamp": 1790614800,
+      "date": "29 Sep",
+      "revenue": 339891
     },
     {
-      "timestamp": 1781456400,
-      "date": "15 Jun",
-      "revenue": 140999
+      "timestamp": 1790701200,
+      "date": "30 Sep",
+      "revenue": 405612
     },
     {
-      "timestamp": 1781542800,
-      "date": "16 Jun",
-      "revenue": 0
+      "timestamp": 1790787600,
+      "date": "1 Okt",
+      "revenue": 578238
     },
     {
-      "timestamp": 1781629200,
-      "date": "17 Jun",
-      "revenue": 0
+      "timestamp": 1790874000,
+      "date": "2 Okt",
+      "revenue": 488223
     },
     {
-      "timestamp": 1781715600,
-      "date": "18 Jun",
-      "revenue": 0
+      "timestamp": 1790960400,
+      "date": "3 Okt",
+      "revenue": 237861
     },
     {
-      "timestamp": 1781802000,
-      "date": "19 Jun",
-      "revenue": 0
-    },
-    {
-      "timestamp": 1781888400,
-      "date": "20 Jun",
-      "revenue": 0
-    },
-    {
-      "timestamp": 1781974800,
-      "date": "21 Jun",
-      "revenue": 0
-    },
-    {
-      "timestamp": 1782061200,
-      "date": "22 Jun",
-      "revenue": 0
-    },
-    {
-      "timestamp": 1782147600,
-      "date": "23 Jun",
-      "revenue": 0
-    },
-    {
-      "timestamp": 1782234000,
-      "date": "24 Jun",
-      "revenue": 0
-    },
-    {
-      "timestamp": 1782320400,
-      "date": "25 Jun",
-      "revenue": 0
-    },
-    {
-      "timestamp": 1782406800,
-      "date": "26 Jun",
-      "revenue": 0
-    },
-    {
-      "timestamp": 1782493200,
-      "date": "27 Jun",
-      "revenue": 0
-    },
-    {
-      "timestamp": 1782579600,
-      "date": "28 Jun",
-      "revenue": 0
-    },
-    {
-      "timestamp": 1782666000,
-      "date": "29 Jun",
-      "revenue": 0
-    },
-    {
-      "timestamp": 1782752400,
-      "date": "30 Jun",
-      "revenue": 0
+      "timestamp": 1791046800,
+      "date": "4 Okt",
+      "revenue": 357347
     }
   ],
   "keyMetrics": {
     "totalSales": {
-      "value": 281998,
-      "formatted": "Rp 281.998",
-      "pctDiff": -56.21128669854052,
+      "value": 6062682,
+      "formatted": "Rp 6.062.682",
+      "pctDiff": -10.857462972955885,
       "label": "Total Penjualan Kotor (Total Sales)"
     },
     "confirmedOrders": {
-      "value": 2,
-      "formatted": "2 Pesanan",
-      "pctDiff": -50,
+      "value": 29,
+      "formatted": "29 Pesanan",
+      "pctDiff": -40.816326530612244,
       "label": "Total Pesanan Berhasil (Confirmed Orders)"
     },
     "uniqueBuyers": {
-      "value": 3,
-      "formatted": "3 Pembeli",
-      "pctDiff": -40,
+      "value": 25,
+      "formatted": "25 Pembeli",
+      "pctDiff": -44.44444444444444,
       "label": "Total Pembeli (Unique Buyers)"
     },
     "salesPerOrder": {
-      "value": 140999,
-      "formatted": "Rp 140.999",
-      "pctDiff": 7.780736976549198,
+      "value": 209058,
+      "formatted": "Rp 209.058",
+      "pctDiff": 53.30495986054261,
       "label": "Rata-Rata Nilai Belanja (AOV / Sales per Order)"
     },
     "impressions": {
-      "value": 13032,
-      "formatted": "13.032",
-      "pctDiff": 0.3542276297551209,
+      "value": 157951,
+      "formatted": "157.951",
+      "pctDiff": -37.148689461977085,
       "label": "Total Tayangan Produk (Impressions)"
     },
     "clicks": {
-      "value": 606,
-      "formatted": "606",
-      "pctDiff": 1.3377926421404682,
+      "value": 3829,
+      "formatted": "3.829",
+      "pctDiff": -32.95394852039923,
       "label": "Total Klik Produk (Clicks)"
     },
     "ctr": {
-      "value": 4.65,
-      "formatted": "4.65%",
-      "pctDiff": 0.0451328942147361,
+      "value": 2.42,
+      "formatted": "2.42%",
+      "pctDiff": 0.1516683371257616,
       "label": "Rasio Klik (CTR)"
     }
   },
   "channelBreakdown": {
     "paid_ads": {
       "label": "Iklan Berbayar (Shopee Ads)",
-      "sales": 0,
-      "ratio": 0,
+      "sales": 4614089,
+      "ratio": 76.11,
       "color": "#EE4D2D"
     },
     "product_card": {
       "label": "Organik & Pencarian Produk",
-      "sales": 506998,
-      "ratio": 100,
+      "sales": 5314858,
+      "ratio": 87.67,
       "color": "#10B981"
     },
     "video": {
       "label": "Shopee Video",
-      "sales": 0,
-      "ratio": 0,
+      "sales": 564512,
+      "ratio": 9.31,
       "color": "#8B5CF6"
     },
     "affiliate": {
       "label": "Shopee Affiliate",
-      "sales": 0,
-      "ratio": 0,
+      "sales": 183312,
+      "ratio": 3.02,
       "color": "#F59E0B"
     },
     "live": {
@@ -254,76 +254,76 @@
       "id": 40657856676,
       "name": "Monture - Rompi Pria Puffer Gelembung Outdoor Big Size Jumbo Premium M - 6XL",
       "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztd-mtnnv1vvcg74b9",
-      "sales": 506998,
-      "salesFormatted": "Rp 506.998",
-      "orders": 3,
-      "units": 3,
-      "clicks": 606,
-      "ctr": "4.89%",
-      "conversionRate": "0.50%",
-      "addToCart": 31
+      "sales": 3990484,
+      "salesFormatted": "Rp 3.990.484",
+      "orders": 19,
+      "units": 20,
+      "clicks": 1767,
+      "ctr": "2.76%",
+      "conversionRate": "1.08%",
+      "addToCart": 107
     },
     {
       "rank": 2,
-      "id": 27188887941,
-      "name": "Monture - Rompi Gelembung Driver Big Size Jumbo M - 6XL Premium Anti Angin",
-      "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztd-mtnq0cgrl53b93",
-      "sales": 0,
-      "salesFormatted": "Rp 0",
-      "orders": 0,
-      "units": 0,
-      "clicks": 0,
-      "ctr": "0%",
-      "conversionRate": "0%",
-      "addToCart": 0
+      "id": 41720970731,
+      "name": "Monture - Rompi Big Size Jumbo Bikers Anti Angin Bahan Premium M - 6XL",
+      "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztj-mtno1phb3dvm27",
+      "sales": 590306,
+      "salesFormatted": "Rp 590.306",
+      "orders": 3,
+      "units": 3,
+      "clicks": 287,
+      "ctr": "3.88%",
+      "conversionRate": "1.05%",
+      "addToCart": 17
     },
     {
       "rank": 3,
-      "id": 27238665579,
-      "name": "Monture Jaket Gunung Cagoule Pria Waterproof Anti Angin Hiking Premium",
-      "image": "https://down-id.img.susercontent.com/file/id-11134207-7ra0t-mc67et2lcz4ye4",
-      "sales": 0,
-      "salesFormatted": "Rp 0",
-      "orders": 0,
-      "units": 0,
-      "clicks": 0,
-      "ctr": "0%",
-      "conversionRate": "0%",
-      "addToCart": 0
+      "id": 50665938893,
+      "name": "Monture - Rompi Puffer Hoodie Bikers Big Size Jumbo M - 6XL Premium",
+      "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztm-mto7mjswo9vp49",
+      "sales": 438516,
+      "salesFormatted": "Rp 438.516",
+      "orders": 2,
+      "units": 2,
+      "clicks": 43,
+      "ctr": "2.32%",
+      "conversionRate": "4.65%",
+      "addToCart": 3
     },
     {
       "rank": 4,
-      "id": 28043618164,
-      "name": "Monture Jaket Gorpcore Waterproof Hiking Outdoor Outland Series",
-      "image": "https://down-id.img.susercontent.com/file/id-11134207-82251-mhpwu8i4tfk5cd",
-      "sales": 0,
-      "salesFormatted": "Rp 0",
-      "orders": 0,
-      "units": 0,
-      "clicks": 0,
-      "ctr": "0%",
-      "conversionRate": "0%",
-      "addToCart": 0
+      "id": 42484321116,
+      "name": "Monture - Makalu Jaket Gropcore Cycling Premium Big Size Jumbo M - 6XL",
+      "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztm-mtpcgjhsmyh2ba",
+      "sales": 333011,
+      "salesFormatted": "Rp 333.011",
+      "orders": 1,
+      "units": 1,
+      "clicks": 72,
+      "ctr": "1.75%",
+      "conversionRate": "1.39%",
+      "addToCart": 2
     },
     {
       "rank": 5,
-      "id": 28989261353,
-      "name": "Monture Jaket Pria Puffer Gelembung Original Jaket Musim Dingin Premium",
-      "image": "https://down-id.img.susercontent.com/file/id-11134207-7ra0h-mcq5gfemzj8800",
-      "sales": 0,
-      "salesFormatted": "Rp 0",
-      "orders": 0,
-      "units": 0,
-      "clicks": 0,
-      "ctr": "0%",
-      "conversionRate": "0%",
-      "addToCart": 0
+      "id": 45117599594,
+      "name": "Monture - Makalu Jaket Gropcore Hiking Big Size Jumbo M - 6XL Premium",
+      "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztc-mtpc2nzox4at34",
+      "sales": 237861,
+      "salesFormatted": "Rp 237.861",
+      "orders": 1,
+      "units": 1,
+      "clicks": 63,
+      "ctr": "1.92%",
+      "conversionRate": "1.59%",
+      "addToCart": 2
     }
   ],
   "orderPerformance": {
-    "cancelledSales": 225000,
-    "cancelledSalesFormatted": "Rp 225.000",
-    "cancelledOrders": 1,
+    "cancelledSales": 0,
+    "cancelledSalesFormatted": "Rp 0",
+    "cancelledOrders": 0,
     "returnRefundSales": 0,
     "returnRefundOrders": 0
   },

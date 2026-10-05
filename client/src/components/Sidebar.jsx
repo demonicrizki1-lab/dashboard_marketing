@@ -3,6 +3,8 @@ import {
   BarChart3, 
   TrendingUp, 
   Package, 
+  Briefcase,
+  Award,
   Tag, 
   Users, 
   Settings, 
@@ -16,8 +18,9 @@ export default function Sidebar({ storeInfo, onOpenSettings, activeTab, setActiv
     { id: 'module1', label: '1. Ringkasan Bisnis (Overview)', icon: BarChart3, badge: 'Aktif', disabled: false },
     { id: 'module2', label: '2. Performa Iklan', icon: TrendingUp, badge: 'Aktif', disabled: false },
     { id: 'module3', label: '3. Master Data SKU & Margin', icon: Package, badge: 'Aktif', disabled: false },
-    { id: 'module4', label: '4. Program Promosi', icon: Tag, badge: 'Segera', disabled: true },
-    { id: 'module5', label: '5. Analisis Pelanggan', icon: Users, badge: 'Segera', disabled: true },
+    { id: 'module_eval', label: '4. Laporan Kinerja PIC & Tim', icon: Award, badge: 'Aktif', disabled: false },
+    { id: 'module4', label: '5. Program Promosi', icon: Tag, badge: 'Segera', disabled: true },
+    { id: 'module5', label: '6. Analisis Pelanggan', icon: Users, badge: 'Segera', disabled: true },
   ];
 
   const storeName = storeInfo?.shop_name || 'Monture outdoor';

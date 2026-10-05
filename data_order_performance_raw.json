@@ -9,14 +9,6 @@
       "chain_ratio": -1,
       "points": [
         {
-          "timestamp": 1788368400,
-          "value": 0
-        },
-        {
-          "timestamp": 1788454800,
-          "value": 0
-        },
-        {
           "timestamp": 1788541200,
           "value": 0
         },
@@ -126,24 +118,24 @@
         },
         {
           "timestamp": 1790874000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790960400,
+          "value": 0
+        },
+        {
+          "timestamp": 1791046800,
           "value": 0
         }
       ]
     },
     "return_refund_sales": {
-      "value": 130410,
-      "old_value": 0,
-      "increment": 130410,
-      "chain_ratio": -1000000,
+      "value": 0,
+      "old_value": 130410,
+      "increment": -130410,
+      "chain_ratio": -1,
       "points": [
-        {
-          "timestamp": 1788368400,
-          "value": 130410
-        },
-        {
-          "timestamp": 1788454800,
-          "value": 0
-        },
         {
           "timestamp": 1788541200,
           "value": 0
@@ -254,6 +246,14 @@
         },
         {
           "timestamp": 1790874000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790960400,
+          "value": 0
+        },
+        {
+          "timestamp": 1791046800,
           "value": 0
         }
       ]
@@ -265,14 +265,6 @@
       "chain_ratio": -1,
       "points": [
         {
-          "timestamp": 1788368400,
-          "value": 0
-        },
-        {
-          "timestamp": 1788454800,
-          "value": 0
-        },
-        {
           "timestamp": 1788541200,
           "value": 0
         },
@@ -382,24 +374,24 @@
         },
         {
           "timestamp": 1790874000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790960400,
+          "value": 0
+        },
+        {
+          "timestamp": 1791046800,
           "value": 0
         }
       ]
     },
     "return_refund_orders": {
-      "value": 1,
-      "old_value": 0,
-      "increment": 1,
-      "chain_ratio": -1000000,
+      "value": 0,
+      "old_value": 1,
+      "increment": -1,
+      "chain_ratio": -1,
       "points": [
-        {
-          "timestamp": 1788368400,
-          "value": 1
-        },
-        {
-          "timestamp": 1788454800,
-          "value": 0
-        },
         {
           "timestamp": 1788541200,
           "value": 0
@@ -510,6 +502,14 @@
         },
         {
           "timestamp": 1790874000,
+          "value": 0
+        },
+        {
+          "timestamp": 1790960400,
+          "value": 0
+        },
+        {
+          "timestamp": 1791046800,
           "value": 0
         }
       ]

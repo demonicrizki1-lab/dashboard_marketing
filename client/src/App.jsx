@@ -8,6 +8,7 @@ import SettingsModal from './components/SettingsModal';
 import ShopeeDateRangePicker from './components/ShopeeDateRangePicker';
 import ProductSkuManager from './components/ProductSkuManager';
 import StoreOverview from './components/StoreOverview';
+import MarketingPerformanceEvaluation from './components/MarketingPerformanceEvaluation';
 import { getDefaultDateRange } from './utils/dateUtils';
 import { 
   Calendar, 
@@ -247,6 +248,9 @@ export default function App() {
           ) : activeModuleTab === 'module3' ? (
             /* Modul 3: Master Data SKU & Kalkulator Margin */
             <ProductSkuManager showToast={showToast} />
+          ) : activeModuleTab === 'module_eval' ? (
+            /* Modul 4: Laporan Kinerja PIC & Tim */
+            <MarketingPerformanceEvaluation showToast={showToast} storeInfo={storeInfo} />
           ) : (
             /* Modul 2: Performa Iklan */
             <>
