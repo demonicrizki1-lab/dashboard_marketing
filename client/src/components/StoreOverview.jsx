@@ -708,13 +708,41 @@ export default function StoreOverview({ showToast, storeInfo }) {
                 options={{
                   responsive: true,
                   maintainAspectRatio: false,
+                  interaction: {
+                    mode: 'index',
+                    intersect: false
+                  },
                   plugins: {
                     legend: {
                       position: 'top',
-                      labels: { color: '#94A3B8', font: { size: 11, family: 'Inter' }, boxWidth: 12, padding: 12 }
+                      labels: {
+                        color: '#94A3B8',
+                        font: { size: 11, family: 'Inter', weight: 500 },
+                        boxWidth: 10,
+                        boxHeight: 10,
+                        padding: 12
+                      }
                     },
                     tooltip: {
+                      backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                      titleColor: '#F8FAFC',
+                      bodyColor: '#CBD5E1',
+                      borderColor: 'rgba(255, 255, 255, 0.12)',
+                      borderWidth: 1,
+                      padding: 10,
+                      boxPadding: 4,
+                      usePointStyle: true,
                       callbacks: {
+                        title: (tooltipItems) => {
+                          if (!tooltipItems.length) return '';
+                          const label = tooltipItems[0].label;
+                          if (chartViewMode === 'monthly' && data?.historicalTrends) {
+                            const item = data.historicalTrends[tooltipItems[0].dataIndex];
+                            const picBadge = item?.pic === 'BARU' ? '🔴 Era PIC Baru' : '🔵 Era PIC Lama';
+                            return `${label} • ${picBadge}`;
+                          }
+                          return label;
+                        },
                         label: (ctx) => ` ${ctx.dataset.label}: Rp ${Number(ctx.raw || 0).toLocaleString('id-ID')}`
                       }
                     }
@@ -776,8 +804,20 @@ export default function StoreOverview({ showToast, storeInfo }) {
                     plugins: {
                       legend: { display: false },
                       tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        titleColor: '#F8FAFC',
+                        bodyColor: '#CBD5E1',
+                        borderColor: 'rgba(255, 255, 255, 0.12)',
+                        borderWidth: 1,
+                        padding: 10,
+                        boxPadding: 4,
                         callbacks: {
-                          label: (ctx) => ` ${ctx.label}: Rp ${Number(ctx.raw || 0).toLocaleString('id-ID')}`
+                          label: (ctx) => {
+                            const totalVal = Number(km?.totalSales?.value || 1);
+                            const currentVal = Number(ctx.raw || 0);
+                            const pct = totalVal > 0 ? ((currentVal / totalVal) * 100).toFixed(1) : '0';
+                            return ` ${ctx.label}: Rp ${currentVal.toLocaleString('id-ID')} (${pct}%)`;
+                          }
                         }
                       }
                     }
@@ -811,7 +851,21 @@ export default function StoreOverview({ showToast, storeInfo }) {
                 { label: 'Shopee Affiliate', color: cb?.affiliate.color, val: cb?.affiliate.sales, ratio: cb?.affiliate.ratio },
                 { label: 'Live Streaming', color: cb?.live.color, val: cb?.live.sales, ratio: cb?.live.ratio }
               ].map((item, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11.5px' }}>
+                <div 
+                  key={idx} 
+                  style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'space-between', 
+                    fontSize: '11.5px',
+                    padding: '5px 8px',
+                    borderRadius: '6px',
+                    background: 'rgba(255, 255, 255, 0.02)',
+                    transition: 'background 0.15s ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)'}
+                >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                     <div style={{ width: '9px', height: '9px', borderRadius: '3px', backgroundColor: item.color, flexShrink: 0 }} />
                     <span style={{ color: 'var(--text-secondary)' }}>{item.label}</span>
