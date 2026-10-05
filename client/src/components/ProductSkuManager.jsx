@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Package, 
   RefreshCw, 
   Search, 
+  ArrowUpDown,
   SlidersHorizontal, 
   DollarSign, 
   ChevronDown, 
   ChevronRight, 
   CheckCircle2, 
   AlertCircle, 
+  AlertTriangle,
   TrendingUp, 
+  TrendingDown,
   Tag, 
   Boxes,
   ShieldCheck,
@@ -17,7 +20,9 @@ import {
   ExternalLink,
   Layers,
   Sparkles,
-  Info
+  Info,
+  Plus,
+  X
 } from 'lucide-react';
 import SkuMarginModal from './SkuMarginModal';
 
@@ -35,6 +40,7 @@ export default function ProductSkuManager({ showToast }) {
   const [syncing, setSyncing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'configured' | 'unconfigured'
+  const [sortBy, setSortBy] = useState('default');
   const [expandedItemId, setExpandedItemId] = useState(null);
   const [selectedProductForMargin, setSelectedProductForMargin] = useState(null);
 
@@ -99,65 +105,126 @@ export default function ProductSkuManager({ showToast }) {
   };
 
   const summary = productsData.summary || {};
-  const products = productsData.products || [];
+  const rawProducts = productsData.products || [];
+
+  // Sorting Logic
+  const sortedProducts = useMemo(() => {
+    const list = [...rawProducts];
+    if (sortBy === 'stock_desc') {
+      return list.sort((a, b) => (b.availableStock || 0) - (a.availableStock || 0));
+    }
+    if (sortBy === 'stock_asc') {
+      return list.sort((a, b) => (a.availableStock || 0) - (b.availableStock || 0));
+    }
+    if (sortBy === 'price_desc') {
+      return list.sort((a, b) => (b.representativePrice || 0) - (a.representativePrice || 0));
+    }
+    if (sortBy === 'price_asc') {
+      return list.sort((a, b) => (a.representativePrice || 0) - (b.representativePrice || 0));
+    }
+    if (sortBy === 'models_desc') {
+      return list.sort((a, b) => (b.modelsCount || 0) - (a.modelsCount || 0));
+    }
+    if (sortBy === 'margin_asc') {
+      return list.sort((a, b) => {
+        const mA = a.isConfigured ? (a.economics?.netProfitMarginPercent || 0) : 999;
+        const mB = b.isConfigured ? (b.economics?.netProfitMarginPercent || 0) : 999;
+        return mA - mB;
+      });
+    }
+    if (sortBy === 'margin_desc') {
+      return list.sort((a, b) => {
+        const mA = a.isConfigured ? (a.economics?.netProfitMarginPercent || 0) : -999;
+        const mB = b.isConfigured ? (b.economics?.netProfitMarginPercent || 0) : -999;
+        return mB - mA;
+      });
+    }
+    return list; // default Shopee recommendation order
+  }, [rawProducts, sortBy]);
+
+  // Completion calculation
+  const totalCount = summary.totalProducts || 1;
+  const configuredCount = summary.configuredCount || 0;
+  const completionPercent = Math.round((configuredCount / totalCount) * 100);
+
+  // Profit average status
+  const avgMargin = summary.avgNetProfitPercent || 0;
+  const isLossMargin = avgMargin < 0;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       
-      {/* Header Modul Master SKU */}
+      {/* Zona 1: Sleek Compact Header Modul Master SKU */}
       <div style={{ 
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'space-between', 
         flexWrap: 'wrap', 
-        gap: '16px',
+        gap: '14px',
         backgroundColor: 'var(--bg-card)',
-        padding: '20px',
+        padding: '16px 20px',
         borderRadius: '12px',
-        border: '1px solid var(--border-color)'
+        border: '1px solid var(--border-color)',
+        boxShadow: '0 4px 20px -8px rgba(0,0,0,0.4)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <div style={{ 
-            width: '44px', 
-            height: '44px', 
+            width: '42px', 
+            height: '42px', 
             borderRadius: '10px', 
             backgroundColor: 'rgba(238, 77, 45, 0.12)', 
             color: 'var(--color-brand-primary)', 
             display: 'flex', 
             alignItems: 'center', 
-            justifyContent: 'center' 
+            justifyContent: 'center',
+            boxShadow: '0 0 16px rgba(238, 77, 45, 0.2)'
           }}>
-            <Package size={24} strokeWidth={2.2} />
+            <Package size={22} strokeWidth={2.2} />
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h2 style={{ fontSize: '18px', fontWeight: 700, margin: 0, letterSpacing: '-0.02em' }}>
-                Master Data Produk & Kalkulator Margin SKU
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <h2 style={{ fontSize: '17px', fontWeight: 700, margin: 0, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
+                Master Data SKU & Unit Economics
               </h2>
-              <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.25)', fontSize: '11px', padding: '2px 8px' }}>
+              <span className="badge" style={{ backgroundColor: 'rgba(238, 77, 45, 0.12)', color: 'var(--color-brand-primary)', border: '1px solid rgba(238, 77, 45, 0.25)', fontSize: '11px', padding: '2px 8px', fontWeight: 600 }}>
                 Modul 3
               </span>
+              <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.2)', fontSize: '11px', padding: '2px 8px' }}>
+                Live Shopee Catalog
+              </span>
             </div>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
-              Atur HPP, potongan fee Shopee, dan operasional per produk sebagai acuan batas aman iklan CPR (25%) & CAC (40%)
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '3px 0 0 0' }}>
+              Atur HPP produk & komponen biaya untuk mengunci batas aman iklan CPR (25% • ROAS ≥ 4.0x) dan CAC (40% • ROAS ≥ 2.5x)
             </p>
           </div>
         </div>
 
-        <button 
-          className="btn btn-primary"
-          onClick={handleSyncProducts}
-          disabled={syncing}
-          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-        >
-          <RefreshCw size={15} className={syncing ? 'animate-spin' : ''} />
-          <span>{syncing ? 'Menarik Produk...' : 'Sinkronkan Produk Shopee'}</span>
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ 
+            padding: '6px 12px', 
+            borderRadius: '8px', 
+            backgroundColor: 'rgba(255,255,255,0.03)', 
+            border: '1px solid var(--border-color)',
+            fontSize: '12px',
+            color: 'var(--text-secondary)'
+          }}>
+            Total Katalog: <strong style={{ color: 'var(--text-primary)' }}>{summary.totalProducts || 0} Produk</strong>
+          </div>
+          <button 
+            className="btn btn-primary"
+            onClick={handleSyncProducts}
+            disabled={syncing}
+            style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', fontSize: '12px', fontWeight: 600 }}
+          >
+            <RefreshCw size={14} className={syncing ? 'animate-spin' : ''} />
+            <span>{syncing ? 'Menarik dari Shopee...' : 'Sinkronkan Katalog Shopee'}</span>
+          </button>
+        </div>
       </div>
 
-      {/* KPI Cards Ringkasan Master Data */}
+      {/* Zona 2: KPI Cards Ringkasan Master Data (Executive Metrics) */}
       <div className="kpi-grid">
-        {/* 1. Total Produk */}
+        {/* 1. Total Produk Toko */}
         <div className="kpi-card">
           <div className="kpi-card-header">
             <span className="kpi-title">Total Produk Toko</span>
@@ -169,14 +236,14 @@ export default function ProductSkuManager({ showToast }) {
             {summary.totalProducts || 0}
           </div>
           <div className="kpi-subtext">
-            <span>Katalog produk aktif terdaftar di Shopee</span>
+            <span>Katalog produk aktif di Shopee Seller Center</span>
           </div>
         </div>
 
-        {/* 2. Total Varian SKU */}
+        {/* 2. Total Varian Model SKU */}
         <div className="kpi-card">
           <div className="kpi-card-header">
-            <span className="kpi-title">Total Varian Model SKU</span>
+            <span className="kpi-title">Total Model Varian SKU</span>
             <div className="kpi-icon info">
               <Layers size={18} />
             </div>
@@ -189,40 +256,78 @@ export default function ProductSkuManager({ showToast }) {
           </div>
         </div>
 
-        {/* 3. SKU Terkonfigurasi */}
+        {/* 3. Status Kelengkapan HPP (Gamified Progress Indicator) */}
         <div className="kpi-card">
           <div className="kpi-card-header">
-            <span className="kpi-title">Produk Diatur Margin</span>
+            <span className="kpi-title">Kelengkapan HPP Produk</span>
             <div className="kpi-icon success">
               <CheckCircle2 size={18} />
             </div>
           </div>
-          <div className="kpi-value tabular-nums" style={{ color: 'var(--color-success)' }}>
-            {summary.configuredCount || 0} <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>/ {summary.totalProducts || 0}</span>
+          <div className="kpi-value tabular-nums" style={{ color: 'var(--color-success)', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+            <span>{configuredCount}</span>
+            <span style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: 500 }}>
+              / {summary.totalProducts || 0} SKU ({completionPercent}%)
+            </span>
           </div>
-          <div className="kpi-subtext">
-            <span>{summary.unconfiguredCount || 0} produk menunggu input HPP</span>
+          {/* Progress Bar Visual */}
+          <div style={{ marginTop: '8px' }}>
+            <div style={{ 
+              width: '100%', 
+              height: '5px', 
+              backgroundColor: 'rgba(255, 255, 255, 0.08)', 
+              borderRadius: '999px', 
+              overflow: 'hidden' 
+            }}>
+              <div style={{ 
+                width: `${Math.max(4, completionPercent)}%`, 
+                height: '100%', 
+                background: completionPercent >= 80 ? '#10B981' : 'linear-gradient(90deg, #EE4D2D 0%, #10B981 100%)',
+                borderRadius: '999px',
+                transition: 'width 0.4s ease'
+              }} />
+            </div>
+            <div className="kpi-subtext" style={{ marginTop: '5px' }}>
+              <span>{summary.unconfiguredCount || 0} produk menunggu input HPP</span>
+            </div>
           </div>
         </div>
 
-        {/* 4. Rata-rata Laba Bersih */}
-        <div className="kpi-card">
+        {/* 4. Rata-rata Laba Bersih (Semantic Colors: Red for Negative, Green for Positive) */}
+        <div className="kpi-card" style={{ borderColor: isLossMargin ? 'rgba(239, 68, 68, 0.3)' : 'var(--border-subtle)' }}>
           <div className="kpi-card-header">
-            <span className="kpi-title">Rata-rata Margin Bersih</span>
-            <div className="kpi-icon" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981' }}>
-              <TrendingUp size={18} />
+            <span className="kpi-title">Rata-Rata Margin Bersih</span>
+            <div 
+              className="kpi-icon" 
+              style={{ 
+                backgroundColor: isLossMargin ? 'rgba(239, 68, 68, 0.15)' : 'rgba(16, 185, 129, 0.15)', 
+                color: isLossMargin ? '#EF4444' : '#10B981' 
+              }}
+            >
+              {isLossMargin ? <TrendingDown size={18} /> : <TrendingUp size={18} />}
             </div>
           </div>
-          <div className="kpi-value tabular-nums" style={{ color: '#10B981' }}>
-            {summary.avgNetProfitPercent || 0}%
+          <div className="kpi-value tabular-nums" style={{ color: isLossMargin ? '#EF4444' : '#10B981', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span>{avgMargin}%</span>
+            {isLossMargin ? (
+              <span className="badge" style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#F87171', border: '1px solid rgba(239, 68, 68, 0.3)', fontSize: '10px', padding: '2px 6px', fontWeight: 600 }}>
+                Defisit Iklan
+              </span>
+            ) : (
+              <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#34D399', border: '1px solid rgba(16, 185, 129, 0.3)', fontSize: '10px', padding: '2px 6px', fontWeight: 600 }}>
+                Sehat
+              </span>
+            )}
           </div>
           <div className="kpi-subtext">
-            <span>Estimasi cuan bersih setelah CPR 25%</span>
+            <span style={{ color: isLossMargin ? '#FCA5A5' : 'var(--text-muted)' }}>
+              {isLossMargin ? '⚠️ Rugi setelah CPR 25% (HPP terlalu tinggi)' : 'Estimasi cuan bersih setelah CPR 25%'}
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Filter & Search Bar */}
+      {/* Zona 3: Toolbar Filter Status, Urutkan (Sorting), dan Pencarian */}
       <div style={{ 
         display: 'flex', 
         alignItems: 'center', 
@@ -230,13 +335,13 @@ export default function ProductSkuManager({ showToast }) {
         flexWrap: 'wrap', 
         gap: '12px',
         backgroundColor: 'var(--bg-card)',
-        padding: '12px 16px',
-        borderRadius: '10px',
+        padding: '12px 18px',
+        borderRadius: '12px',
         border: '1px solid var(--border-color)'
       }}>
         {/* Status Filter Tabs */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.04em' }}>
             STATUS MARGIN:
           </span>
           {[
@@ -253,9 +358,10 @@ export default function ProductSkuManager({ showToast }) {
                 backgroundColor: statusFilter === f.key ? 'var(--color-brand-primary)' : 'rgba(255, 255, 255, 0.05)',
                 color: statusFilter === f.key ? '#fff' : 'var(--text-secondary)',
                 border: `1px solid ${statusFilter === f.key ? 'var(--color-brand-primary)' : 'var(--border-color)'}`,
-                padding: '5px 10px',
+                padding: '5px 12px',
                 fontSize: '12px',
-                fontWeight: 600
+                fontWeight: 600,
+                transition: 'all 0.2s ease'
               }}
             >
               {f.label}
@@ -263,78 +369,122 @@ export default function ProductSkuManager({ showToast }) {
           ))}
         </div>
 
-        {/* Search Input Form */}
-        <form onSubmit={handleSearchSubmit} style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: '280px' }}>
-          <div style={{ position: 'relative', width: '100%' }}>
-            <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-            <input
-              type="text"
-              placeholder="Cari nama produk, SKU, atau Item ID..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+        {/* Right Controls: Sort Dropdown & Search Form */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', flex: '1 1 450px', justifyContent: 'flex-end' }}>
+          {/* Quick Sort Dropdown */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', position: 'relative' }}>
+            <ArrowUpDown size={14} style={{ color: 'var(--text-muted)' }} />
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
               style={{
-                width: '100%',
-                padding: '7px 12px 7px 32px',
-                backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                backgroundColor: 'rgba(255, 255, 255, 0.04)',
                 border: '1px solid var(--border-color)',
                 borderRadius: '8px',
                 color: 'var(--text-primary)',
                 fontSize: '12px',
-                outline: 'none'
+                padding: '7px 28px 7px 10px',
+                outline: 'none',
+                cursor: 'pointer',
+                appearance: 'none',
+                WebkitAppearance: 'none'
               }}
-            />
+              title="Urutkan daftar produk"
+            >
+              <option value="default" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Urutan Default Shopee</option>
+              <option value="stock_desc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Stok Terbanyak</option>
+              <option value="stock_asc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Stok Tersedikit</option>
+              <option value="price_desc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Harga Tertinggi</option>
+              <option value="price_asc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Harga Terendah</option>
+              <option value="models_desc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Varian Terbanyak</option>
+              <option value="margin_asc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Margin Terendah (Prioritas Evaluasi)</option>
+              <option value="margin_desc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Margin Tertinggi</option>
+            </select>
+            <ChevronDown size={13} style={{ position: 'absolute', right: '8px', pointerEvents: 'none', color: 'var(--text-muted)' }} />
           </div>
-          <button type="submit" className="btn btn-secondary" style={{ padding: '7px 14px', fontSize: '12px' }}>
-            Cari
-          </button>
-        </form>
+
+          {/* Search Input Form */}
+          <form onSubmit={handleSearchSubmit} style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: '240px', flex: '1 1 240px', maxWidth: '360px' }}>
+            <div style={{ position: 'relative', width: '100%' }}>
+              <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+              <input
+                type="text"
+                placeholder="Cari produk, SKU induk, Item ID..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '7px 28px 7px 32px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '8px',
+                  color: 'var(--text-primary)',
+                  fontSize: '12px',
+                  outline: 'none'
+                }}
+              />
+              {searchTerm && (
+                <button 
+                  type="button" 
+                  onClick={() => { setSearchTerm(''); loadProducts(); }}
+                  style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }}
+                >
+                  <X size={13} />
+                </button>
+              )}
+            </div>
+            <button type="submit" className="btn btn-secondary" style={{ padding: '7px 12px', fontSize: '12px' }}>
+              Cari
+            </button>
+          </form>
+        </div>
       </div>
 
-      {/* Tabel Master SKU Produk */}
-      <div className="table-responsive" style={{ backgroundColor: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+      {/* Zona 4: Tabel Master SKU Produk (Wide Container with Fixed Header & Columns) */}
+      <div className="table-responsive" style={{ backgroundColor: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border-color)', overflowX: 'auto' }}>
         {loading ? (
           <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
             <div className="spinner" style={{ margin: '0 auto 12px auto' }}></div>
-            <span>Memuat master data produk...</span>
+            <span>Memuat master data produk & kalkulator margin...</span>
           </div>
-        ) : products.length === 0 ? (
+        ) : sortedProducts.length === 0 ? (
           <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
             <Package size={36} style={{ margin: '0 auto 12px auto', opacity: 0.5 }} />
-            <p style={{ margin: 0, fontSize: '14px' }}>Tidak ada produk yang cocok dengan pencarian.</p>
+            <p style={{ margin: 0, fontSize: '14px' }}>Tidak ada produk yang cocok dengan pencarian atau filter.</p>
           </div>
         ) : (
-          <table className="campaign-data-table" style={{ width: '100%' }}>
+          <table className="campaign-data-table" style={{ width: '100%', minWidth: '1140px', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                <th style={{ width: '44px', textAlign: 'center' }}></th>
-                <th style={{ minWidth: '260px', textAlign: 'left', fontSize: '11px', letterSpacing: '0.04em' }}>
+                <th style={{ width: '48px', textAlign: 'center', padding: '12px 8px' }}></th>
+                <th style={{ minWidth: '280px', textAlign: 'left', fontSize: '11px', letterSpacing: '0.04em', padding: '12px 14px' }}>
                   PRODUK & SKU INDUK
                 </th>
-                <th style={{ width: '90px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                <th style={{ width: '90px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em', padding: '12px 10px' }}>
                   STOK
                 </th>
-                <th style={{ width: '130px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                <th style={{ width: '125px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em', padding: '12px 10px' }}>
                   HARGA PROMO
                 </th>
-                <th style={{ width: '130px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                <th style={{ width: '125px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em', padding: '12px 10px' }}>
                   PLAFON CPR (25%)
                 </th>
-                <th style={{ width: '130px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                <th style={{ width: '125px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em', padding: '12px 10px' }}>
                   PLAFON CAC (40%)
                 </th>
-                <th style={{ width: '130px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                <th style={{ width: '135px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em', padding: '12px 10px' }}>
                   ESTIMASI CUAN
                 </th>
-                <th style={{ width: '120px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                <th style={{ width: '140px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em', padding: '12px 10px' }}>
                   STATUS MARGIN
                 </th>
-                <th style={{ width: '100px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em' }}>
+                <th style={{ width: '120px', textAlign: 'center', fontSize: '11px', letterSpacing: '0.04em', padding: '12px 14px' }}>
                   AKSI
                 </th>
               </tr>
             </thead>
             <tbody>
-              {products.map((p) => {
+              {sortedProducts.map((p) => {
                 const isExpanded = expandedItemId === p.itemId;
                 const eco = p.economics || {};
 
@@ -370,9 +520,9 @@ export default function ProductSkuManager({ showToast }) {
 
                 return (
                   <React.Fragment key={p.itemId}>
-                    <tr style={{ backgroundColor: isExpanded ? 'rgba(255, 255, 255, 0.02)' : 'transparent' }}>
+                    <tr style={{ backgroundColor: isExpanded ? 'rgba(255, 255, 255, 0.02)' : 'transparent', transition: 'background-color 0.15s ease' }}>
                       {/* Accordion Expand Button */}
-                      <td style={{ textAlign: 'center' }}>
+                      <td style={{ textAlign: 'center', padding: '14px 8px' }}>
                         <button 
                           onClick={() => toggleExpand(p.itemId)}
                           className="btn-icon"
@@ -384,49 +534,49 @@ export default function ProductSkuManager({ showToast }) {
                       </td>
 
                       {/* Info Produk (Left Aligned) */}
-                      <td>
+                      <td style={{ padding: '14px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                           {p.coverImage ? (
                             <img 
                               src={p.coverImage} 
                               alt={p.name} 
-                              style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover', border: '1px solid var(--border-color)', flexShrink: 0 }}
+                              style={{ width: '44px', height: '44px', borderRadius: '8px', objectFit: 'cover', border: '1px solid var(--border-color)', flexShrink: 0 }}
                             />
                           ) : (
-                            <div style={{ width: '42px', height: '42px', borderRadius: '8px', backgroundColor: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                              <Package size={20} style={{ color: 'var(--text-muted)' }} />
+                            <div style={{ width: '44px', height: '44px', borderRadius: '8px', backgroundColor: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              <Package size={22} style={{ color: 'var(--text-muted)' }} />
                             </div>
                           )}
                           <div style={{ minWidth: 0 }}>
-                            <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '280px' }} title={p.name}>
+                            <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '300px' }} title={p.name}>
                               {p.name}
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '3px', fontSize: '11px', color: 'var(--text-muted)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '3px', fontSize: '11px', color: 'var(--text-muted)', flexWrap: 'wrap' }}>
                               <span>SKU: <strong style={{ color: 'var(--text-secondary)' }}>{p.parentSku}</strong></span>
                               <span>•</span>
                               <span>ID: <span className="tabular-nums">{p.itemId}</span></span>
                               <span>•</span>
-                              <span>{p.modelsCount} Varian</span>
+                              <span style={{ color: 'var(--color-info)' }}>{p.modelsCount} Varian</span>
                             </div>
                           </div>
                         </div>
                       </td>
 
                       {/* Stok Tersedia (Center Aligned) */}
-                      <td style={{ textAlign: 'center' }}>
+                      <td style={{ textAlign: 'center', padding: '14px 10px' }}>
                         <span className="tabular-nums" style={{ fontSize: '13px', fontWeight: 600, color: p.availableStock > 0 ? 'var(--text-primary)' : 'var(--color-danger)' }}>
                           {p.availableStock} pcs
                         </span>
                       </td>
 
                       {/* Harga Jual Promo (Center Aligned) */}
-                      <td style={{ textAlign: 'center' }}>
+                      <td style={{ textAlign: 'center', padding: '14px 10px' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                           <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--color-brand-primary)' }}>
                             {formatRupiah(p.representativePrice)}
                           </div>
                           {p.sellingPriceMin !== p.sellingPriceMax && (
-                            <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                            <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>
                               {formatRupiah(p.sellingPriceMin)} - {formatRupiah(p.sellingPriceMax)}
                             </div>
                           )}
@@ -434,38 +584,38 @@ export default function ProductSkuManager({ showToast }) {
                       </td>
 
                       {/* Plafon CPR 25% (Center Aligned) */}
-                      <td style={{ textAlign: 'center' }}>
+                      <td style={{ textAlign: 'center', padding: '14px 10px' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                           <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: '#10B981' }}>
                             {formatRupiah(eco.cprLimit)}
                           </div>
-                          <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                          <span style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>
                             ROAS ≥ 4.0x
                           </span>
                         </div>
                       </td>
 
                       {/* Plafon CAC 40% (Center Aligned) */}
-                      <td style={{ textAlign: 'center' }}>
+                      <td style={{ textAlign: 'center', padding: '14px 10px' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                           <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: '#F59E0B' }}>
                             {formatRupiah(eco.cacLimit)}
                           </div>
-                          <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                          <span style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>
                             ROAS ≥ 2.5x
                           </span>
                         </div>
                       </td>
 
                       {/* Estimasi Laba Bersih (Center Aligned) */}
-                      <td style={{ textAlign: 'center' }}>
+                      <td style={{ textAlign: 'center', padding: '14px 10px' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                           {p.isConfigured ? (
                             <>
                               <div className="tabular-nums" style={{ fontSize: '13px', fontWeight: 700, color: eco.netProfitWithCpr > 0 ? '#10B981' : '#EF4444' }}>
                                 {formatRupiah(eco.netProfitWithCpr)}
                               </div>
-                              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                              <span style={{ fontSize: '10px', color: eco.netProfitWithCpr > 0 ? '#34D399' : '#F87171', marginTop: '2px', fontWeight: 600 }}>
                                 {eco.netProfitMarginPercent}% Margin
                               </span>
                             </>
@@ -477,32 +627,72 @@ export default function ProductSkuManager({ showToast }) {
                         </div>
                       </td>
 
-                      {/* Status Konfigurasi Margin (Center Aligned) */}
-                      <td style={{ textAlign: 'center' }}>
+                      {/* Status Konfigurasi Margin (Interactive Quick-Action CTA) */}
+                      <td style={{ textAlign: 'center', padding: '14px 10px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                           {p.isConfigured ? (
-                            <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.25)', fontSize: '11px', padding: '3px 8px' }}>
+                            <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.25)', fontSize: '11px', padding: '4px 8px' }}>
                               ✅ Terkonfigurasi
                             </span>
                           ) : (
-                            <span className="badge" style={{ backgroundColor: 'rgba(239, 68, 68, 0.12)', color: '#F87171', border: '1px solid rgba(239, 68, 68, 0.25)', fontSize: '11px', padding: '3px 8px' }}>
-                              ⚠️ Belum Diisi
-                            </span>
+                            <button
+                              onClick={() => setSelectedProductForMargin(p)}
+                              className="badge"
+                              title="Klik untuk langsung mengatur HPP produk ini"
+                              style={{ 
+                                cursor: 'pointer',
+                                backgroundColor: 'rgba(245, 158, 11, 0.12)', 
+                                color: '#F59E0B', 
+                                border: '1px solid rgba(245, 158, 11, 0.3)', 
+                                fontSize: '11px', 
+                                padding: '4px 8px',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px'
+                              }}
+                            >
+                              <AlertCircle size={12} />
+                              <span>+ Atur HPP</span>
+                            </button>
                           )}
                         </div>
                       </td>
 
-                      {/* Tombol Aksi (Center Aligned) */}
-                      <td style={{ textAlign: 'center' }}>
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                          <button
-                            onClick={() => setSelectedProductForMargin(p)}
-                            className="btn btn-secondary"
-                            style={{ padding: '6px 12px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                      {/* Tombol Aksi (Center Aligned, Always Visible) */}
+                      <td style={{ textAlign: 'center', padding: '14px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}>
+                          {p.isConfigured ? (
+                            <button
+                              onClick={() => setSelectedProductForMargin(p)}
+                              className="btn btn-secondary"
+                              style={{ padding: '6px 12px', fontSize: '11.5px', display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+                              title="Perbarui margin & HPP"
+                            >
+                              <Edit3 size={13} />
+                              <span>Edit</span>
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => setSelectedProductForMargin(p)}
+                              className="btn btn-primary"
+                              style={{ padding: '6px 12px', fontSize: '11.5px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontWeight: 600 }}
+                              title="Input HPP & kalkulator plafon iklan"
+                            >
+                              <Plus size={13} />
+                              <span>Atur HPP</span>
+                            </button>
+                          )}
+
+                          <a
+                            href={`https://seller.shopee.co.id/portal/product/${p.itemId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-icon"
+                            title="Buka produk di Shopee Seller Center"
+                            style={{ color: 'var(--text-muted)', padding: '5px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                           >
-                            <Edit3 size={13} />
-                            <span>Atur Margin</span>
-                          </button>
+                            <ExternalLink size={13} />
+                          </a>
                         </div>
                       </td>
                     </tr>
@@ -510,12 +700,17 @@ export default function ProductSkuManager({ showToast }) {
                     {/* Accordion Detail: Daftar Varian Model SKU (Urutan Warna & Size M - 4XL/6XL) */}
                     {isExpanded && (
                       <tr>
-                        <td colSpan={9} style={{ backgroundColor: 'rgba(0, 0, 0, 0.25)', padding: '14px 20px', borderBottom: '1px solid var(--border-color)' }}>
+                        <td colSpan={9} style={{ backgroundColor: 'rgba(0, 0, 0, 0.28)', padding: '16px 22px', borderBottom: '1px solid var(--border-color)' }}>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                              <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)' }}>
-                                📦 Rincian {sortedModels.length} Varian SKU Model (Urutan Warna & Size M - 4XL):
-                              </span>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)' }}>
+                                  📦 Rincian {sortedModels.length} Varian Model SKU (Urutan Warna & Size M - 4XL):
+                                </span>
+                                <span className="badge" style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: 'var(--text-secondary)', fontSize: '10px', padding: '1px 6px' }}>
+                                  {p.name}
+                                </span>
+                              </div>
                               <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
                                 Parameter margin dihitung proporsional terhadap harga promo varian
                               </span>
@@ -538,14 +733,22 @@ export default function ProductSkuManager({ showToast }) {
                                     <tr key={m.modelId} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
                                       <td style={{ padding: '8px 12px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                          {m.image && (
-                                            <img src={m.image} alt={m.name} style={{ width: '24px', height: '24px', borderRadius: '4px', objectFit: 'cover' }} />
+                                          {m.image ? (
+                                            <img src={m.image} alt={m.name} style={{ width: '26px', height: '26px', borderRadius: '4px', objectFit: 'cover' }} />
+                                          ) : (
+                                            <div style={{ width: '26px', height: '26px', borderRadius: '4px', backgroundColor: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                              <Tag size={12} style={{ color: 'var(--text-muted)' }} />
+                                            </div>
                                           )}
                                           <strong style={{ color: 'var(--text-primary)' }}>{m.name}</strong>
                                         </div>
                                       </td>
                                       <td style={{ padding: '8px 12px', color: 'var(--text-secondary)' }}>{m.sku}</td>
-                                      <td style={{ padding: '8px 12px', textAlign: 'center' }} className="tabular-nums">{m.availableStock}</td>
+                                      <td style={{ padding: '8px 12px', textAlign: 'center' }} className="tabular-nums">
+                                        <span style={{ color: m.availableStock > 0 ? 'var(--text-primary)' : 'var(--color-danger)' }}>
+                                          {m.availableStock}
+                                        </span>
+                                      </td>
                                       <td style={{ padding: '8px 12px', textAlign: 'center', fontWeight: 600, color: 'var(--color-brand-primary)' }} className="tabular-nums">
                                         {formatRupiah(m.promotionPrice)}
                                       </td>

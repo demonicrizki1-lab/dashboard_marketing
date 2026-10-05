@@ -297,9 +297,10 @@ function getProductsWithMargins(options = {}) {
   });
 
   // Filter pencarian nama / SKU
+  let filteredProducts = [...formattedProducts];
   if (search.trim()) {
     const q = search.toLowerCase();
-    formattedProducts = formattedProducts.filter(p => 
+    filteredProducts = filteredProducts.filter(p => 
       p.name.toLowerCase().includes(q) || 
       p.parentSku.toLowerCase().includes(q) ||
       p.itemId.includes(q) ||
@@ -309,12 +310,12 @@ function getProductsWithMargins(options = {}) {
 
   // Filter status konfigurasi margin
   if (statusFilter === 'configured') {
-    formattedProducts = formattedProducts.filter(p => p.isConfigured);
+    filteredProducts = filteredProducts.filter(p => p.isConfigured);
   } else if (statusFilter === 'unconfigured') {
-    formattedProducts = formattedProducts.filter(p => !p.isConfigured);
+    filteredProducts = filteredProducts.filter(p => !p.isConfigured);
   }
 
-  // Ringkasan Finansial
+  // Ringkasan Finansial (Dihitung dari SELURUH produk toko agar KPI Card tidak berubah saat filter aktif)
   const totalProducts = rawProducts.length;
   const totalSkus = rawProducts.reduce((acc, p) => acc + (p.model_list?.length || 0), 0);
   const configuredList = formattedProducts.filter(p => p.isConfigured);
@@ -331,7 +332,7 @@ function getProductsWithMargins(options = {}) {
       unconfiguredCount: totalProducts - configuredCount,
       avgNetProfitPercent: Math.round(avgNetProfitPercent * 10) / 10
     },
-    products: formattedProducts
+    products: filteredProducts
   };
 }
 
