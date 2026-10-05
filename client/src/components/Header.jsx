@@ -16,17 +16,47 @@ export default function Header({
   lastUpdated, 
   onRefresh, 
   isRefreshing, 
-  onOpenSettings 
+  onOpenSettings,
+  activeTab = 'module2'
 }) {
   const storeName = storeInfo?.shop_name || 'Monture outdoor';
+
+  // Dynamic Header Title & Description based on Active Navigation Tab
+  const getHeaderInfo = () => {
+    switch (activeTab) {
+      case 'module1':
+        return {
+          title: 'Ringkasan Bisnis (Overview Toko)',
+          subtitle: `Toko: ${storeName} • Monitoring Pendapatan & Multi-Channel Traffic Shopee`
+        };
+      case 'module3':
+        return {
+          title: 'Master Data SKU & Unit Economics',
+          subtitle: `Toko: ${storeName} • Kalkulator Margin & Plafon Biaya Iklan (CPR 25% / CAC 40%)`
+        };
+      case 'module_eval':
+        return {
+          title: 'Laporan Kinerja PIC & Tim Marketing',
+          subtitle: `Toko: ${storeName} • Evaluasi Kinerja PIC Lama vs Baru & Audit Finansial Historis`
+        };
+      case 'module2':
+      default:
+        return {
+          title: 'Dashboard Performa Iklan',
+          subtitle: `Toko: ${storeName} • Monitoring Metrik Iklan Shopee Real-Time`
+        };
+    }
+  };
+
+  const currentInfo = getHeaderInfo();
 
   return (
     <header className="top-header">
       <div className="header-left">
         <div className="header-title">
-          <h2>Dashboard Performa Iklan</h2>
+          <h2>{currentInfo.title}</h2>
           <p>
-            Toko: <strong style={{ color: 'var(--text-primary)' }}>{storeName}</strong> • Monitoring Metrik Iklan Shopee Real-Time
+            Toko: <strong style={{ color: 'var(--text-primary)' }}>{storeName}</strong> • {currentInfo.subtitle.split('• ')[1] || 'Shopee Command Hub'}
           </p>
         </div>
       </div>

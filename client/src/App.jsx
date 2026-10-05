@@ -238,6 +238,7 @@ export default function App() {
           onRefresh={handleLiveSync}
           isRefreshing={isRefreshing}
           onOpenSettings={() => setIsSettingsOpen(true)}
+          activeTab={activeModuleTab}
         />
 
         {/* Content Body */}
