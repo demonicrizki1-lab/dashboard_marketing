@@ -637,151 +637,199 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
   return (
     <div className="evaluation-container" style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
       
-      {/* 1. Executive Toolbar & Filter Bar Terpadu (Zona 1) */}
+      {/* 1. Executive Toolbar & Filter Bar Terpadu (Zona 1 - Ramping 2 Baris) */}
       <section aria-label="Toolbar dan Filter Evaluasi Kinerja PIC">
         <div
           className="glass-card"
           style={{
-            padding: '14px 20px',
+            padding: '14px 18px',
             borderRadius: '14px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
+            gap: '10px',
             border: '1px solid rgba(255, 255, 255, 0.08)',
-            background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%)'
+            background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.45) 0%, rgba(15, 23, 42, 0.65) 100%)',
+            boxShadow: '0 4px 20px -8px rgba(0,0,0,0.4)'
           }}
         >
-          {/* Main Row: Title Badge + Shopee Picker + Presets + Actions */}
+          {/* BARIS 1: Header Modul + Status Pesanan + Aksi Utilitas */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
             
-            {/* Left Section: Icon Badge + ShopeeDataCenterPicker + Presets */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-              
-              {/* Badge Icon & Label */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div
-                  style={{
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '10px',
-                    background: 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff',
-                    boxShadow: '0 4px 12px rgba(2, 132, 199, 0.3)',
-                    flexShrink: 0
-                  }}
-                >
-                  <Briefcase size={18} strokeWidth={2.2} />
-                </div>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-                      Benchmark PIC
-                    </span>
-                    <span className="badge" style={{ backgroundColor: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8', border: '1px solid rgba(56, 189, 248, 0.25)', fontSize: '10px', padding: '1px 6px' }}>
-                      Executive Audit
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Separator Divider */}
-              <div style={{ width: '1px', height: '24px', backgroundColor: 'rgba(255, 255, 255, 0.12)' }} />
-
-              {/* Shopee Data Center Dropdown Picker */}
-              <ShopeeDataCenterPicker
-                selectedPeriod={selectedPeriodObj}
-                onChange={(newPeriod) => {
-                  setSelectedPeriodObj(newPeriod);
-                  setActivePeriodFilter('datacenter');
-                  fetchEvaluationData(newPeriod, false, orderType);
+            {/* Sisi Kiri: Branding Modul */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
+                style={{
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '10px',
+                  background: 'linear-gradient(135deg, #0284C7 0%, #0369A1 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  boxShadow: '0 4px 12px rgba(2, 132, 199, 0.3)',
+                  flexShrink: 0
                 }}
-                orderType={orderType}
-                onOrderTypeChange={(newOrderType) => {
-                  setOrderType(newOrderType);
-                  fetchEvaluationData(selectedPeriodObj, false, newOrderType);
-                }}
-              />
-
-              {/* Separator Divider */}
-              <div style={{ width: '1px', height: '24px', backgroundColor: 'rgba(255, 255, 255, 0.12)' }} />
-
-              {/* Quick Era Preset Pills */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                {[
-                  { id: 'all', label: '🌟 Semua (Lifetime)' },
-                  { id: 'pic_baru', label: '⚡ Era PIC Baru' },
-                  { id: 'pic_lama', label: '👤 Era PIC Lama' },
-                  { id: '2026', label: '📅 Tahun 2026' },
-                  { id: '2025', label: '🗓️ Tahun 2025' },
-                  { id: 'last_3m', label: '📊 3 Bulan Terakhir' },
-                  { id: 'custom', label: '📆 Kustom' }
-                ].map(p => {
-                  const isSelected = activePeriodFilter === p.id;
-                  return (
-                    <button
-                      key={p.id}
-                      onClick={() => {
-                        setActivePeriodFilter(p.id);
-                        if (p.id === 'all') {
-                          const pObj = { id: '30 hari sebelumnya.', period: 'past30days', label: '30 hari sebelumnya.' };
-                          setSelectedPeriodObj(pObj);
-                          fetchEvaluationData(pObj, false, orderType);
-                        } else if (p.id === 'pic_baru') {
-                          const picBaruPeriod = { type: 'month_range', startMonth: '2026-08', endMonth: '2026-10', label: 'Agu 2026 - Okt 2026' };
-                          setSelectedPeriodObj(picBaruPeriod);
-                          fetchEvaluationData(picBaruPeriod, false, orderType);
-                        } else if (p.id === 'pic_lama') {
-                          const picLamaPeriod = { type: 'month_range', startMonth: '2024-09', endMonth: '2026-07', label: 'Sep 2024 - Jul 2026' };
-                          setSelectedPeriodObj(picLamaPeriod);
-                          fetchEvaluationData(picLamaPeriod, false, orderType);
-                        } else if (p.id === '2026') {
-                          const y26Period = { type: 'year', year: 2026, label: '2026' };
-                          setSelectedPeriodObj(y26Period);
-                          fetchEvaluationData(y26Period, false, orderType);
-                        } else if (p.id === '2025') {
-                          const y25Period = { type: 'year', year: 2025, label: '2025' };
-                          setSelectedPeriodObj(y25Period);
-                          fetchEvaluationData(y25Period, false, orderType);
-                        } else if (p.id === 'last_3m') {
-                          const last3mPeriod = { type: 'month_range', startMonth: '2026-08', endMonth: '2026-10', label: '3 Bulan Terakhir' };
-                          setSelectedPeriodObj(last3mPeriod);
-                          fetchEvaluationData(last3mPeriod, false, orderType);
-                        }
-                      }}
-                      className={`filter-chip ${isSelected ? 'active' : ''}`}
-                      style={{
-                        padding: '6px 12px',
-                        borderRadius: '8px',
-                        fontSize: '11.5px',
-                        fontWeight: isSelected ? 700 : 500,
-                        border: isSelected ? '1px solid var(--color-brand-primary)' : '1px solid rgba(255, 255, 255, 0.1)',
-                        backgroundColor: isSelected ? 'rgba(238, 77, 45, 0.16)' : 'rgba(255, 255, 255, 0.03)',
-                        color: isSelected ? 'var(--color-brand-primary)' : 'var(--text-secondary)',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease'
-                      }}
-                    >
-                      {p.label}
-                    </button>
-                  );
-                })}
+              >
+                <Briefcase size={17} strokeWidth={2.2} />
               </div>
-
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+                  Benchmark PIC & Evaluasi Tim
+                </span>
+                <span className="badge" style={{ backgroundColor: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8', border: '1px solid rgba(56, 189, 248, 0.25)', fontSize: '10px', padding: '1px 6px' }}>
+                  Modul 4 • Executive Audit
+                </span>
+                <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#10B981', border: '1px solid rgba(16, 185, 129, 0.2)', fontSize: '10px', padding: '1px 6px' }}>
+                  ● Shopee API Live
+                </span>
+              </div>
             </div>
 
-            {/* Right Section: Status Pill & Action Buttons */}
+            {/* Sisi Kanan: Status Pesanan + Tombol Aksi */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-              
-              {/* Filtered Data Pill */}
+              {/* Order Status Selector */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <select
+                  value={orderType}
+                  onChange={(e) => {
+                    const newType = e.target.value;
+                    setOrderType(newType);
+                    fetchEvaluationData(selectedPeriodObj, false, newType);
+                  }}
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    borderRadius: '8px',
+                    color: 'var(--text-primary)',
+                    fontSize: '11.5px',
+                    padding: '5px 10px',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
+                  title="Pilih status pesanan untuk laporan"
+                >
+                  <option value="paid" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Status: Pesanan Dibayar</option>
+                  <option value="confirmed" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Status: Pesanan Dikonfirmasi</option>
+                </select>
+              </div>
+
+              <div style={{ width: '1px', height: '18px', backgroundColor: 'rgba(255, 255, 255, 0.12)', margin: '0 2px' }} />
+
+              {/* Utility Actions: Segarkan, Cetak, CSV */}
+              <button
+                onClick={() => fetchEvaluationData(selectedPeriodObj, true, orderType)}
+                className="btn-secondary"
+                style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11.5px', padding: '5px 10px', borderRadius: '8px' }}
+                title="Muat ulang data evaluasi terkini dari Shopee API"
+              >
+                <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
+                <span>Segarkan</span>
+              </button>
+
+              <button
+                onClick={handlePrint}
+                className="btn-secondary"
+                style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11.5px', padding: '5px 10px', borderRadius: '8px' }}
+                title="Cetak atau simpan ke PDF"
+              >
+                <Printer size={13} />
+                <span>Cetak</span>
+              </button>
+
+              <button
+                onClick={handleExportCSV}
+                className="btn-secondary"
+                style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11.5px', padding: '5px 10px', borderRadius: '8px' }}
+                title="Unduh rekapitulasi evaluasi kinerja ke CSV"
+              >
+                <Download size={13} />
+                <span>CSV</span>
+              </button>
+            </div>
+
+          </div>
+
+          {/* BARIS 2: Filter Periode Terpadu + Info Scope Tunggal */}
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between', 
+            flexWrap: 'wrap', 
+            gap: '10px',
+            paddingTop: '10px',
+            borderTop: '1px solid rgba(255, 255, 255, 0.06)'
+          }}>
+            {/* Filter Pills */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              {[
+                { id: 'all', label: '🌟 Semua (Lifetime)' },
+                { id: 'pic_baru', label: '⚡ Era PIC Baru' },
+                { id: 'pic_lama', label: '👤 Era PIC Lama' },
+                { id: '2026', label: '📅 2026' },
+                { id: '2025', label: '🗓️ 2025' },
+                { id: 'last_3m', label: '📊 3 Bulan' },
+                { id: 'custom', label: '📆 Kustom' }
+              ].map(p => {
+                const isSelected = activePeriodFilter === p.id;
+                return (
+                  <button
+                    key={p.id}
+                    onClick={() => {
+                      setActivePeriodFilter(p.id);
+                      if (p.id === 'all') {
+                        const pObj = { id: 'all', period: 'all', label: 'Semua (Sep 2024 - Saat ini)' };
+                        setSelectedPeriodObj(pObj);
+                        fetchEvaluationData(pObj, false, orderType);
+                      } else if (p.id === 'pic_baru') {
+                        const picBaruPeriod = { type: 'month_range', startMonth: '2026-08', endMonth: '2026-10', label: 'Agu 2026 - Okt 2026' };
+                        setSelectedPeriodObj(picBaruPeriod);
+                        fetchEvaluationData(picBaruPeriod, false, orderType);
+                      } else if (p.id === 'pic_lama') {
+                        const picLamaPeriod = { type: 'month_range', startMonth: '2024-09', endMonth: '2026-07', label: 'Sep 2024 - Jul 2026' };
+                        setSelectedPeriodObj(picLamaPeriod);
+                        fetchEvaluationData(picLamaPeriod, false, orderType);
+                      } else if (p.id === '2026') {
+                        const y26Period = { type: 'year', year: 2026, label: '2026' };
+                        setSelectedPeriodObj(y26Period);
+                        fetchEvaluationData(y26Period, false, orderType);
+                      } else if (p.id === '2025') {
+                        const y25Period = { type: 'year', year: 2025, label: '2025' };
+                        setSelectedPeriodObj(y25Period);
+                        fetchEvaluationData(y25Period, false, orderType);
+                      } else if (p.id === 'last_3m') {
+                        const last3mPeriod = { type: 'month_range', startMonth: '2026-08', endMonth: '2026-10', label: '3 Bulan Terakhir' };
+                        setSelectedPeriodObj(last3mPeriod);
+                        fetchEvaluationData(last3mPeriod, false, orderType);
+                      }
+                    }}
+                    className={`filter-chip ${isSelected ? 'active' : ''}`}
+                    style={{
+                      padding: '5px 11px',
+                      borderRadius: '8px',
+                      fontSize: '11.5px',
+                      fontWeight: isSelected ? 700 : 500,
+                      border: isSelected ? '1px solid var(--color-brand-primary)' : '1px solid rgba(255, 255, 255, 0.08)',
+                      backgroundColor: isSelected ? 'rgba(238, 77, 45, 0.16)' : 'rgba(255, 255, 255, 0.03)',
+                      color: isSelected ? 'var(--color-brand-primary)' : 'var(--text-secondary)',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    {p.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Scope Summary & Reset Button */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               <div
                 style={{
                   fontSize: '11.5px',
                   color: 'var(--text-secondary)',
                   backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                  padding: '6px 12px',
+                  padding: '5px 12px',
                   borderRadius: '8px',
                   border: '1px solid rgba(255, 255, 255, 0.08)',
                   display: 'flex',
@@ -792,45 +840,38 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 <Clock size={13} style={{ color: 'var(--color-brand-primary)' }} />
                 <span>
                   <strong style={{ color: 'var(--text-primary)' }}>{filteredTrends.length} Bulan</strong> ({filteredStats.totalOrders} Order)
+                  <span style={{ color: 'var(--text-muted)', marginLeft: '6px' }}>• {activePeriodLabel}</span>
                 </span>
               </div>
 
-              {/* Action Buttons: Segarkan, Cetak PDF, Export CSV */}
-              <button
-                onClick={() => fetchEvaluationData(selectedPeriodObj, true, orderType)}
-                className="btn-secondary"
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', padding: '6px 12px', borderRadius: '8px' }}
-                title="Muat ulang data evaluasi terkini dari Shopee API"
-              >
-                <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
-                <span>Segarkan</span>
-              </button>
-
-              <button
-                onClick={handlePrint}
-                className="btn-secondary"
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', padding: '6px 12px', borderRadius: '8px' }}
-                title="Cetak atau simpan ke PDF"
-              >
-                <Printer size={13} />
-                <span>Cetak</span>
-              </button>
-
-              <button
-                onClick={handleExportCSV}
-                className="btn-secondary"
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', padding: '6px 12px', borderRadius: '8px' }}
-                title="Unduh rekapitulasi evaluasi kinerja ke CSV"
-              >
-                <Download size={13} />
-                <span>CSV</span>
-              </button>
-
+              {isFiltered && (
+                <button
+                  onClick={() => {
+                    setActivePeriodFilter('all');
+                    const pObj = { id: 'all', period: 'all', label: 'Semua (Sep 2024 - Saat ini)' };
+                    setSelectedPeriodObj(pObj);
+                    fetchEvaluationData(pObj, false, orderType);
+                  }}
+                  className="badge"
+                  style={{
+                    background: 'rgba(59, 130, 246, 0.12)',
+                    border: '1px solid rgba(59, 130, 246, 0.25)',
+                    color: '#60A5FA',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    padding: '4px 8px'
+                  }}
+                  title="Kembalikan ke semua periode (Lifetime)"
+                >
+                  Reset ↺
+                </button>
+              )}
             </div>
 
           </div>
 
-          {/* Conditional Sub-Row: Custom Month Range Form */}
+          {/* Sub-Row Khusus Kustom: Form Rentang Bulan (Hanya muncul jika tombol Kustom diklik) */}
           {activePeriodFilter === 'custom' && (
             <div
               style={{
@@ -838,10 +879,11 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 alignItems: 'center',
                 gap: '12px',
                 flexWrap: 'wrap',
-                padding: '10px 14px',
+                padding: '8px 12px',
                 borderRadius: '8px',
                 backgroundColor: 'rgba(238, 77, 45, 0.05)',
-                border: '1px solid rgba(238, 77, 45, 0.25)'
+                border: '1px solid rgba(238, 77, 45, 0.25)',
+                marginTop: '4px'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-brand-primary)' }}>
@@ -855,7 +897,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   value={customStartMonth}
                   onChange={(e) => setCustomStartMonth(e.target.value)}
                   style={{
-                    padding: '5px 8px',
+                    padding: '4px 8px',
                     borderRadius: '6px',
                     backgroundColor: '#1E293B',
                     color: '#FFFFFF',
@@ -881,7 +923,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   value={customEndMonth}
                   onChange={(e) => setCustomEndMonth(e.target.value)}
                   style={{
-                    padding: '5px 8px',
+                    padding: '4px 8px',
                     borderRadius: '6px',
                     backgroundColor: '#1E293B',
                     color: '#FFFFFF',
@@ -913,7 +955,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 }}
                 className="btn-primary"
                 style={{
-                  padding: '5px 12px',
+                  padding: '4px 10px',
                   fontSize: '11.5px',
                   borderRadius: '6px',
                   cursor: 'pointer'
@@ -923,50 +965,6 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               </button>
             </div>
           )}
-
-          {/* Sub-Row: Breadcrumb & Active Filter Info */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              fontSize: '11px',
-              color: 'var(--text-muted)',
-              paddingTop: '6px',
-              borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-              flexWrap: 'wrap',
-              gap: '8px'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Periode Aktif:</span>
-              <strong style={{ color: isFiltered ? 'var(--color-brand-primary)' : 'var(--text-primary)' }}>
-                {activePeriodLabel}
-              </strong>
-            </div>
-
-            {isFiltered && (
-              <button
-                onClick={() => {
-                  setActivePeriodFilter('all');
-                  const pObj = { id: '30 hari sebelumnya.', period: 'past30days', label: '30 hari sebelumnya.' };
-                  setSelectedPeriodObj(pObj);
-                  fetchEvaluationData(pObj, false, orderType);
-                }}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: '#60A5FA',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  textDecoration: 'underline'
-                }}
-              >
-                Reset ke Semua Periode (Lifetime)
-              </button>
-            )}
-          </div>
 
         </div>
       </section>
