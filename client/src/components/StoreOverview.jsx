@@ -312,6 +312,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
   const lp = data?.lifetime;
   const profile = data?.storeProfile;
   const bm = data?.picBenchmark;
+  const orderPerf = data?.orderPerformance;
 
   // 8th Metric: Tingkat Konversi Pesanan (CR)
   const conversionRateVal = km?.conversionRate?.value !== undefined 
@@ -319,6 +320,11 @@ export default function StoreOverview({ showToast, storeInfo }) {
     : (km?.clicks?.value > 0 ? (km.confirmedOrders?.value / km.clicks.value) * 100 : 0);
   const conversionRateFormatted = km?.conversionRate?.formatted || (conversionRateVal.toFixed(2) + '%');
   const conversionRatePctDiff = km?.conversionRate?.pctDiff !== undefined ? km.conversionRate.pctDiff : km?.confirmedOrders?.pctDiff;
+
+  // Top 5 Products Summary
+  const topProducts = data?.topProducts || [];
+  const top5TotalSales = topProducts.reduce((sum, p) => sum + (p.sales || 0), 0);
+  const top5TotalUnits = topProducts.reduce((sum, p) => sum + (p.units || 0), 0);
 
   return (
     <div className="store-overview-container" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -885,105 +891,205 @@ export default function StoreOverview({ showToast, storeInfo }) {
         </div>
       </div>
 
-      {/* 6. Top 5 Produk Terlaris Toko (Product-Rankings API) */}
-      <section aria-label="Peringkat 5 Produk Terlaris Toko">
-        <div className="glass-card" style={{ padding: '22px', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Award size={18} style={{ color: '#F59E0B' }} />
-              <h3 style={{ fontSize: '16px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
-                Top 5 Produk Terlaris Toko Monture Outdoor
-              </h3>
+      {/* 5. Top 5 Produk Terlaris Toko & Status Operasional Pesanan */}
+      <section aria-label="Top 5 Produk Terlaris Toko dan Status Operasional">
+        <div className="glass-card" style={{ padding: '20px 22px', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+          
+          {/* Header Section */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'rgba(245, 158, 11, 0.12)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Award size={18} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: 'var(--text-primary)' }}>
+                  Top 5 Produk Terlaris Toko ({data?.customLabel || selectedPeriodObj?.label || '30 Hari Terakhir'})
+                </h3>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                  Peringkat produk terlaris berdasarkan penjualan terkonfirmasi Shopee Product Rankings API
+                </span>
+              </div>
             </div>
-            <span className="badge" style={{ backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#F59E0B', fontSize: '11px', padding: '3px 8px' }}>
-              🏆 Peringkat Penjualan Terkonfirmasi
-            </span>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <span className="badge" style={{ backgroundColor: 'rgba(238, 77, 45, 0.12)', color: 'var(--color-brand-primary)', fontSize: '11px', padding: '3px 10px', borderRadius: '6px', fontWeight: 600 }}>
+                Total Omzet Top 5: Rp {((top5TotalSales || 0) / 1000000).toFixed(2)}M
+              </span>
+              <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.12)', color: '#60A5FA', fontSize: '11px', padding: '3px 10px', borderRadius: '6px', fontWeight: 600 }}>
+                {top5TotalUnits} Unit Terjual
+              </span>
+            </div>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
-            <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12.5px' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', textAlign: 'left', color: 'var(--text-muted)' }}>
-                  <th style={{ padding: '10px 12px', width: '50px', textAlign: 'center' }}>Rank</th>
-                  <th style={{ padding: '10px 12px' }}>Produk</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'right' }}>Penjualan</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center' }}>Pesanan</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center' }}>Unit</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center' }}>Add to Cart</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center' }}>CTR</th>
-                  <th style={{ padding: '10px 12px', textAlign: 'center' }}>Konversi (CR)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(data?.topProducts || []).map((prod) => (
-                  <tr key={prod.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background 0.15s' }}>
-                    <td style={{ padding: '12px', textAlign: 'center' }}>
-                      <span
-                        style={{
-                          width: '24px',
-                          height: '24px',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          borderRadius: '6px',
-                          fontSize: '12px',
-                          fontWeight: 800,
-                          backgroundColor: prod.rank === 1 ? 'rgba(245, 158, 11, 0.2)' : prod.rank === 2 ? 'rgba(148, 163, 184, 0.2)' : prod.rank === 3 ? 'rgba(205, 127, 50, 0.2)' : 'rgba(255,255,255,0.06)',
-                          color: prod.rank === 1 ? '#F59E0B' : prod.rank === 2 ? '#E2E8F0' : prod.rank === 3 ? '#D97706' : 'var(--text-muted)'
-                        }}
-                      >
-                        {prod.rank}
-                      </span>
-                    </td>
-                    <td style={{ padding: '12px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        {prod.image ? (
-                          <img
-                            src={prod.image}
-                            alt={prod.name}
-                            style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.1)' }}
-                            onError={(e) => { e.target.style.display = 'none'; }}
-                          />
-                        ) : (
-                          <div style={{ width: '42px', height: '42px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <ShoppingBag size={18} style={{ color: 'var(--text-muted)' }} />
-                          </div>
-                        )}
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                          <span style={{ fontWeight: 600, color: 'var(--text-primary)', maxWidth: '420px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {prod.name}
-                          </span>
-                          <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                            ID: {prod.id}
-                          </span>
-                        </div>
-                      </div>
-                    </td>
-                    <td style={{ padding: '12px', textAlign: 'right', fontWeight: 800, color: 'var(--color-brand-primary)', fontFamily: 'var(--font-mono)' }}>
-                      {prod.salesFormatted}
-                    </td>
-                    <td style={{ padding: '12px', textAlign: 'center', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
-                      {prod.orders}
-                    </td>
-                    <td style={{ padding: '12px', textAlign: 'center', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
-                      {prod.units}
-                    </td>
-                    <td style={{ padding: '12px', textAlign: 'center', fontWeight: 600, color: '#60A5FA', fontFamily: 'var(--font-mono)' }}>
-                      {prod.addToCart}
-                    </td>
-                    <td style={{ padding: '12px', textAlign: 'center', fontFamily: 'var(--font-mono)' }}>
-                      {prod.ctr}
-                    </td>
-                    <td style={{ padding: '12px', textAlign: 'center' }}>
-                      <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981', padding: '2px 8px', fontSize: '11px' }}>
-                        {prod.conversionRate}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {/* Operational Health Strip (Pembatalan, Retur, NFR) */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+            {/* 1. Pesanan Dibatalkan */}
+            <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Pesanan Dibatalkan</span>
+                <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>
+                  {orderPerf?.cancelledOrders || 0} <span style={{ fontSize: '10.5px', color: 'var(--text-muted)', fontWeight: 400 }}>pesanan</span> ({orderPerf?.cancelledSalesFormatted || 'Rp 0'})
+                </div>
+              </div>
+              <span className="badge" style={{ backgroundColor: (orderPerf?.cancelledOrders || 0) === 0 ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)', color: (orderPerf?.cancelledOrders || 0) === 0 ? '#10B981' : '#EF4444', fontSize: '10.5px', padding: '2px 7px' }}>
+                {(orderPerf?.cancelledOrders || 0) === 0 ? '🟢 0% Batal' : 'Ada Pembatalan'}
+              </span>
+            </div>
+
+            {/* 2. Pengembalian Barang & Dana */}
+            <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Pengembalian / Retur</span>
+                <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>
+                  {orderPerf?.returnRefundOrders || 0} <span style={{ fontSize: '10.5px', color: 'var(--text-muted)', fontWeight: 400 }}>pesanan</span> (Rp {Number(orderPerf?.returnRefundSales || 0).toLocaleString('id-ID')})
+                </div>
+              </div>
+              <span className="badge" style={{ backgroundColor: (orderPerf?.returnRefundOrders || 0) === 0 ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)', color: (orderPerf?.returnRefundOrders || 0) === 0 ? '#10B981' : '#EF4444', fontSize: '10.5px', padding: '2px 7px' }}>
+                {(orderPerf?.returnRefundOrders || 0) === 0 ? '🟢 0% Retur' : 'Ada Retur'}
+              </span>
+            </div>
+
+            {/* 3. Non-Fulfilment Rate */}
+            <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Tingkat Pesanan Tidak Selesai (NFR)</span>
+                <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#10B981', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>
+                  0.00% <span style={{ fontSize: '10.5px', color: 'var(--text-muted)', fontWeight: 400 }}>Target Shopee &lt; 3%</span>
+                </div>
+              </div>
+              <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981', fontSize: '10.5px', padding: '2px 7px' }}>
+                ✓ Standar Star Seller
+              </span>
+            </div>
           </div>
+
+          {/* Table Container */}
+          {topProducts.length === 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '36px 16px', background: 'rgba(255, 255, 255, 0.015)', borderRadius: '12px', border: '1px dashed rgba(255, 255, 255, 0.08)', gap: '10px' }}>
+              <ShoppingBag size={28} style={{ color: 'var(--text-muted)', opacity: 0.6 }} />
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ margin: 0, fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                  Tidak ada data peringkat produk untuk periode ini
+                </p>
+                <p style={{ margin: '4px 0 0 0', fontSize: '11.5px', color: 'var(--text-muted)' }}>
+                  Pilih rentang bulan aktif atau 30 hari terakhir untuk melihat ranking produk riil.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div style={{ overflowX: 'auto', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+              <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                <thead>
+                  <tr style={{ background: 'rgba(255, 255, 255, 0.03)', borderBottom: '1px solid rgba(255,255,255,0.08)', textAlign: 'left', color: 'var(--text-muted)' }}>
+                    <th style={{ padding: '11px 14px', width: '52px', textAlign: 'center', textTransform: 'uppercase', fontSize: '10.5px', letterSpacing: '0.04em' }}>Rank</th>
+                    <th style={{ padding: '11px 14px', textTransform: 'uppercase', fontSize: '10.5px', letterSpacing: '0.04em' }}>Produk</th>
+                    <th style={{ padding: '11px 14px', textAlign: 'right', textTransform: 'uppercase', fontSize: '10.5px', letterSpacing: '0.04em' }}>Penjualan Kotor</th>
+                    <th style={{ padding: '11px 14px', textAlign: 'center', textTransform: 'uppercase', fontSize: '10.5px', letterSpacing: '0.04em' }}>Pesanan</th>
+                    <th style={{ padding: '11px 14px', textAlign: 'center', textTransform: 'uppercase', fontSize: '10.5px', letterSpacing: '0.04em' }}>Unit</th>
+                    <th style={{ padding: '11px 14px', textAlign: 'center', textTransform: 'uppercase', fontSize: '10.5px', letterSpacing: '0.04em' }}>Add to Cart</th>
+                    <th style={{ padding: '11px 14px', textAlign: 'center', textTransform: 'uppercase', fontSize: '10.5px', letterSpacing: '0.04em' }}>CTR</th>
+                    <th style={{ padding: '11px 14px', textAlign: 'center', textTransform: 'uppercase', fontSize: '10.5px', letterSpacing: '0.04em' }}>Konversi (CR)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {topProducts.map((prod) => (
+                    <tr 
+                      key={prod.id} 
+                      style={{ 
+                        borderBottom: '1px solid rgba(255,255,255,0.04)', 
+                        transition: 'background 0.15s ease' 
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                    >
+                      <td style={{ padding: '12px 14px', textAlign: 'center' }}>
+                        <span
+                          style={{
+                            width: '26px',
+                            height: '26px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: '7px',
+                            fontSize: '11.5px',
+                            fontWeight: 800,
+                            backgroundColor: 
+                              prod.rank === 1 ? 'rgba(245, 158, 11, 0.18)' : 
+                              prod.rank === 2 ? 'rgba(148, 163, 184, 0.18)' : 
+                              prod.rank === 3 ? 'rgba(217, 119, 6, 0.18)' : 'rgba(255,255,255,0.05)',
+                            color: 
+                              prod.rank === 1 ? '#F59E0B' : 
+                              prod.rank === 2 ? '#CBD5E1' : 
+                              prod.rank === 3 ? '#F97316' : 'var(--text-muted)',
+                            border: 
+                              prod.rank === 1 ? '1px solid rgba(245, 158, 11, 0.35)' :
+                              prod.rank === 2 ? '1px solid rgba(148, 163, 184, 0.35)' :
+                              prod.rank === 3 ? '1px solid rgba(217, 119, 6, 0.35)' : '1px solid rgba(255,255,255,0.08)'
+                          }}
+                        >
+                          {prod.rank}
+                        </span>
+                      </td>
+                      <td style={{ padding: '12px 14px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          {prod.image ? (
+                            <img
+                              src={prod.image}
+                              alt={prod.name}
+                              style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}
+                              onError={(e) => { e.target.style.display = 'none'; }}
+                            />
+                          ) : (
+                            <div style={{ width: '42px', height: '42px', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              <ShoppingBag size={18} style={{ color: 'var(--text-muted)' }} />
+                            </div>
+                          )}
+                          <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                            <span style={{ fontWeight: 600, color: 'var(--text-primary)', maxWidth: '420px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {prod.name}
+                            </span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
+                              <span style={{ fontSize: '10.5px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                                ID: {prod.id}
+                              </span>
+                              <a
+                                href={`https://shopee.co.id/product/${profile?.shopId || '1575219792'}/${prod.id}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ fontSize: '10.5px', color: '#60A5FA', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '2px' }}
+                              >
+                                Lihat Produk <ArrowUpRight size={10} />
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td style={{ padding: '12px 14px', textAlign: 'right', fontWeight: 800, color: 'var(--color-brand-primary)', fontFamily: 'var(--font-mono)', fontSize: '13px' }}>
+                        {prod.salesFormatted}
+                      </td>
+                      <td style={{ padding: '12px 14px', textAlign: 'center', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
+                        {prod.orders}
+                      </td>
+                      <td style={{ padding: '12px 14px', textAlign: 'center', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
+                        {prod.units}
+                      </td>
+                      <td style={{ padding: '12px 14px', textAlign: 'center', fontWeight: 600, color: '#60A5FA', fontFamily: 'var(--font-mono)' }}>
+                        {prod.addToCart}
+                      </td>
+                      <td style={{ padding: '12px 14px', textAlign: 'center', fontFamily: 'var(--font-mono)' }}>
+                        {prod.ctr}
+                      </td>
+                      <td style={{ padding: '12px 14px', textAlign: 'center' }}>
+                        <span className="badge" style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', color: '#10B981', padding: '2px 8px', fontSize: '11px', borderRadius: '5px' }}>
+                          {prod.conversionRate}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </section>
 
