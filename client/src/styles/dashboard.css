@@ -1305,3 +1305,37 @@ button, input, select, textarea {
 .spin-animation {
   animation: spin 1s linear infinite;
 }
+
+/* ==========================================================================
+   Overview Toko Custom Grids
+   ========================================================================== */
+.overview-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 1080px) {
+  .overview-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .overview-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.overview-charts-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+@media (max-width: 1100px) {
+  .overview-charts-grid {
+    grid-template-columns: 1fr;
+  }
+}

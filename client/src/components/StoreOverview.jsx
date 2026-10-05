@@ -469,13 +469,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
           <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Sinkron langsung dari Shopee Data Center</span>
         </div>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '12px'
-          }}
-        >
+        <div className="overview-kpi-grid">
           {/* Card 1: Total Penjualan Kotor */}
           <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
             <div>
@@ -630,38 +624,49 @@ export default function StoreOverview({ showToast, storeInfo }) {
         </div>
       </section>
 
-      {/* 5. Visualisasi Grafik: Tren Pertumbuhan Omzet + Donut Sumber Omzet */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', gap: '20px' }}>
+      {/* 4 & 5. Visualisasi Grafik: Tren Pertumbuhan Omzet + Donut Sumber Omzet */}
+      <div className="overview-charts-grid">
         
         {/* Grafik Garis Tren Omzet Bulanan */}
-        <div className="glass-card" style={{ padding: '22px', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <TrendingUp size={18} style={{ color: 'var(--color-brand-primary)' }} />
-              <h3 style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
+        <div 
+          className="glass-card" 
+          style={{ 
+            padding: '18px 20px', 
+            borderRadius: '14px', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            justifyContent: 'space-between',
+            gap: '14px',
+            minHeight: '380px'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', minHeight: '34px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+              <TrendingUp size={16} style={{ color: 'var(--color-brand-primary)', flexShrink: 0 }} />
+              <h3 style={{ fontSize: '14.5px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {chartViewMode === 'daily' && data?.dailyTrendPoints?.length > 0
                   ? `Grafik Tren Harian (${data.customLabel || 'Bulan Terpilih'})`
                   : 'Grafik Tren Omzet Toko (Sejak Berdiri)'}
               </h3>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
               {data?.dailyTrendPoints && data.dailyTrendPoints.length > 0 && (
-                <div style={{ display: 'flex', background: 'rgba(255,255,255,0.06)', borderRadius: '8px', padding: '3px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ display: 'inline-flex', background: 'rgba(255,255,255,0.06)', borderRadius: '6px', padding: '2px', border: '1px solid rgba(255,255,255,0.08)' }}>
                   <button
                     onClick={() => setChartViewMode('monthly')}
                     style={{
                       background: chartViewMode === 'monthly' ? 'var(--color-brand-primary)' : 'transparent',
                       color: chartViewMode === 'monthly' ? '#fff' : 'var(--text-muted)',
                       border: 'none',
-                      borderRadius: '6px',
-                      padding: '4px 10px',
-                      fontSize: '11px',
+                      borderRadius: '5px',
+                      padding: '3px 8px',
+                      fontSize: '10.5px',
                       fontWeight: 600,
                       cursor: 'pointer',
-                      transition: 'all 0.2s'
+                      transition: 'all 0.15s ease'
                     }}
                   >
-                    Tren Bulanan Toko
+                    Bulanan
                   </button>
                   <button
                     onClick={() => setChartViewMode('daily')}
@@ -669,32 +674,34 @@ export default function StoreOverview({ showToast, storeInfo }) {
                       background: chartViewMode === 'daily' ? 'var(--color-brand-primary)' : 'transparent',
                       color: chartViewMode === 'daily' ? '#fff' : 'var(--text-muted)',
                       border: 'none',
-                      borderRadius: '6px',
-                      padding: '4px 10px',
-                      fontSize: '11px',
+                      borderRadius: '5px',
+                      padding: '3px 8px',
+                      fontSize: '10.5px',
                       fontWeight: 600,
                       cursor: 'pointer',
-                      transition: 'all 0.2s'
+                      transition: 'all 0.15s ease'
                     }}
                   >
-                    Tren Harian ({data.dailyTrendPoints.length} Hari)
+                    Harian
                   </button>
                 </div>
               )}
               {chartViewMode === 'monthly' && (
-                <>
-                  <span className="badge" style={{ fontSize: '10.5px', background: 'rgba(59, 130, 246, 0.15)', color: '#60A5FA' }}>
-                    🔵 PIC Lama (s/d Jul 2026)
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: 'var(--text-muted)' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#3B82F6', flexShrink: 0 }}></span>
+                    PIC Lama
                   </span>
-                  <span className="badge" style={{ fontSize: '10.5px', background: 'rgba(238, 77, 45, 0.15)', color: 'var(--color-brand-primary)' }}>
-                    🔴 PIC Baru (Agu 2026+)
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'var(--color-brand-primary)', flexShrink: 0 }}></span>
+                    PIC Baru
                   </span>
-                </>
+                </div>
               )}
             </div>
           </div>
 
-          <div style={{ height: '280px', position: 'relative' }}>
+          <div style={{ height: '290px', position: 'relative' }}>
             {lineChartData && (
               <Line
                 data={lineChartData}
@@ -704,7 +711,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
                   plugins: {
                     legend: {
                       position: 'top',
-                      labels: { color: '#94A3B8', font: { size: 11, family: 'Inter' }, boxWidth: 12, padding: 14 }
+                      labels: { color: '#94A3B8', font: { size: 11, family: 'Inter' }, boxWidth: 12, padding: 12 }
                     },
                     tooltip: {
                       callbacks: {
@@ -733,21 +740,32 @@ export default function StoreOverview({ showToast, storeInfo }) {
         </div>
 
         {/* Ringkasan Sumber Omzet (Donut Chart) */}
-        <div className="glass-card" style={{ padding: '22px', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div 
+          className="glass-card" 
+          style={{ 
+            padding: '18px 20px', 
+            borderRadius: '14px', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            justifyContent: 'space-between',
+            gap: '14px',
+            minHeight: '380px'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', minHeight: '34px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Layers size={18} style={{ color: '#8B5CF6' }} />
-              <h3 style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
-                Ringkasan Sumber Omzet (Kontribusi Channel)
+              <Layers size={16} style={{ color: '#8B5CF6', flexShrink: 0 }} />
+              <h3 style={{ fontSize: '14.5px', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, whiteSpace: 'nowrap' }}>
+                Ringkasan Sumber Omzet
               </h3>
             </div>
-            <span className="badge" style={{ fontSize: '11px', background: 'rgba(139, 92, 246, 0.15)', color: '#A78BFA' }}>
-              Pie / Donut
+            <span className="badge" style={{ fontSize: '10.5px', background: 'rgba(139, 92, 246, 0.15)', color: '#A78BFA', padding: '2px 8px', borderRadius: '5px' }}>
+              Kontribusi Channel
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', minHeight: '260px' }}>
-            <div style={{ width: '210px', height: '210px', position: 'relative' }}>
+          <div style={{ height: '290px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '18px' }}>
+            <div style={{ width: '180px', height: '180px', position: 'relative', flexShrink: 0 }}>
               {doughnutChartData && (
                 <Doughnut
                   data={doughnutChartData}
@@ -777,15 +795,15 @@ export default function StoreOverview({ showToast, storeInfo }) {
                   pointerEvents: 'none'
                 }}
               >
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Total Omzet</span>
-                <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>Total Omzet</span>
+                <span style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
                   Rp {(Number(km?.totalSales?.value || 0) / 1000000).toFixed(2)}M
                 </span>
               </div>
             </div>
 
             {/* Channel Legend Strip */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, minWidth: '190px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, minWidth: '160px' }}>
               {[
                 { label: 'Organik & Pencarian', color: cb?.product_card.color, val: cb?.product_card.sales, ratio: cb?.product_card.ratio },
                 { label: 'Iklan Shopee Ads', color: cb?.paid_ads.color, val: cb?.paid_ads.sales, ratio: cb?.paid_ads.ratio },
@@ -793,16 +811,16 @@ export default function StoreOverview({ showToast, storeInfo }) {
                 { label: 'Shopee Affiliate', color: cb?.affiliate.color, val: cb?.affiliate.sales, ratio: cb?.affiliate.ratio },
                 { label: 'Live Streaming', color: cb?.live.color, val: cb?.live.sales, ratio: cb?.live.ratio }
               ].map((item, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '10px', height: '10px', borderRadius: '3px', backgroundColor: item.color }} />
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11.5px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+                    <div style={{ width: '9px', height: '9px', borderRadius: '3px', backgroundColor: item.color, flexShrink: 0 }} />
                     <span style={{ color: 'var(--text-secondary)' }}>{item.label}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <strong style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+                    <strong style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)', fontSize: '11.5px' }}>
                       Rp {((item.val || 0) / 1000000).toFixed(2)}M
                     </strong>
-                    <span style={{ fontSize: '11px', color: 'var(--text-muted)', width: '42px', textAlign: 'right' }}>
+                    <span style={{ fontSize: '10.5px', color: 'var(--text-muted)', width: '38px', textAlign: 'right' }}>
                       ({(item.ratio || 0).toFixed(1)}%)
                     </span>
                   </div>
