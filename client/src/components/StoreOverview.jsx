@@ -317,20 +317,22 @@ export default function StoreOverview({ showToast, storeInfo }) {
     <div className="store-overview-container" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
       {/* 1. Header Filter Bar (Menggunakan ShopeeDataCenterPicker Replika 1:1) */}
+      {/* 1. Header Filter Bar (Zona 1: Filter Bar & Status Koneksi Terpadu) */}
       <div
         className="glass-card"
         style={{
-          padding: '16px 20px',
+          padding: '14px 20px',
           borderRadius: '14px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '16px',
-          border: '1px solid rgba(255,255,255,0.08)'
+          gap: '12px',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%)'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
           {/* Shopee Data Center Dropdown Picker (Termasuk Status Pesanan Dropdown Replika Seller Center) */}
           <ShopeeDataCenterPicker
             selectedPeriod={selectedPeriodObj}
@@ -344,20 +346,21 @@ export default function StoreOverview({ showToast, storeInfo }) {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button
-            onClick={handleSyncLive}
-            disabled={syncing}
-            className="btn-secondary"
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', padding: '7px 14px', borderRadius: '8px' }}
-            title="Tarik data live terkini dari Shopee Data Center"
-          >
-            <RefreshCw size={14} className={syncing ? 'animate-spin' : ''} />
-            <span>{syncing ? 'Menyinkron...' : 'Live Sync'}</span>
-          </button>
-
-          <button
             onClick={handleExportCSV}
             className="btn-secondary"
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', padding: '7px 14px', borderRadius: '8px' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '12px',
+              padding: '7px 14px',
+              borderRadius: '8px',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              color: 'var(--text-secondary)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
             title="Unduh rekapitulasi performa ke CSV"
           >
             <Download size={14} />

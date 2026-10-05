@@ -231,26 +231,32 @@ export default function ShopeeDataCenterPicker({
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '7px 14px',
-            backgroundColor: '#FFFFFF',
-            border: isOpen ? '1.5px solid #EE4D2D' : '1px solid #CBD5E1',
-            borderRadius: '6px',
+            padding: '7px 12px',
+            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+            border: isOpen ? '1.5px solid #EE4D2D' : '1px solid rgba(255, 255, 255, 0.12)',
+            borderRadius: '8px',
             cursor: 'pointer',
-            boxShadow: isOpen ? '0 0 0 3px rgba(238, 77, 45, 0.15)' : '0 1px 2px rgba(0,0,0,0.05)',
+            boxShadow: isOpen ? '0 0 0 3px rgba(238, 77, 45, 0.2)' : 'none',
             transition: 'all 0.2s ease',
             fontFamily: 'inherit'
           }}
+          onMouseEnter={(e) => {
+            if (!isOpen) e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+          }}
+          onMouseLeave={(e) => {
+            if (!isOpen) e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+          }}
         >
-          <span style={{ fontSize: '13px', color: '#64748B', fontWeight: 500 }}>
-            Periode Data
+          <span style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>
+            Periode Data:
           </span>
-          <span style={{ fontSize: '13px', color: '#EE4D2D', fontWeight: 700 }}>
+          <span style={{ fontSize: '12.5px', color: '#EE4D2D', fontWeight: 700 }}>
             {displayInfo.label}
           </span>
-          <span style={{ fontSize: '13px', color: '#1E293B', fontWeight: 600 }}>
+          <span style={{ fontSize: '12px', color: '#F8FAFC', fontWeight: 600 }}>
             {displayInfo.dateText}
           </span>
-          <Calendar size={16} style={{ color: '#64748B', marginLeft: '4px' }} />
+          <Calendar size={15} style={{ color: '#94A3B8', marginLeft: '2px' }} />
         </button>
 
         {/* Dropdown Panel 2 Kolom Persis Seller Center Shopee */}
@@ -701,32 +707,37 @@ export default function ShopeeDataCenterPicker({
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '10px',
+            gap: '8px',
             padding: '7px 12px',
-            backgroundColor: '#FFFFFF',
-            border: isOrderTypeOpen ? '1px solid #EE4D2D' : '1px solid #CBD5E1',
-            borderRadius: '6px',
-            fontSize: '12.5px',
-            color: '#1E293B',
+            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+            border: isOrderTypeOpen ? '1px solid #EE4D2D' : '1px solid rgba(255, 255, 255, 0.12)',
+            borderRadius: '8px',
+            fontSize: '12px',
+            color: '#F8FAFC',
             cursor: 'pointer',
-            minWidth: '220px',
-            boxShadow: isOrderTypeOpen ? '0 0 0 2px rgba(238, 77, 45, 0.15)' : 'none',
+            minWidth: '175px',
+            boxShadow: isOrderTypeOpen ? '0 0 0 2px rgba(238, 77, 45, 0.2)' : 'none',
             transition: 'all 0.15s ease'
           }}
           title="Filter status pesanan sesuai Shopee Seller Center"
+          onMouseEnter={(e) => {
+            if (!isOrderTypeOpen) e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+          }}
+          onMouseLeave={(e) => {
+            if (!isOrderTypeOpen) e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+          }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ color: '#475569', fontWeight: 500 }}>Status Pesanan</span>
-            <HelpCircle size={13} style={{ color: '#94A3B8' }} />
+            <span style={{ color: '#94A3B8', fontWeight: 500 }}>Status:</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontWeight: 600, color: '#1E293B' }}>
+            <span style={{ fontWeight: 600, color: '#F8FAFC' }}>
               {orderType === 'place' ? 'Pesanan Dibuat' : (orderType === 'confirmed' ? 'Pesanan Siap Dikirim' : 'Pesanan Dibayar')}
             </span>
             <ChevronDown 
-              size={14} 
+              size={13} 
               style={{ 
-                color: '#64748B', 
+                color: '#94A3B8', 
                 transform: isOrderTypeOpen ? 'rotate(180deg)' : 'none',
                 transition: 'transform 0.2s ease'
               }} 
@@ -793,10 +804,24 @@ export default function ShopeeDataCenterPicker({
         )}
       </div>
 
-      {/* Indikator Live Connection */}
-      <div style={{ fontSize: '11px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
-        <span>Permintaan langsung ke Shopee API:</span>
-        <span style={{ color: '#10B981', fontWeight: 700 }}>Live</span>
+      {/* Indikator Live Connection (Pill Kompak) */}
+      <div
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '6px',
+          padding: '5px 10px',
+          borderRadius: '20px',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          border: '1px solid rgba(16, 185, 129, 0.25)',
+          fontSize: '11px',
+          fontWeight: 600,
+          color: '#10B981'
+        }}
+        title="Terhubung langsung ke Shopee Seller Center Data Center API"
+      >
+        <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#10B981', boxShadow: '0 0 6px #10B981' }} />
+        <span>Shopee API Live</span>
       </div>
     </div>
   );
