@@ -191,7 +191,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
       const avgMonthlyOrders = (totalOrders / monthsCount).toFixed(1);
       const aov = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
       const adsRatio = totalRevenue > 0 ? ((totalAdsRevenue / totalRevenue) * 100).toFixed(1) : '0';
-      const organicRatio = totalRevenue > 0 ? ((totalOrganicRevenue / totalRevenue) * 100).toFixed(1) : '100';
+      const organicRatio = totalRevenue > 0 ? (Number(totalAdsRevenue) === 0 ? '100.0' : ((totalOrganicRevenue / totalRevenue) * 100).toFixed(1)) : '100.0';
 
       const firstMonth = picLamaMonths[0]?.month;
       const lastMonth = picLamaMonths[picLamaMonths.length - 1]?.month;
@@ -234,7 +234,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
       aov: bm?.picLama?.aov || 157231,
       aovFormatted: bm?.picLama?.aovFormatted || 'Rp 157.231',
       adsRatio: bm?.picLama?.adsRatio || 0,
-      organicRatio: bm?.picLama?.organicRatio || 99.4,
+      organicRatio: bm?.picLama?.organicRatio || 100,
       description: 'Menampilkan data acuan rata-rata era PIC Lama sebagai tolak ukur evaluasi pertumbuhan.'
     };
   }, [picLamaMonths, bm]);
