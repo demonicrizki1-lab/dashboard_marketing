@@ -19,8 +19,9 @@ export default function Sidebar({ storeInfo, onOpenSettings, activeTab, setActiv
     { id: 'module2', label: '2. Performa Iklan', icon: TrendingUp, badge: 'Aktif', disabled: false },
     { id: 'module3', label: '3. Master Data SKU & Margin', icon: Package, badge: 'Aktif', disabled: false },
     { id: 'module_eval', label: '4. Laporan Kinerja PIC & Tim', icon: Award, badge: 'Aktif', disabled: false },
-    { id: 'module4', label: '5. Program Promosi', icon: Tag, badge: 'Segera', disabled: true },
-    { id: 'module5', label: '6. Analisis Pelanggan', icon: Users, badge: 'Segera', disabled: true },
+    { id: 'module_tiktok_sample', label: '5. Kurasi Sample Affiliate TikTok', icon: ShieldCheck, badge: 'Baru', disabled: false },
+    { id: 'module4', label: '6. Program Promosi', icon: Tag, badge: 'Segera', disabled: true },
+    { id: 'module5', label: '7. Analisis Pelanggan', icon: Users, badge: 'Segera', disabled: true },
   ];
 
   const storeName = storeInfo?.shop_name || 'Monture outdoor';

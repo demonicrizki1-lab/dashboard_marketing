@@ -27,6 +27,16 @@ const {
   getOverviewData,
   syncOverviewLiveFromShopee
 } = require('./services/overviewService');
+const {
+  getCuratedSamples,
+  getSummaryMetrics,
+  runCuration,
+  updateSampleStatus,
+  updateAiAudit,
+  updateTiktokSessionFromCurl,
+  syncLiveFromTiktok,
+  loadDatabase: loadTiktokDatabase
+} = require('./services/tiktokAffiliateService');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -215,6 +225,112 @@ app.get('/api/overview', async (req, res) => {
 app.post('/api/overview/sync', async (req, res) => {
   try {
     const result = await syncOverviewLiveFromShopee();
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ==========================================
+// 11. Modul TikTok Affiliate Sample Curation
+// ==========================================
+
+// GET /api/tiktok/samples - Daftar permohonan terkurasi dengan filter
+app.get('/api/tiktok/samples', (req, res) => {
+  try {
+    const list = getCuratedSamples(req.query);
+    res.json({ success: true, count: list.length, samples: list });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/tiktok/summary - Ringkasan metrik KPI kurasi
+app.get('/api/tiktok/summary', (req, res) => {
+  try {
+    const summary = getSummaryMetrics();
+    res.json(summary);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/tiktok/curate - Jalankan kurasi 7 KPI
+app.post('/api/tiktok/curate', (req, res) => {
+  try {
+    const { force = false } = req.body;
+    const result = runCuration(force);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/tiktok/action - Ubah status manual (Override Approve / Reject)
+app.post('/api/tiktok/action', (req, res) => {
+  try {
+    const { applyId, status, note } = req.body;
+    if (!applyId || !status) {
+      return res.status(400).json({ error: 'applyId dan status wajib diisi.' });
+    }
+    const updated = updateSampleStatus(applyId, status, note);
+    res.json({ success: true, updated });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/tiktok/audit-ai - Verifikasi Keaslian Video (Tandai AI / Real Human)
+// Aturan Monture: Jika ditandai AI -> OTOMATIS GUGUR / REJECTED
+app.post('/api/tiktok/audit-ai', (req, res) => {
+  try {
+    const { applyId, isAi, note } = req.body;
+    if (!applyId || isAi === undefined) {
+      return res.status(400).json({ error: 'applyId dan isAi wajib diisi.' });
+    }
+    const updated = updateAiAudit(applyId, isAi, note);
+    res.json({ success: true, updated });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/tiktok/session - Update sesi dari import cURL
+app.post('/api/tiktok/session', (req, res) => {
+  try {
+    const rawCurl = req.body.curl || req.body.curlCommand;
+    if (!rawCurl) {
+      return res.status(400).json({ error: 'Perintah cURL TikTok wajib diisi.' });
+    }
+    const result = updateTiktokSessionFromCurl(rawCurl);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/tiktok/session - Cek status sesi TikTok
+app.get('/api/tiktok/session', (req, res) => {
+  try {
+    const db = loadTiktokDatabase();
+    const config = db.config || {};
+    res.json({
+      isConnected: Boolean(config.url && config.headers?.cookie),
+      lastSync: config.lastSync,
+      shopId: config.shopId || '7494826103548118725',
+      shopRegion: config.shopRegion || 'ID',
+      hasUrl: Boolean(config.url)
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/tiktok/sync - Tarik data terbaru dari TikTok API
+app.post('/api/tiktok/sync', async (req, res) => {
+  try {
+    const { page = 1, pageSize = 50 } = req.body;
+    const result = await syncLiveFromTiktok(page, pageSize);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

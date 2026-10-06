@@ -9,10 +9,6 @@
       "chain_ratio": -1,
       "points": [
         {
-          "timestamp": 1788541200,
-          "value": 0
-        },
-        {
           "timestamp": 1788627600,
           "value": 0
         },
@@ -126,6 +122,10 @@
         },
         {
           "timestamp": 1791046800,
+          "value": 0
+        },
+        {
+          "timestamp": 1791133200,
           "value": 0
         }
       ]
@@ -137,10 +137,6 @@
       "chain_ratio": -1,
       "points": [
         {
-          "timestamp": 1788541200,
-          "value": 0
-        },
-        {
           "timestamp": 1788627600,
           "value": 0
         },
@@ -254,6 +250,10 @@
         },
         {
           "timestamp": 1791046800,
+          "value": 0
+        },
+        {
+          "timestamp": 1791133200,
           "value": 0
         }
       ]
@@ -265,10 +265,6 @@
       "chain_ratio": -1,
       "points": [
         {
-          "timestamp": 1788541200,
-          "value": 0
-        },
-        {
           "timestamp": 1788627600,
           "value": 0
         },
@@ -382,6 +378,10 @@
         },
         {
           "timestamp": 1791046800,
+          "value": 0
+        },
+        {
+          "timestamp": 1791133200,
           "value": 0
         }
       ]
@@ -393,10 +393,6 @@
       "chain_ratio": -1,
       "points": [
         {
-          "timestamp": 1788541200,
-          "value": 0
-        },
-        {
           "timestamp": 1788627600,
           "value": 0
         },
@@ -510,6 +506,10 @@
         },
         {
           "timestamp": 1791046800,
+          "value": 0
+        },
+        {
+          "timestamp": 1791133200,
           "value": 0
         }
       ]

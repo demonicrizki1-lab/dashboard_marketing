@@ -9,6 +9,7 @@ import ShopeeDateRangePicker from './components/ShopeeDateRangePicker';
 import ProductSkuManager from './components/ProductSkuManager';
 import StoreOverview from './components/StoreOverview';
 import MarketingPerformanceEvaluation from './components/MarketingPerformanceEvaluation';
+import TiktokAffiliateCurator from './components/TiktokAffiliateCurator';
 import { getDefaultDateRange } from './utils/dateUtils';
 import { 
   Calendar, 
@@ -252,6 +253,9 @@ export default function App() {
           ) : activeModuleTab === 'module_eval' ? (
             /* Modul 4: Laporan Kinerja PIC & Tim */
             <MarketingPerformanceEvaluation showToast={showToast} storeInfo={storeInfo} />
+          ) : activeModuleTab === 'module_tiktok_sample' ? (
+            /* Modul 5: Kurasi Sample Affiliate TikTok */
+            <TiktokAffiliateCurator showToast={showToast} />
           ) : (
             /* Modul 2: Performa Iklan */
             <>

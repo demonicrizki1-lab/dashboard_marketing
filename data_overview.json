@@ -1,9 +1,9 @@
 {
   "period": "past30days",
-  "startTime": 1788602955,
-  "endTime": 1791194955,
+  "startTime": 1788700572,
+  "endTime": 1791292572,
   "customLabel": "30 Hari Sebelumnya",
-  "lastUpdated": "2026-10-05T10:09:15.812Z",
+  "lastUpdated": "2026-10-06T13:16:12.356Z",
   "isRealShopeeData": true,
   "storeProfile": {
     "storeName": "Monture outdoor",
@@ -14,18 +14,13 @@
     "status": "Aktif / Operasional"
   },
   "lifetime": {
-    "revenue": 43586515,
-    "revenueFormatted": "Rp 43.586.515",
-    "orders": 255,
-    "aov": 170928,
-    "aovFormatted": "Rp 170.928"
+    "revenue": 43629816,
+    "revenueFormatted": "Rp 43.629.816",
+    "orders": 258,
+    "aov": 169108,
+    "aovFormatted": "Rp 169.108"
   },
   "dailyTrendPoints": [
-    {
-      "timestamp": 1788541200,
-      "date": "5 Sep",
-      "revenue": 0
-    },
     {
       "timestamp": 1788627600,
       "date": "6 Sep",
@@ -170,81 +165,86 @@
       "timestamp": 1791046800,
       "date": "4 Okt",
       "revenue": 357347
+    },
+    {
+      "timestamp": 1791133200,
+      "date": "5 Okt",
+      "revenue": 166795
     }
   ],
   "keyMetrics": {
     "totalSales": {
-      "value": 6062682,
-      "formatted": "Rp 6.062.682",
-      "pctDiff": -10.857462972955885,
+      "value": 6229477,
+      "formatted": "Rp 6.229.477",
+      "pctDiff": -8.404995655121002,
       "label": "Total Penjualan Kotor (Total Sales)"
     },
     "confirmedOrders": {
-      "value": 29,
-      "formatted": "29 Pesanan",
-      "pctDiff": -40.816326530612244,
+      "value": 30,
+      "formatted": "30 Pesanan",
+      "pctDiff": -38.775510204081634,
       "label": "Total Pesanan Berhasil (Confirmed Orders)"
     },
     "uniqueBuyers": {
-      "value": 25,
-      "formatted": "25 Pembeli",
-      "pctDiff": -44.44444444444444,
+      "value": 26,
+      "formatted": "26 Pembeli",
+      "pctDiff": -42.22222222222222,
       "label": "Total Pembeli (Unique Buyers)"
     },
     "salesPerOrder": {
-      "value": 209058,
-      "formatted": "Rp 209.058",
-      "pctDiff": 53.30495986054261,
+      "value": 207649,
+      "formatted": "Rp 207.649",
+      "pctDiff": 52.034706856489535,
       "label": "Rata-Rata Nilai Belanja (AOV / Sales per Order)"
     },
     "impressions": {
-      "value": 157951,
-      "formatted": "157.951",
-      "pctDiff": -37.148689461977085,
+      "value": 181719,
+      "formatted": "181.719",
+      "pctDiff": -27.810794276316315,
       "label": "Total Tayangan Produk (Impressions)"
     },
     "clicks": {
-      "value": 3829,
-      "formatted": "3.829",
-      "pctDiff": -32.95394852039923,
+      "value": 4182,
+      "formatted": "4.182",
+      "pctDiff": -26.913666550157288,
       "label": "Total Klik Produk (Clicks)"
     },
     "ctr": {
-      "value": 2.42,
-      "formatted": "2.42%",
-      "pctDiff": 0.1516683371257616,
+      "value": 2.3,
+      "formatted": "2.30%",
+      "pctDiff": 0.02824891645387649,
       "label": "Rasio Klik (CTR)"
     },
     "conversionRate": {
-      "value": 0.76,
-      "formatted": "0.76%",
-      "pctDiff": -0.421617039132771,
+      "value": 0.72,
+      "formatted": "0.72%",
+      "pctDiff": -0.5374964381579248,
       "label": "Tingkat Konversi Pesanan (CR)"
     }
   },
   "channelBreakdown": {
     "paid_ads": {
       "label": "Iklan Berbayar (Shopee Ads)",
-      "sales": 4614089,
-      "ratio": 76.11,
+      "sales": 4780884,
+      "ratio": 76.75,
       "color": "#EE4D2D"
     },
     "product_card": {
       "label": "Organik & Pencarian Produk",
-      "sales": 5314858,
-      "ratio": 87.67,
+      "sales": 5481653,
+      "ratio": 88,
       "color": "#10B981"
     },
     "video": {
       "label": "Shopee Video",
       "sales": 564512,
-      "ratio": 9.31,
+      "ratio": 9.06,
       "color": "#8B5CF6"
     },
     "affiliate": {
       "label": "Shopee Affiliate",
       "sales": 183312,
-      "ratio": 3.02,
+      "ratio": 2.94,
       "color": "#F59E0B"
     },
     "live": {
@@ -260,14 +260,14 @@
       "id": 40657856676,
       "name": "Monture - Rompi Pria Puffer Gelembung Outdoor Big Size Jumbo Premium M - 6XL",
       "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztd-mtnnv1vvcg74b9",
-      "sales": 3990484,
-      "salesFormatted": "Rp 3.990.484",
-      "orders": 19,
-      "units": 20,
-      "clicks": 1767,
+      "sales": 4079583,
+      "salesFormatted": "Rp 4.079.583",
+      "orders": 20,
+      "units": 21,
+      "clicks": 1790,
       "ctr": "2.76%",
-      "conversionRate": "1.08%",
-      "addToCart": 107
+      "conversionRate": "1.12%",
+      "addToCart": 108
     },
     {
       "rank": 2,
@@ -278,9 +278,9 @@
       "salesFormatted": "Rp 590.306",
       "orders": 3,
       "units": 3,
-      "clicks": 287,
-      "ctr": "3.88%",
-      "conversionRate": "1.05%",
+      "clicks": 296,
+      "ctr": "3.71%",
+      "conversionRate": "1.01%",
       "addToCart": 17
     },
     {
@@ -292,9 +292,9 @@
       "salesFormatted": "Rp 438.516",
       "orders": 2,
       "units": 2,
-      "clicks": 43,
-      "ctr": "2.32%",
-      "conversionRate": "4.65%",
+      "clicks": 48,
+      "ctr": "2.37%",
+      "conversionRate": "4.17%",
       "addToCart": 3
     },
     {
@@ -306,9 +306,9 @@
       "salesFormatted": "Rp 333.011",
       "orders": 1,
       "units": 1,
-      "clicks": 72,
-      "ctr": "1.75%",
-      "conversionRate": "1.39%",
+      "clicks": 103,
+      "ctr": "1.65%",
+      "conversionRate": "0.97%",
       "addToCart": 2
     },
     {
@@ -320,10 +320,10 @@
       "salesFormatted": "Rp 237.861",
       "orders": 1,
       "units": 1,
-      "clicks": 63,
-      "ctr": "1.92%",
-      "conversionRate": "1.59%",
-      "addToCart": 2
+      "clicks": 91,
+      "ctr": "1.48%",
+      "conversionRate": "1.10%",
+      "addToCart": 5
     }
   ],
   "orderPerformance": {
@@ -445,7 +445,7 @@
       "revenue": 699995,
       "orders": 4,
       "adsRevenue": 0,
-      "organicRevenue": 559996,
+      "organicRevenue": 699995,
       "pic": "LAMA",
       "note": "Penjualan Organik"
     },
@@ -483,7 +483,7 @@
       "revenue": 7871740,
       "orders": 54,
       "adsRevenue": 7618480,
-      "organicRevenue": 7319230,
+      "organicRevenue": 253260,
       "pic": "BARU",
       "note": "Shopee Ads Aktif"
     },
@@ -493,18 +493,18 @@
       "revenue": 6192746,
       "orders": 27,
       "adsRevenue": 5337984,
-      "organicRevenue": 5575332,
+      "organicRevenue": 854762,
       "pic": "BARU"
     },
     {
       "month": "Okt 2026",
       "mCode": "2026-10",
-      "revenue": 6723492,
-      "orders": 29,
-      "adsRevenue": 5535719,
-      "organicRevenue": 6106078,
+      "revenue": 6766793,
+      "orders": 32,
+      "adsRevenue": 4614089,
+      "organicRevenue": 2152704,
       "pic": "BARU",
-      "note": "Berjalan s/d 3 Okt"
+      "note": "Data Live Shopee API"
     }
   ],
   "picBenchmark": {
@@ -521,27 +521,27 @@
       "aov": 157231,
       "aovFormatted": "Rp 157.231",
       "adsRatio": 0,
-      "organicRatio": 99.4
+      "organicRatio": 100
     },
     "picBaru": {
       "periodLabel": "Agustus 2026 – Saat ini",
       "activeMonths": 3,
-      "totalRevenue": 20787978,
-      "totalRevenueFormatted": "Rp 20.787.978",
-      "avgMonthlyRevenue": 6929326,
-      "avgMonthlyRevenueFormatted": "Rp 6.929.326",
-      "totalOrders": 110,
-      "avgMonthlyOrders": 36.7,
-      "aov": 188982,
-      "aovFormatted": "Rp 188.982",
-      "adsRatio": 89,
-      "organicRatio": 91.4
+      "totalRevenue": 20831279,
+      "totalRevenueFormatted": "Rp 20.831.279",
+      "avgMonthlyRevenue": 6943760,
+      "avgMonthlyRevenueFormatted": "Rp 6.943.760",
+      "totalOrders": 113,
+      "avgMonthlyOrders": 37.7,
+      "aov": 184348,
+      "aovFormatted": "Rp 184.348",
+      "adsRatio": 84.3,
+      "organicRatio": 15.7
     },
     "deltas": {
-      "avgMonthlyRevenueGrowth": 264.7,
-      "avgMonthlyOrdersGrowth": 203.4,
-      "aovGrowth": 20.2,
-      "adsRatioDiff": 89
+      "avgMonthlyRevenueGrowth": 265.5,
+      "avgMonthlyOrdersGrowth": 211.7,
+      "aovGrowth": 17.2,
+      "adsRatioDiff": 84.3
     }
   }
 }
