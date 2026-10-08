@@ -64,9 +64,9 @@ export default function TiktokAffiliateCurator({ showToast }) {
   const [curlSubmitting, setCurlSubmitting] = useState(false);
 
   // Fetch initial summary & samples
-  const fetchData = async () => {
+  const fetchData = async (isBackground = false) => {
     try {
-      setLoading(true);
+      if (!isBackground) setLoading(true);
       const [resSamples, resSummary, resSession] = await Promise.all([
         fetch('/api/tiktok/samples'),
         fetch('/api/tiktok/summary'),
@@ -89,14 +89,23 @@ export default function TiktokAffiliateCurator({ showToast }) {
       }
     } catch (err) {
       console.error('Error fetching TikTok curation data:', err);
-      showToast?.('Gagal memuat data kurasi TikTok: ' + err.message, 'error');
+      if (!isBackground) {
+        showToast?.('Gagal memuat data kurasi TikTok: ' + err.message, 'error');
+      }
     } finally {
-      setLoading(false);
+      if (!isBackground) setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchData();
+
+    // Auto-sync saat berpindah tab kembali ke Monture Dashboard
+    const handleFocus = () => {
+      fetchData(true);
+    };
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
   // Run Curation Engine
