@@ -40,6 +40,45 @@ export default function App() {
   const [toast, setToast] = useState(null);
   const [campaignsLoading, setCampaignsLoading] = useState(false);
 
+  // Theme Management (Default: Commercial Light Mode)
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('monture_theme') || 'light';
+  });
+
+  // Sidebar Collapse / Hide Management
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
+    return localStorage.getItem('sidebar_collapsed') === 'true';
+  });
+
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(prev => {
+      const next = !prev;
+      localStorage.setItem('sidebar_collapsed', String(next));
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        toggleSidebar();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.className = `theme-${theme}`;
+    localStorage.setItem('monture_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
+
   // Helper show toast
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -221,16 +260,27 @@ export default function App() {
 
   return (
     <div className="app-layout">
+      {/* Mobile backdrop when sidebar is open on small screens */}
+      {!isSidebarCollapsed && (
+        <div 
+          className="sidebar-backdrop"
+          onClick={toggleSidebar}
+          aria-label="Tutup Sidebar"
+        />
+      )}
+
       {/* Sidebar Navigation */}
       <Sidebar
         storeInfo={storeInfo}
         onOpenSettings={() => setIsSettingsOpen(true)}
         activeTab={activeModuleTab}
         setActiveTab={setActiveModuleTab}
+        isCollapsed={isSidebarCollapsed}
+        onToggleSidebar={toggleSidebar}
       />
 
-      {/* Main Content Area */}
-      <div className="main-wrapper">
+      {/* Main Content Area (Expands to 100% when sidebar is hidden) */}
+      <div className={`main-wrapper ${isSidebarCollapsed ? 'expanded' : ''}`}>
         {/* Sticky Header */}
         <Header
           storeInfo={storeInfo}
@@ -240,6 +290,10 @@ export default function App() {
           isRefreshing={isRefreshing}
           onOpenSettings={() => setIsSettingsOpen(true)}
           activeTab={activeModuleTab}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          isSidebarCollapsed={isSidebarCollapsed}
+          onToggleSidebar={toggleSidebar}
         />
 
         {/* Content Body */}
@@ -286,7 +340,7 @@ export default function App() {
 
               {/* Interactive Trends Chart */}
               <section aria-label="Grafik Tren Iklan">
-                <AdsCharts chartData={chartData} />
+                <AdsCharts chartData={chartData} theme={theme} />
               </section>
 
               {/* Campaign Product Table with Filter & Evaluasi */}

@@ -646,9 +646,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             display: 'flex',
             flexDirection: 'column',
             gap: '10px',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.45) 0%, rgba(15, 23, 42, 0.65) 100%)',
-            boxShadow: '0 4px 20px -8px rgba(0,0,0,0.4)'
+            border: '1px solid var(--border-subtle)',
+            background: 'var(--bg-card)',
+            boxShadow: 'var(--shadow-sm)'
           }}
         >
           {/* BARIS 1: Header Modul + Status Pesanan + Aksi Utilitas */}
@@ -697,8 +697,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                     fetchEvaluationData(selectedPeriodObj, false, newType);
                   }}
                   style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    backgroundColor: 'var(--bg-input)',
+                    border: '1px solid var(--border-subtle)',
                     borderRadius: '8px',
                     color: 'var(--text-primary)',
                     fontSize: '11.5px',
@@ -708,12 +708,12 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   }}
                   title="Pilih status pesanan untuk laporan"
                 >
-                  <option value="paid" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Status: Pesanan Dibayar</option>
-                  <option value="confirmed" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Status: Pesanan Dikonfirmasi</option>
+                  <option value="paid">Status: Pesanan Dibayar</option>
+                  <option value="confirmed">Status: Pesanan Dikonfirmasi</option>
                 </select>
               </div>
 
-              <div style={{ width: '1px', height: '18px', backgroundColor: 'rgba(255, 255, 255, 0.12)', margin: '0 2px' }} />
+              <div style={{ width: '1px', height: '18px', backgroundColor: 'var(--border-subtle)', margin: '0 2px' }} />
 
               {/* Utility Actions: Segarkan, Cetak, CSV */}
               <button
@@ -757,7 +757,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             flexWrap: 'wrap', 
             gap: '10px',
             paddingTop: '10px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)'
+            borderTop: '1px solid var(--border-subtle)'
           }}>
             {/* Filter Pills */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
@@ -808,8 +808,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                       borderRadius: '8px',
                       fontSize: '11.5px',
                       fontWeight: isSelected ? 700 : 500,
-                      border: isSelected ? '1px solid var(--color-brand-primary)' : '1px solid rgba(255, 255, 255, 0.08)',
-                      backgroundColor: isSelected ? 'rgba(238, 77, 45, 0.16)' : 'rgba(255, 255, 255, 0.03)',
+                      border: isSelected ? '1px solid var(--color-brand-primary)' : '1px solid var(--border-subtle)',
+                      backgroundColor: isSelected ? 'var(--color-brand-subtle)' : 'var(--bg-input)',
                       color: isSelected ? 'var(--color-brand-primary)' : 'var(--text-secondary)',
                       cursor: 'pointer',
                       transition: 'all 0.15s ease'
@@ -827,10 +827,10 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 style={{
                   fontSize: '11.5px',
                   color: 'var(--text-secondary)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  backgroundColor: 'var(--bg-input)',
                   padding: '5px 12px',
                   borderRadius: '8px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  border: '1px solid var(--border-subtle)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px'
@@ -853,9 +853,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   }}
                   className="badge"
                   style={{
-                    background: 'rgba(59, 130, 246, 0.12)',
-                    border: '1px solid rgba(59, 130, 246, 0.25)',
-                    color: '#60A5FA',
+                    background: 'var(--color-info-bg)',
+                    border: '1px solid var(--color-info-border)',
+                    color: 'var(--color-info)',
                     fontSize: '11px',
                     fontWeight: 600,
                     cursor: 'pointer',
@@ -880,7 +880,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 flexWrap: 'wrap',
                 padding: '8px 12px',
                 borderRadius: '8px',
-                backgroundColor: 'rgba(238, 77, 45, 0.05)',
+                backgroundColor: 'var(--color-brand-subtle)',
                 border: '1px solid rgba(238, 77, 45, 0.25)',
                 marginTop: '4px'
               }}
@@ -891,16 +891,16 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Mulai:</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Mulai:</span>
                 <select
                   value={customStartMonth}
                   onChange={(e) => setCustomStartMonth(e.target.value)}
                   style={{
                     padding: '4px 8px',
                     borderRadius: '6px',
-                    backgroundColor: '#1E293B',
-                    color: '#FFFFFF',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    backgroundColor: 'var(--bg-input)',
+                    color: 'var(--text-primary)',
+                    border: '1px solid var(--border-subtle)',
                     fontSize: '11.5px',
                     fontWeight: 600,
                     cursor: 'pointer'
@@ -917,16 +917,16 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               <ArrowRight size={13} style={{ color: 'var(--text-muted)' }} />
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Sampai:</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Sampai:</span>
                 <select
                   value={customEndMonth}
                   onChange={(e) => setCustomEndMonth(e.target.value)}
                   style={{
                     padding: '4px 8px',
                     borderRadius: '6px',
-                    backgroundColor: '#1E293B',
-                    color: '#FFFFFF',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    backgroundColor: 'var(--bg-input)',
+                    color: 'var(--text-primary)',
+                    border: '1px solid var(--border-subtle)',
                     fontSize: '11.5px',
                     fontWeight: 600,
                     cursor: 'pointer'
@@ -978,7 +978,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           }}
         >
           {/* Card 1: Omzet / Bulan */}
-          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid var(--border-subtle)', background: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
@@ -992,8 +992,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 {scorecardMetrics.card1.value}
               </div>
             </div>
-            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+              <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)', fontWeight: 500 }}>
                 {scorecardMetrics.card1.subtitle}
               </span>
               <span className="badge" style={{ backgroundColor: scorecardMetrics.card1.bg, color: scorecardMetrics.card1.color, fontSize: '10px', padding: '1px 6px', borderRadius: '5px' }}>
@@ -1003,7 +1003,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           </div>
 
           {/* Card 2: Pesanan / Bulan */}
-          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid var(--border-subtle)', background: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
@@ -1017,8 +1017,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 {scorecardMetrics.card2.value}
               </div>
             </div>
-            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+              <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)', fontWeight: 500 }}>
                 {scorecardMetrics.card2.subtitle}
               </span>
               <span className="badge" style={{ backgroundColor: scorecardMetrics.card2.bg, color: scorecardMetrics.card2.color, fontSize: '10px', padding: '1px 6px', borderRadius: '5px' }}>
@@ -1028,7 +1028,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           </div>
 
           {/* Card 3: Nilai Belanja Rata-Rata (AOV) */}
-          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid var(--border-subtle)', background: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
@@ -1042,8 +1042,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 {scorecardMetrics.card3.value}
               </div>
             </div>
-            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+              <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)', fontWeight: 500 }}>
                 {scorecardMetrics.card3.subtitle}
               </span>
               <span className="badge" style={{ backgroundColor: scorecardMetrics.card3.bg, color: scorecardMetrics.card3.color, fontSize: '10px', padding: '1px 6px', borderRadius: '5px' }}>
@@ -1053,7 +1053,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           </div>
 
           {/* Card 4: Ketergantungan Iklan / Rasio */}
-          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+          <div className="glass-card" style={{ padding: '18px 20px', borderRadius: '14px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid var(--border-subtle)', background: 'var(--bg-card)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>
@@ -1067,13 +1067,13 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                 {scorecardMetrics.card4.value}
               </div>
               {/* Mini 2-tone Bar (Ads vs Organic) */}
-              <div style={{ height: '4px', width: '100%', borderRadius: '2px', backgroundColor: 'rgba(255,255,255,0.06)', display: 'flex', overflow: 'hidden', marginTop: '8px' }}>
+              <div style={{ height: '4px', width: '100%', borderRadius: '2px', backgroundColor: 'var(--border-subtle)', display: 'flex', overflow: 'hidden', marginTop: '8px' }}>
                 <div style={{ width: `${scorecardMetrics.card4.adsRatio}%`, backgroundColor: '#F97316' }} title={`Iklan: ${scorecardMetrics.card4.adsRatio}%`} />
                 <div style={{ width: `${scorecardMetrics.card4.organicRatio}%`, backgroundColor: '#10B981' }} title={`Organik: ${scorecardMetrics.card4.organicRatio}%`} />
               </div>
             </div>
-            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+              <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)', fontWeight: 500 }}>
                 {scorecardMetrics.card4.subtitle}
               </span>
               <span className="badge" style={{ backgroundColor: scorecardMetrics.card4.bg, color: scorecardMetrics.card4.color, fontSize: '10px', padding: '1px 6px', borderRadius: '5px' }}>
@@ -1094,13 +1094,14 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               padding: '12px 18px',
               borderRadius: '12px',
               background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.08) 0%, rgba(238, 77, 45, 0.08) 100%)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              border: '1px solid var(--border-subtle)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               flexWrap: 'wrap',
               gap: '12px',
-              marginBottom: '16px'
+              marginBottom: '16px',
+              boxShadow: 'var(--shadow-sm)'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -1111,22 +1112,22 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Net Omzet:</span>
+                <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)', fontWeight: 500 }}>Net Omzet:</span>
                 <span style={{ fontSize: '13px', fontWeight: 800, color: '#10B981', fontFamily: 'var(--font-mono)' }}>
                   {netDeltas.revDeltaFormatted} /bln ({picBaruStats.revGrowth}%)
                 </span>
               </div>
-              <div style={{ width: '1px', height: '14px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
+              <div style={{ width: '1px', height: '14px', backgroundColor: 'var(--border-subtle)' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Net Order:</span>
+                <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)', fontWeight: 500 }}>Net Order:</span>
                 <span style={{ fontSize: '13px', fontWeight: 800, color: '#10B981', fontFamily: 'var(--font-mono)' }}>
                   {netDeltas.ordDeltaFormatted} order /bln ({picBaruStats.ordGrowth}%)
                 </span>
               </div>
-              <div style={{ width: '1px', height: '14px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
+              <div style={{ width: '1px', height: '14px', backgroundColor: 'var(--border-subtle)' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Net AOV:</span>
-                <span style={{ fontSize: '13px', fontWeight: 800, color: '#60A5FA', fontFamily: 'var(--font-mono)' }}>
+                <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)', fontWeight: 500 }}>Net AOV:</span>
+                <span style={{ fontSize: '13px', fontWeight: 800, color: 'var(--color-info)', fontFamily: 'var(--font-mono)' }}>
                   {netDeltas.aovDeltaFormatted} ({picBaruStats.aovGrowth}%)
                 </span>
               </div>
@@ -1142,11 +1143,11 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             style={{
               padding: '22px',
               borderRadius: '16px',
-              backgroundColor: 'rgba(59, 130, 246, 0.04)',
+              backgroundColor: 'var(--bg-card)',
               border: activePeriodFilter === 'pic_lama' 
                 ? '2px solid #3B82F6' 
-                : (picLamaStats.isBaseline ? '1px dashed rgba(59, 130, 246, 0.3)' : '1px solid rgba(59, 130, 246, 0.25)'),
-              boxShadow: activePeriodFilter === 'pic_lama' ? '0 0 24px rgba(59, 130, 246, 0.25)' : 'none',
+                : (picLamaStats.isBaseline ? '1px dashed rgba(59, 130, 246, 0.35)' : '1px solid var(--border-subtle)'),
+              boxShadow: activePeriodFilter === 'pic_lama' ? '0 0 24px rgba(59, 130, 246, 0.25)' : 'var(--shadow-sm)',
               display: 'flex',
               flexDirection: 'column',
               gap: '14px',
@@ -1154,9 +1155,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               opacity: picBaruStats.hasData && !picLamaStats.hasData ? 0.9 : 1
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(59, 130, 246, 0.15)', paddingBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '12px' }}>
               <div>
-                <span className="badge" style={{ backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#60A5FA', fontSize: '11px', padding: '3px 8px', marginBottom: '6px', display: 'inline-block' }}>
+                <span className="badge" style={{ backgroundColor: 'var(--color-info-bg)', color: 'var(--color-info)', fontSize: '11px', padding: '3px 8px', marginBottom: '6px', display: 'inline-block' }}>
                   {picLamaStats.badgeText}
                 </span>
                 <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
@@ -1165,25 +1166,25 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               </div>
               <div style={{ textAlign: 'right' }}>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Status Evaluasi</span>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: picLamaStats.isBaseline ? '#94A3B8' : '#38BDF8' }}>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: picLamaStats.isBaseline ? 'var(--text-muted)' : 'var(--color-info)' }}>
                   {picLamaStats.statusText}
                 </div>
               </div>
             </div>
 
-            <div style={{ fontSize: '11.5px', color: '#CBD5E1', backgroundColor: 'rgba(59, 130, 246, 0.06)', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.15)' }}>
-              💡 <strong>Karakteristik Strategi:</strong> {picLamaStats.description}
+            <div style={{ fontSize: '11.5px', color: 'var(--text-secondary)', backgroundColor: 'var(--color-info-bg)', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--color-info-border)', lineHeight: 1.5 }}>
+              💡 <strong style={{ color: 'var(--text-primary)' }}>Karakteristik Strategi:</strong> {picLamaStats.description}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Omzet / Bulan:</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Omzet / Bulan:</span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
                   {picLamaStats.avgMonthlyRevenueFormatted}
                 </div>
               </div>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Order / Bulan:</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Order / Bulan:</span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
                   {Math.round(Number(picLamaStats.avgMonthlyOrders))} <small style={{ fontSize: '12px', fontWeight: 500 }}>pesanan</small>
                 </div>
@@ -1191,34 +1192,34 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             </div>
 
             {/* Horizontal Stacked Bar (Ads vs Organic Split) */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
                 <span style={{ color: '#F97316', fontWeight: 700 }}>Iklan: {picLamaStats.adsRatio}%</span>
                 <span style={{ color: '#10B981', fontWeight: 700 }}>Organik: {picLamaStats.organicRatio}%</span>
               </div>
-              <div style={{ height: '6px', borderRadius: '3px', backgroundColor: 'rgba(255,255,255,0.06)', display: 'flex', overflow: 'hidden' }}>
+              <div style={{ height: '6px', borderRadius: '3px', backgroundColor: 'var(--border-subtle)', display: 'flex', overflow: 'hidden' }}>
                 <div style={{ width: `${picLamaStats.adsRatio}%`, backgroundColor: '#F97316' }} />
                 <div style={{ width: `${picLamaStats.organicRatio}%`, backgroundColor: '#10B981' }} />
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle)' }}>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Nilai Belanja Rata-Rata (AOV):</span>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: '#CBD5E1', fontFamily: 'var(--font-mono)' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Nilai Belanja Rata-Rata (AOV):</span>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
                   {picLamaStats.aovFormatted}
                 </div>
               </div>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Total Pesanan:</span>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: '#CBD5E1', fontFamily: 'var(--font-mono)' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Total Pesanan:</span>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
                   {picLamaStats.totalOrders} order
                 </div>
               </div>
             </div>
 
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-              Total Akumulasi Omzet Era Ini: <strong style={{ color: '#60A5FA' }}>{picLamaStats.totalRevenueFormatted}</strong> ({picLamaStats.totalOrders} Pesanan Terkonfirmasi)
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
+              Total Akumulasi Omzet Era Ini: <strong style={{ color: 'var(--color-info)' }}>{picLamaStats.totalRevenueFormatted}</strong> ({picLamaStats.totalOrders} Pesanan Terkonfirmasi)
             </div>
           </div>
 
@@ -1228,11 +1229,11 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             style={{
               padding: '22px',
               borderRadius: '16px',
-              backgroundColor: 'rgba(238, 77, 45, 0.04)',
+              backgroundColor: 'var(--bg-card)',
               border: activePeriodFilter === 'pic_baru' 
                 ? '2px solid var(--color-brand-primary)' 
-                : (picBaruStats.isNotYetActive ? '1px dashed rgba(255, 255, 255, 0.15)' : '1.5px solid rgba(238, 77, 45, 0.35)'),
-              boxShadow: activePeriodFilter === 'pic_baru' ? '0 0 24px rgba(238, 77, 45, 0.3)' : 'none',
+                : (picBaruStats.isNotYetActive ? '1px dashed var(--border-subtle)' : '1px solid var(--border-subtle)'),
+              boxShadow: activePeriodFilter === 'pic_baru' ? '0 0 24px rgba(238, 77, 45, 0.25)' : 'var(--shadow-sm)',
               display: 'flex',
               flexDirection: 'column',
               gap: '14px',
@@ -1240,9 +1241,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               opacity: picBaruStats.isNotYetActive ? 0.6 : 1
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(238, 77, 45, 0.2)', paddingBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '12px' }}>
               <div>
-                <span className="badge" style={{ backgroundColor: 'rgba(238, 77, 45, 0.15)', color: 'var(--color-brand-primary)', fontSize: '11px', padding: '3px 8px', marginBottom: '6px', display: 'inline-block' }}>
+                <span className="badge" style={{ backgroundColor: 'var(--color-brand-subtle)', color: 'var(--color-brand-primary)', fontSize: '11px', padding: '3px 8px', marginBottom: '6px', display: 'inline-block' }}>
                   {picBaruStats.badgeText}
                 </span>
                 <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
@@ -1251,25 +1252,25 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
               </div>
               <div style={{ textAlign: 'right' }}>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Status Evaluasi</span>
-                <div style={{ fontSize: '12px', fontWeight: 800, color: picBaruStats.isNotYetActive ? '#94A3B8' : '#10B981' }}>
+                <div style={{ fontSize: '12px', fontWeight: 800, color: picBaruStats.isNotYetActive ? 'var(--text-muted)' : 'var(--color-success)' }}>
                   {picBaruStats.statusText}
                 </div>
               </div>
             </div>
 
-            <div style={{ fontSize: '11.5px', color: '#CBD5E1', backgroundColor: 'rgba(238, 77, 45, 0.06)', padding: '8px 12px', borderRadius: '8px', border: '1px solid rgba(238, 77, 45, 0.15)' }}>
-              🚀 <strong>Status Kinerja:</strong> {picBaruStats.description}
+            <div style={{ fontSize: '11.5px', color: 'var(--text-secondary)', backgroundColor: 'var(--color-brand-subtle)', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(238, 77, 45, 0.25)', lineHeight: 1.5 }}>
+              🚀 <strong style={{ color: 'var(--text-primary)' }}>Status Kinerja:</strong> {picBaruStats.description}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Omzet / Bulan:</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Omzet / Bulan:</span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--color-brand-primary)', fontFamily: 'var(--font-mono)' }}>
                   {picBaruStats.avgMonthlyRevenueFormatted}
                 </div>
               </div>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Order / Bulan:</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Rata-Rata Order / Bulan:</span>
                 <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
                   {Math.round(Number(picBaruStats.avgMonthlyOrders))} <small style={{ fontSize: '12px', fontWeight: 500 }}>pesanan</small>
                 </div>
@@ -1277,33 +1278,33 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             </div>
 
             {/* Horizontal Stacked Bar (Ads vs Organic Split) */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
                 <span style={{ color: '#F97316', fontWeight: 700 }}>Iklan: {picBaruStats.adsRatio}%</span>
                 <span style={{ color: '#10B981', fontWeight: 700 }}>Organik: {picBaruStats.organicRatio}%</span>
               </div>
-              <div style={{ height: '6px', borderRadius: '3px', backgroundColor: 'rgba(255,255,255,0.06)', display: 'flex', overflow: 'hidden' }}>
+              <div style={{ height: '6px', borderRadius: '3px', backgroundColor: 'var(--border-subtle)', display: 'flex', overflow: 'hidden' }}>
                 <div style={{ width: `${picBaruStats.adsRatio}%`, backgroundColor: '#F97316' }} />
                 <div style={{ width: `${picBaruStats.organicRatio}%`, backgroundColor: '#10B981' }} />
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle)' }}>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Nilai Belanja Rata-Rata (AOV):</span>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: '#38BDF8', fontFamily: 'var(--font-mono)' }}>
-                  {picBaruStats.aovFormatted} {picBaruStats.hasData && <small style={{ fontSize: '11px', color: '#10B981', fontWeight: 700 }}>({picBaruStats.aovGrowth}%)</small>}
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Nilai Belanja Rata-Rata (AOV):</span>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-info)', fontFamily: 'var(--font-mono)' }}>
+                  {picBaruStats.aovFormatted} {picBaruStats.hasData && <small style={{ fontSize: '11px', color: 'var(--color-success)', fontWeight: 700 }}>({picBaruStats.aovGrowth}%)</small>}
                 </div>
               </div>
               <div>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Total Pesanan:</span>
-                <div style={{ fontSize: '16px', fontWeight: 700, color: '#CBD5E1', fontFamily: 'var(--font-mono)' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Total Pesanan:</span>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
                   {picBaruStats.totalOrders} order
                 </div>
               </div>
             </div>
 
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
               Total Akumulasi Omzet Era Ini: <strong style={{ color: 'var(--color-brand-primary)' }}>{picBaruStats.totalRevenueFormatted}</strong> ({picBaruStats.totalOrders} Pesanan Terkonfirmasi)
             </div>
           </div>
@@ -1318,7 +1319,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           style={{
             padding: '24px',
             borderRadius: '16px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: '1px solid var(--border-subtle)',
+            background: 'var(--bg-card)',
+            boxShadow: 'var(--shadow-sm)',
             display: 'flex',
             flexDirection: 'column',
             gap: '16px'
@@ -1342,7 +1345,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             </div>
 
             {/* Toggle Metrik Garis */}
-            <div style={{ display: 'inline-flex', padding: '3px', backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <div style={{ display: 'inline-flex', padding: '3px', backgroundColor: 'var(--bg-input)', borderRadius: '10px', border: '1px solid var(--border-subtle)' }}>
               {[
                 { id: 'all', label: 'Semua Metrik' },
                 { id: 'gmv', label: 'Total GMV' },
@@ -1371,7 +1374,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           </div>
 
           {/* Legenda Keterangan Era PIC */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '18px', fontSize: '11.5px', color: 'var(--text-secondary)', padding: '8px 14px', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '8px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '18px', fontSize: '11.5px', color: 'var(--text-secondary)', padding: '8px 14px', backgroundColor: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', flexWrap: 'wrap' }}>
             <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>Panduan Titik & Era:</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#3B82F6', display: 'inline-block' }} />
@@ -1405,7 +1408,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                       position: 'top',
                       labels: {
                         boxWidth: 12,
-                        color: '#94A3B8',
+                        color: '#64748B',
                         font: { size: 11, family: 'Inter' }
                       }
                     },
@@ -1436,13 +1439,13 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   },
                   scales: {
                     x: {
-                      grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                      ticks: { color: '#94A3B8', font: { size: 11 } }
+                      grid: { color: 'rgba(148, 163, 184, 0.12)' },
+                      ticks: { color: '#64748B', font: { size: 11 } }
                     },
                     y: {
-                      grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                      grid: { color: 'rgba(148, 163, 184, 0.12)' },
                       ticks: {
-                        color: '#94A3B8',
+                        color: '#64748B',
                         font: { size: 11 },
                         callback: function (val) {
                           if (val >= 1000000) return 'Rp ' + (val / 1000000).toFixed(1) + 'M';
@@ -1466,7 +1469,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           style={{
             borderRadius: '16px',
             overflow: 'hidden',
-            border: '1px solid rgba(255, 255, 255, 0.1)'
+            border: '1px solid var(--border-subtle)',
+            background: 'var(--bg-card)',
+            boxShadow: 'var(--shadow-sm)'
           }}
         >
           {/* Header Accordion yang Bisa Diklik */}
@@ -1492,7 +1497,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   height: '36px',
                   borderRadius: '10px',
                   background: 'rgba(56, 189, 248, 0.12)',
-                  color: '#38BDF8',
+                  color: '#0284C7',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -1505,7 +1510,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   <h3 style={{ fontSize: '15px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
                     Rincian Audit Bulanan Toko ({filteredTrends.length} Bulan Terdata)
                   </h3>
-                  <span className="badge" style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: 'var(--text-secondary)', fontSize: '10.5px', padding: '2px 8px' }}>
+                  <span className="badge" style={{ backgroundColor: 'var(--bg-input)', color: 'var(--text-secondary)', border: '1px solid var(--border-subtle)', fontSize: '10.5px', padding: '2px 8px' }}>
                     Total: Rp {filteredStats.totalRevenue.toLocaleString('id-ID')} • {filteredStats.totalOrders} Order
                   </span>
                 </div>
@@ -1516,7 +1521,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span className="badge" style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: 'var(--text-secondary)', fontSize: '11px', padding: '4px 10px' }}>
+              <span className="badge" style={{ backgroundColor: 'var(--bg-input)', color: 'var(--text-secondary)', border: '1px solid var(--border-subtle)', fontSize: '11px', padding: '4px 10px' }}>
                 {isAccordionOpen ? 'Tutup Rincian' : 'Buka Rincian Tabel'}
               </span>
               <div
@@ -1524,7 +1529,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   width: '30px',
                   height: '30px',
                   borderRadius: '8px',
-                  background: 'rgba(255,255,255,0.06)',
+                  background: 'var(--bg-input)',
+                  border: '1px solid var(--border-subtle)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1538,11 +1544,11 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
 
           {/* Isi Accordion (Tabel Data dengan MoM %) */}
           {isAccordionOpen && (
-            <div style={{ padding: '0 22px 22px 22px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ padding: '0 22px 22px 22px', borderTop: '1px solid var(--border-subtle)' }}>
               <div style={{ overflowX: 'auto', marginTop: '14px' }}>
                 <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                   <thead>
-                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', textAlign: 'left', color: 'var(--text-muted)' }}>
+                    <tr style={{ borderBottom: '1px solid var(--border-subtle)', textAlign: 'left', color: 'var(--text-secondary)', fontWeight: 600 }}>
                       <th style={{ padding: '10px 12px' }}>Bulan</th>
                       <th style={{ padding: '10px 12px', textAlign: 'center' }}>Era PIC</th>
                       <th style={{ padding: '10px 12px', textAlign: 'right' }}>Total Omzet (GMV)</th>
@@ -1568,7 +1574,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                         <tr
                           key={idx}
                           style={{
-                            borderBottom: '1px solid rgba(255,255,255,0.04)',
+                            borderBottom: '1px solid var(--border-subtle)',
                             backgroundColor: isBaru ? 'rgba(238, 77, 45, 0.03)' : 'transparent',
                             borderLeft: isBaru ? '3px solid var(--color-brand-primary)' : '3px solid transparent',
                             transition: 'background 0.15s'
@@ -1581,8 +1587,8 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                             <span
                               className="badge"
                               style={{
-                                backgroundColor: isBaru ? 'rgba(238, 77, 45, 0.15)' : 'rgba(59, 130, 246, 0.15)',
-                                color: isBaru ? 'var(--color-brand-primary)' : '#60A5FA',
+                                backgroundColor: isBaru ? 'var(--color-brand-subtle)' : 'var(--color-info-bg)',
+                                color: isBaru ? 'var(--color-brand-primary)' : 'var(--color-info)',
                                 fontSize: '10px',
                                 padding: '2px 8px'
                               }}
@@ -1596,16 +1602,16 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                           <td style={{ padding: '12px', textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: '11px' }}>
                             {momPct !== null ? (
                               <span style={{
-                                color: Number(momPct) > 0 ? '#10B981' : Number(momPct) < 0 ? '#EF4444' : '#94A3B8',
+                                color: Number(momPct) > 0 ? '#10B981' : Number(momPct) < 0 ? '#EF4444' : 'var(--text-muted)',
                                 fontWeight: 700
                               }}>
                                 {Number(momPct) > 0 ? `+${momPct}%` : `${momPct}%`}
                               </span>
                             ) : (
-                              <span style={{ color: '#64748B' }}>-</span>
+                              <span style={{ color: 'var(--text-muted)' }}>-</span>
                             )}
                           </td>
-                          <td style={{ padding: '12px', textAlign: 'center', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
+                          <td style={{ padding: '12px', textAlign: 'center', fontWeight: 600, fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>
                             {t.orders}
                           </td>
                           <td style={{ padding: '12px', textAlign: 'right', color: t.adsRevenue > 0 ? '#F97316' : 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
@@ -1615,11 +1621,11 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                             Rp {t.organicRevenue.toLocaleString('id-ID')}
                           </td>
                           <td style={{ padding: '12px', textAlign: 'center', fontWeight: 600 }}>
-                            <span style={{ color: Number(adsPct) > 50 ? '#F97316' : 'var(--text-muted)' }}>
+                            <span style={{ color: Number(adsPct) > 50 ? '#F97316' : 'var(--text-secondary)' }}>
                               {adsPct}%
                             </span>
                           </td>
-                          <td style={{ padding: '12px', color: 'var(--text-muted)', fontSize: '11px' }}>
+                          <td style={{ padding: '12px', color: 'var(--text-secondary)', fontSize: '11px' }}>
                             {t.note || '-'}
                           </td>
                         </tr>
@@ -1628,7 +1634,7 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
                   </tbody>
                   {/* Summary Footer Baris Total Terfilter */}
                   <tfoot>
-                    <tr style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', fontWeight: 800, borderTop: '2px solid rgba(255, 255, 255, 0.1)' }}>
+                    <tr style={{ backgroundColor: 'var(--bg-input)', fontWeight: 800, borderTop: '2px solid var(--border-subtle)' }}>
                       <td colSpan={2} style={{ padding: '12px', color: 'var(--text-primary)' }}>
                         TOTAL TERFILTER ({filteredStats.monthsCount} BULAN)
                       </td>
@@ -1669,8 +1675,9 @@ export default function MarketingPerformanceEvaluation({ showToast, storeInfo })
           style={{
             padding: '24px',
             borderRadius: '16px',
-            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.9) 100%)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-subtle)',
+            boxShadow: 'var(--shadow-sm)',
             display: 'flex',
             flexDirection: 'column',
             gap: '16px'

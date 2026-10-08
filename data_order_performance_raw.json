@@ -9,14 +9,6 @@
       "chain_ratio": -1,
       "points": [
         {
-          "timestamp": 1788627600,
-          "value": 0
-        },
-        {
-          "timestamp": 1788714000,
-          "value": 0
-        },
-        {
           "timestamp": 1788800400,
           "value": 0
         },
@@ -126,6 +118,14 @@
         },
         {
           "timestamp": 1791133200,
+          "value": 0
+        },
+        {
+          "timestamp": 1791219600,
+          "value": 0
+        },
+        {
+          "timestamp": 1791306000,
           "value": 0
         }
       ]
@@ -137,14 +137,6 @@
       "chain_ratio": -1,
       "points": [
         {
-          "timestamp": 1788627600,
-          "value": 0
-        },
-        {
-          "timestamp": 1788714000,
-          "value": 0
-        },
-        {
           "timestamp": 1788800400,
           "value": 0
         },
@@ -254,6 +246,14 @@
         },
         {
           "timestamp": 1791133200,
+          "value": 0
+        },
+        {
+          "timestamp": 1791219600,
+          "value": 0
+        },
+        {
+          "timestamp": 1791306000,
           "value": 0
         }
       ]
@@ -265,14 +265,6 @@
       "chain_ratio": -1,
       "points": [
         {
-          "timestamp": 1788627600,
-          "value": 0
-        },
-        {
-          "timestamp": 1788714000,
-          "value": 0
-        },
-        {
           "timestamp": 1788800400,
           "value": 0
         },
@@ -382,6 +374,14 @@
         },
         {
           "timestamp": 1791133200,
+          "value": 0
+        },
+        {
+          "timestamp": 1791219600,
+          "value": 0
+        },
+        {
+          "timestamp": 1791306000,
           "value": 0
         }
       ]
@@ -393,14 +393,6 @@
       "chain_ratio": -1,
       "points": [
         {
-          "timestamp": 1788627600,
-          "value": 0
-        },
-        {
-          "timestamp": 1788714000,
-          "value": 0
-        },
-        {
           "timestamp": 1788800400,
           "value": 0
         },
@@ -510,6 +502,14 @@
         },
         {
           "timestamp": 1791133200,
+          "value": 0
+        },
+        {
+          "timestamp": 1791219600,
+          "value": 0
+        },
+        {
+          "timestamp": 1791306000,
           "value": 0
         }
       ]

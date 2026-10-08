@@ -20,26 +20,37 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  transition: var(--theme-transition);
 }
 
 button, input, select, textarea {
   font-family: inherit;
 }
 
-/* Modern Sleek Scrollbars for Dark Theme */
+/* Modern Sleek Scrollbars (Light by default, Dark when active) */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.03);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.18);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.32);
+}
+
+body.theme-dark ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+body.theme-dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+}
+body.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
 }
 
 /* App Container Layout */
@@ -47,7 +58,9 @@ button, input, select, textarea {
   display: flex;
   min-height: 100vh;
   background-color: var(--bg-canvas);
+  transition: var(--theme-transition);
 }
+
 
 /* ==========================================================================
    Sidebar Navigation
@@ -63,16 +76,43 @@ button, input, select, textarea {
   bottom: 0;
   left: 0;
   z-index: 40;
-  transition: width var(--transition-normal);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+}
+
+.sidebar.collapsed {
+  transform: translateX(-100%);
 }
 
 .sidebar-header {
   height: 70px;
-  padding: 0 20px;
+  padding: 0 16px 0 20px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 10px;
   border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar-toggle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-left: auto;
+}
+
+.sidebar-toggle-btn:hover {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
 }
 
 .sidebar-brand-icon {
@@ -167,7 +207,11 @@ button, input, select, textarea {
 .sidebar-footer {
   padding: 14px 16px;
   border-top: 1px solid var(--border-subtle);
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: var(--bg-canvas);
+}
+
+body.theme-dark .sidebar-footer {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .store-card {
@@ -210,6 +254,56 @@ button, input, select, textarea {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-wrapper.expanded {
+  margin-left: 0;
+}
+
+/* Sidebar Toggle Button in Header */
+.btn-toggle-sidebar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.btn-toggle-sidebar:hover {
+  background-color: var(--bg-card-hover);
+  color: var(--color-brand-primary);
+  border-color: var(--border-highlight);
+}
+
+.btn-toggle-sidebar.sidebar-hidden {
+  background-color: var(--color-brand-subtle);
+  color: var(--color-brand-primary);
+  border-color: rgba(238, 77, 45, 0.3);
+}
+
+/* Mobile Sidebar Backdrop */
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 35;
+  }
 }
 
 /* Sticky Header */
@@ -323,6 +417,39 @@ button, input, select, textarea {
 
 .btn-icon-only {
   padding: 8px;
+}
+
+/* Theme Toggle Button in Header */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 35px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-highlight);
+  color: var(--color-brand-primary);
+}
+
+.theme-toggle-btn svg {
+  transition: transform 0.25s ease;
+}
+
+.theme-toggle-btn:hover svg {
+  transform: rotate(18deg) scale(1.08);
 }
 
 /* Content Container */
@@ -575,7 +702,11 @@ button, input, select, textarea {
   justify-content: space-between;
   padding: 10px 20px;
   border-top: 1px solid var(--border-subtle);
-  background-color: rgba(0, 0, 0, 0.12);
+  background-color: var(--bg-canvas);
+}
+
+body.theme-dark .shopee-datepicker-footer {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 
@@ -605,6 +736,18 @@ button, input, select, textarea {
   transform: translateY(-2px);
   border-color: var(--border-highlight);
   box-shadow: var(--shadow-md);
+}
+
+.glass-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.glass-card:hover {
+  border-color: var(--border-highlight);
 }
 
 .kpi-card-header {
@@ -842,16 +985,21 @@ button, input, select, textarea {
 }
 
 .campaign-data-table th {
-  background-color: rgba(0, 0, 0, 0.2);
-  color: var(--text-muted);
-  font-weight: 600;
+  background-color: var(--bg-canvas);
+  color: var(--text-secondary);
+  font-weight: 700;
   text-transform: uppercase;
-  font-size: 10px;
+  font-size: 10.5px;
   letter-spacing: 0.05em;
   padding: 12px 16px;
   border-bottom: 1px solid var(--border-subtle);
   white-space: nowrap;
   user-select: none;
+}
+
+body.theme-dark .campaign-data-table th {
+  background-color: rgba(0, 0, 0, 0.25);
+  color: var(--text-muted);
 }
 
 .campaign-data-table th.sortable {
@@ -950,7 +1098,7 @@ button, input, select, textarea {
 
 .badge-deleted {
   background-color: rgba(148, 163, 184, 0.12);
-  color: #94A3B8;
+  color: var(--text-muted);
 }
 
 /* Smart Evaluation Badges */
@@ -1243,11 +1391,15 @@ button, input, select, textarea {
 .modal-footer {
   padding: 16px 24px;
   border-top: 1px solid var(--border-subtle);
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: var(--bg-canvas);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
+}
+
+body.theme-dark .modal-footer {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 /* ==========================================================================
@@ -1291,11 +1443,13 @@ button, input, select, textarea {
   .sidebar {
     transform: translateX(-100%);
   }
+  .sidebar:not(.collapsed),
   .sidebar.open {
     transform: translateX(0);
+    box-shadow: var(--shadow-lg);
   }
   .main-wrapper {
-    margin-left: 0;
+    margin-left: 0 !important;
   }
   .kpi-grid {
     grid-template-columns: 1fr;

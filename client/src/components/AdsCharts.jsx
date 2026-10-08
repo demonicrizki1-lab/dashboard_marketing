@@ -43,8 +43,11 @@ const formatRupiahTooltip = (val) => {
   }).format(val || 0);
 };
 
-export default function AdsCharts({ chartData }) {
+export default function AdsCharts({ chartData, theme = 'light' }) {
   const [activeTab, setActiveTab] = useState('revenue'); // 'revenue' | 'traffic' | 'roas'
+  const isLight = theme === 'light';
+  const gridColor = isLight ? 'rgba(0, 0, 0, 0.06)' : 'rgba(255, 255, 255, 0.05)';
+  const tickColor = isLight ? '#64748B' : '#94A3B8';
 
   if (!chartData || !chartData.labels || chartData.labels.length === 0) {
     return (
@@ -65,7 +68,7 @@ export default function AdsCharts({ chartData }) {
         label: 'Omzet Iklan (GMV)',
         data: chartData.gmv || [],
         borderColor: '#10B981',
-        backgroundColor: 'rgba(16, 185, 129, 0.12)',
+        backgroundColor: isLight ? 'rgba(16, 185, 129, 0.08)' : 'rgba(16, 185, 129, 0.12)',
         fill: true,
         tension: 0.35,
         pointRadius: 3,
@@ -77,7 +80,7 @@ export default function AdsCharts({ chartData }) {
         label: 'Biaya Iklan (Cost)',
         data: chartData.cost || [],
         borderColor: '#EE4D2D',
-        backgroundColor: 'rgba(238, 77, 45, 0.08)',
+        backgroundColor: isLight ? 'rgba(238, 77, 45, 0.05)' : 'rgba(238, 77, 45, 0.08)',
         fill: true,
         tension: 0.35,
         pointRadius: 3,
@@ -88,9 +91,9 @@ export default function AdsCharts({ chartData }) {
     ];
     yAxesConfig = {
       y: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        grid: { color: gridColor },
         ticks: {
-          color: '#94A3B8',
+          color: tickColor,
           font: { family: "'Plus Jakarta Sans', sans-serif", size: 10 },
           callback: (value) => {
             if (value >= 1000000) return 'Rp ' + (value / 1000000).toFixed(1) + 'M';
@@ -106,7 +109,7 @@ export default function AdsCharts({ chartData }) {
         label: 'Tayangan (Impressions)',
         data: chartData.impression || [],
         borderColor: '#3B82F6',
-        backgroundColor: 'rgba(59, 130, 246, 0.08)',
+        backgroundColor: isLight ? 'rgba(59, 130, 246, 0.05)' : 'rgba(59, 130, 246, 0.08)',
         fill: true,
         tension: 0.35,
         pointRadius: 2,
@@ -117,7 +120,7 @@ export default function AdsCharts({ chartData }) {
         label: 'Klik (Clicks)',
         data: chartData.click || [],
         borderColor: '#F59E0B',
-        backgroundColor: 'rgba(245, 158, 11, 0.15)',
+        backgroundColor: isLight ? 'rgba(245, 158, 11, 0.08)' : 'rgba(245, 158, 11, 0.15)',
         fill: false,
         tension: 0.35,
         pointRadius: 3,
@@ -129,7 +132,7 @@ export default function AdsCharts({ chartData }) {
       yImp: {
         type: 'linear',
         position: 'left',
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        grid: { color: gridColor },
         ticks: {
           color: '#3B82F6',
           font: { size: 10 },
@@ -157,7 +160,7 @@ export default function AdsCharts({ chartData }) {
         label: 'ROAS Harian',
         data: roasSeries,
         borderColor: '#8B5CF6',
-        backgroundColor: 'rgba(139, 92, 246, 0.12)',
+        backgroundColor: isLight ? 'rgba(139, 92, 246, 0.08)' : 'rgba(139, 92, 246, 0.12)',
         fill: true,
         tension: 0.35,
         pointRadius: 3,
@@ -168,7 +171,7 @@ export default function AdsCharts({ chartData }) {
     ];
     yAxesConfig = {
       y: {
-        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        grid: { color: gridColor },
         ticks: {
           color: '#8B5CF6',
           font: { size: 10 },
@@ -190,7 +193,7 @@ export default function AdsCharts({ chartData }) {
         position: 'top',
         align: 'end',
         labels: {
-          color: '#94A3B8',
+          color: isLight ? '#475569' : '#94A3B8',
           font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: '500' },
           boxWidth: 12,
           usePointStyle: true,
@@ -198,10 +201,10 @@ export default function AdsCharts({ chartData }) {
         }
       },
       tooltip: {
-        backgroundColor: '#1C243B',
-        titleColor: '#F8FAFC',
-        bodyColor: '#CBD5E1',
-        borderColor: '#2A3656',
+        backgroundColor: isLight ? '#FFFFFF' : '#1C243B',
+        titleColor: isLight ? '#0F172A' : '#F8FAFC',
+        bodyColor: isLight ? '#334155' : '#CBD5E1',
+        borderColor: isLight ? '#E2E8F0' : '#2A3656',
         borderWidth: 1,
         padding: 12,
         boxPadding: 6,

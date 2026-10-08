@@ -233,22 +233,22 @@ export default function ShopeeDataCenterPicker({
             alignItems: 'center',
             gap: '8px',
             padding: '7px 12px',
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-            border: isOpen ? '1.5px solid #EE4D2D' : '1px solid rgba(255, 255, 255, 0.12)',
+            backgroundColor: 'var(--bg-input)',
+            border: isOpen ? '1.5px solid var(--color-brand-primary)' : '1px solid var(--border-subtle)',
             borderRadius: '8px',
             cursor: 'pointer',
-            boxShadow: isOpen ? '0 0 0 3px rgba(238, 77, 45, 0.2)' : 'none',
+            boxShadow: isOpen ? '0 0 0 3px var(--color-brand-subtle)' : 'none',
             transition: 'all 0.2s ease',
             fontFamily: 'inherit'
           }}
           onMouseEnter={(e) => {
-            if (!isOpen) e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+            if (!isOpen) e.currentTarget.style.borderColor = 'var(--border-highlight)';
           }}
           onMouseLeave={(e) => {
-            if (!isOpen) e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+            if (!isOpen) e.currentTarget.style.borderColor = 'var(--border-subtle)';
           }}
         >
-          <span style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>
+          <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 500 }}>
             Periode Data:
           </span>
           <span style={{ fontSize: '12.5px', color: '#EE4D2D', fontWeight: 700 }}>
@@ -710,29 +710,29 @@ export default function ShopeeDataCenterPicker({
             justifyContent: 'space-between',
             gap: '8px',
             padding: '7px 12px',
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-            border: isOrderTypeOpen ? '1px solid #EE4D2D' : '1px solid rgba(255, 255, 255, 0.12)',
+            backgroundColor: 'var(--bg-input)',
+            border: isOrderTypeOpen ? '1px solid var(--color-brand-primary)' : '1px solid var(--border-subtle)',
             borderRadius: '8px',
             fontSize: '12px',
-            color: '#F8FAFC',
+            color: 'var(--text-primary)',
             cursor: 'pointer',
             minWidth: '175px',
-            boxShadow: isOrderTypeOpen ? '0 0 0 2px rgba(238, 77, 45, 0.2)' : 'none',
+            boxShadow: isOrderTypeOpen ? '0 0 0 2px var(--color-brand-subtle)' : 'none',
             transition: 'all 0.15s ease'
           }}
           title="Filter status pesanan sesuai Shopee Seller Center"
           onMouseEnter={(e) => {
-            if (!isOrderTypeOpen) e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+            if (!isOrderTypeOpen) e.currentTarget.style.borderColor = 'var(--border-highlight)';
           }}
           onMouseLeave={(e) => {
-            if (!isOrderTypeOpen) e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+            if (!isOrderTypeOpen) e.currentTarget.style.borderColor = 'var(--border-subtle)';
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ color: '#94A3B8', fontWeight: 500 }}>Status:</span>
+            <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Status:</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontWeight: 600, color: '#F8FAFC' }}>
+            <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
               {orderType === 'place' ? 'Pesanan Dibuat' : (orderType === 'confirmed' ? 'Pesanan Siap Dikirim' : 'Pesanan Dibayar')}
             </span>
             <ChevronDown 

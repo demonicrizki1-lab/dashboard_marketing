@@ -10,18 +10,19 @@ import {
   Settings, 
   Store, 
   ExternalLink,
-  ShieldCheck
+  ShieldCheck,
+  PanelLeftClose
 } from 'lucide-react';
 
-export default function Sidebar({ storeInfo, onOpenSettings, activeTab, setActiveTab }) {
+export default function Sidebar({ storeInfo, onOpenSettings, activeTab, setActiveTab, isCollapsed, onToggleSidebar }) {
   const navItems = [
-    { id: 'module1', label: '1. Ringkasan Bisnis (Overview)', icon: BarChart3, badge: 'Aktif', disabled: false },
-    { id: 'module2', label: '2. Performa Iklan', icon: TrendingUp, badge: 'Aktif', disabled: false },
-    { id: 'module3', label: '3. Master Data SKU & Margin', icon: Package, badge: 'Aktif', disabled: false },
-    { id: 'module_eval', label: '4. Laporan Kinerja PIC & Tim', icon: Award, badge: 'Aktif', disabled: false },
-    { id: 'module_tiktok_sample', label: '5. Kurasi Sample Affiliate TikTok', icon: ShieldCheck, badge: 'Baru', disabled: false },
-    { id: 'module4', label: '6. Program Promosi', icon: Tag, badge: 'Segera', disabled: true },
-    { id: 'module5', label: '7. Analisis Pelanggan', icon: Users, badge: 'Segera', disabled: true },
+    { id: 'module1', label: 'Ringkasan Bisnis (Overview)', icon: BarChart3, badge: 'Aktif', disabled: false },
+    { id: 'module2', label: 'Performa Iklan', icon: TrendingUp, badge: 'Aktif', disabled: false },
+    { id: 'module3', label: 'Master Data SKU & Margin', icon: Package, badge: 'Aktif', disabled: false },
+    { id: 'module_eval', label: 'Laporan Kinerja PIC & Tim', icon: Award, badge: 'Aktif', disabled: false },
+    { id: 'module_tiktok_sample', label: 'Kurasi Sample Affiliate TikTok', icon: ShieldCheck, badge: 'Baru', disabled: false },
+    { id: 'module4', label: 'Program Promosi', icon: Tag, badge: 'Segera', disabled: true },
+    { id: 'module5', label: 'Analisis Pelanggan', icon: Users, badge: 'Segera', disabled: true },
   ];
 
   const storeName = storeInfo?.shop_name || 'Monture outdoor';
@@ -29,16 +30,30 @@ export default function Sidebar({ storeInfo, onOpenSettings, activeTab, setActiv
   const initial = storeName.charAt(0).toUpperCase();
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       {/* Brand Header */}
       <div className="sidebar-header">
-        <div className="sidebar-brand-icon">
-          <TrendingUp size={20} strokeWidth={2.4} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div className="sidebar-brand-icon">
+            <TrendingUp size={20} strokeWidth={2.4} />
+          </div>
+          <div className="sidebar-brand-text">
+            <h1>Shopee Analytics</h1>
+            <span>Seller Command Hub</span>
+          </div>
         </div>
-        <div className="sidebar-brand-text">
-          <h1>Shopee Analytics</h1>
-          <span>Seller Command Hub</span>
-        </div>
+
+        {/* Tombol Collapse / Sembunyikan Sidebar */}
+        <button
+          type="button"
+          className="sidebar-toggle-btn"
+          onClick={onToggleSidebar}
+          title="Sembunyikan Sidebar (Ctrl+B)"
+          aria-label="Sembunyikan Sidebar"
+          id="btn-sidebar-collapse"
+        >
+          <PanelLeftClose size={18} />
+        </button>
       </div>
 
       {/* Nav List */}

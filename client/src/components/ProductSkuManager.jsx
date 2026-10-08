@@ -275,7 +275,7 @@ export default function ProductSkuManager({ showToast }) {
             <div style={{ 
               width: '100%', 
               height: '5px', 
-              backgroundColor: 'rgba(255, 255, 255, 0.08)', 
+              backgroundColor: 'var(--border-subtle)', 
               borderRadius: '999px', 
               overflow: 'hidden' 
             }}>
@@ -355,9 +355,9 @@ export default function ProductSkuManager({ showToast }) {
               className="badge"
               style={{
                 cursor: 'pointer',
-                backgroundColor: statusFilter === f.key ? 'var(--color-brand-primary)' : 'rgba(255, 255, 255, 0.05)',
+                backgroundColor: statusFilter === f.key ? 'var(--color-brand-primary)' : 'var(--bg-input)',
                 color: statusFilter === f.key ? '#fff' : 'var(--text-secondary)',
-                border: `1px solid ${statusFilter === f.key ? 'var(--color-brand-primary)' : 'var(--border-color)'}`,
+                border: `1px solid ${statusFilter === f.key ? 'var(--color-brand-primary)' : 'var(--border-subtle)'}`,
                 padding: '5px 12px',
                 fontSize: '12px',
                 fontWeight: 600,
@@ -378,8 +378,8 @@ export default function ProductSkuManager({ showToast }) {
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                border: '1px solid var(--border-color)',
+                backgroundColor: 'var(--bg-input)',
+                border: '1px solid var(--border-subtle)',
                 borderRadius: '8px',
                 color: 'var(--text-primary)',
                 fontSize: '12px',
@@ -391,14 +391,14 @@ export default function ProductSkuManager({ showToast }) {
               }}
               title="Urutkan daftar produk"
             >
-              <option value="default" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Urutan Default Shopee</option>
-              <option value="stock_desc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Stok Terbanyak</option>
-              <option value="stock_asc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Stok Tersedikit</option>
-              <option value="price_desc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Harga Tertinggi</option>
-              <option value="price_asc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Harga Terendah</option>
-              <option value="models_desc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Varian Terbanyak</option>
-              <option value="margin_asc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Margin Terendah (Prioritas Evaluasi)</option>
-              <option value="margin_desc" style={{ backgroundColor: '#1E293B', color: '#fff' }}>Margin Tertinggi</option>
+              <option value="default">Urutan Default Shopee</option>
+              <option value="stock_desc">Stok Terbanyak</option>
+              <option value="stock_asc">Stok Tersedikit</option>
+              <option value="price_desc">Harga Tertinggi</option>
+              <option value="price_asc">Harga Terendah</option>
+              <option value="models_desc">Varian Terbanyak</option>
+              <option value="margin_asc">Margin Terendah (Prioritas Evaluasi)</option>
+              <option value="margin_desc">Margin Tertinggi</option>
             </select>
             <ChevronDown size={13} style={{ position: 'absolute', right: '8px', pointerEvents: 'none', color: 'var(--text-muted)' }} />
           </div>
@@ -415,8 +415,8 @@ export default function ProductSkuManager({ showToast }) {
                 style={{
                   width: '100%',
                   padding: '7px 28px 7px 32px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                  border: '1px solid var(--border-color)',
+                  backgroundColor: 'var(--bg-input)',
+                  border: '1px solid var(--border-subtle)',
                   borderRadius: '8px',
                   color: 'var(--text-primary)',
                   fontSize: '12px',
@@ -520,7 +520,7 @@ export default function ProductSkuManager({ showToast }) {
 
                 return (
                   <React.Fragment key={p.itemId}>
-                    <tr style={{ backgroundColor: isExpanded ? 'rgba(255, 255, 255, 0.02)' : 'transparent', transition: 'background-color 0.15s ease' }}>
+                    <tr style={{ backgroundColor: isExpanded ? 'var(--bg-card-hover)' : 'transparent', transition: 'background-color 0.15s ease' }}>
                       {/* Accordion Expand Button */}
                       <td style={{ textAlign: 'center', padding: '14px 8px' }}>
                         <button 

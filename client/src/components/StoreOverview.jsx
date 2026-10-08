@@ -340,9 +340,9 @@ export default function StoreOverview({ showToast, storeInfo }) {
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '12px',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.45) 0%, rgba(15, 23, 42, 0.65) 100%)',
-          boxShadow: '0 4px 20px -8px rgba(0,0,0,0.4)'
+          border: '1px solid var(--border-subtle)',
+          background: 'var(--bg-card)',
+          boxShadow: 'var(--shadow-sm)'
         }}
       >
         {/* Sisi Kiri: Shopee Data Center Picker + Quick Preset Chips */}
@@ -359,7 +359,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
           />
 
           {/* Pemisah Vertikal */}
-          <div style={{ width: '1px', height: '22px', backgroundColor: 'rgba(255, 255, 255, 0.12)', margin: '0 2px' }} />
+          <div style={{ width: '1px', height: '22px', backgroundColor: 'var(--border-subtle)', margin: '0 2px' }} />
 
           {/* Quick Preset Shortcut Chips (Akses Cepat Harian/Mingguan/Bulanan) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
@@ -407,9 +407,9 @@ export default function StoreOverview({ showToast, storeInfo }) {
                     padding: '5px 11px',
                     fontSize: '11.5px',
                     fontWeight: isActive ? 700 : 500,
-                    backgroundColor: isActive ? 'rgba(238, 77, 45, 0.16)' : 'rgba(255, 255, 255, 0.04)',
+                    backgroundColor: isActive ? 'rgba(238, 77, 45, 0.16)' : 'var(--bg-input)',
                     color: isActive ? 'var(--color-brand-primary)' : 'var(--text-secondary)',
-                    border: isActive ? '1px solid var(--color-brand-primary)' : '1px solid rgba(255, 255, 255, 0.08)',
+                    border: isActive ? '1px solid var(--color-brand-primary)' : '1px solid var(--border-subtle)',
                     borderRadius: '8px',
                     transition: 'all 0.15s ease'
                   }}
@@ -434,8 +434,8 @@ export default function StoreOverview({ showToast, storeInfo }) {
               fontSize: '11.5px',
               padding: '6px 12px',
               borderRadius: '8px',
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
+              backgroundColor: 'var(--bg-input)',
+              border: '1px solid var(--border-subtle)',
               color: 'var(--text-secondary)',
               cursor: 'pointer'
             }}
@@ -455,8 +455,8 @@ export default function StoreOverview({ showToast, storeInfo }) {
               fontSize: '11.5px',
               padding: '6px 12px',
               borderRadius: '8px',
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
+              backgroundColor: 'var(--bg-input)',
+              border: '1px solid var(--border-subtle)',
               color: 'var(--text-secondary)',
               cursor: 'pointer'
             }}
@@ -474,8 +474,9 @@ export default function StoreOverview({ showToast, storeInfo }) {
         style={{
           padding: '12px 18px',
           borderRadius: '12px',
-          background: 'linear-gradient(135deg, rgba(238, 77, 45, 0.05) 0%, rgba(15, 23, 42, 0.7) 100%)',
-          border: '1px solid rgba(238, 77, 45, 0.18)',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border-subtle)',
+          boxShadow: 'var(--shadow-sm)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -525,7 +526,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
 
         {/* Right: Lifetime Metric Cards */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 14px', borderRadius: '8px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
               <span style={{ fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', fontWeight: 600 }}>
                 Total Omzet Lifetime
@@ -536,7 +537,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 14px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '6px 14px', borderRadius: '8px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
               <span style={{ fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', fontWeight: 600 }}>
                 Total Pesanan Selesai
@@ -563,7 +564,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
 
         <div className="overview-kpi-grid">
           {/* Card 1: Total Penjualan Kotor */}
-          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Total Penjualan Kotor</span>
@@ -575,14 +576,14 @@ export default function StoreOverview({ showToast, storeInfo }) {
                 {km?.totalSales?.formatted || 'Rp 0'}
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
               <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.totalSales?.pctDiff)}
             </div>
           </div>
 
           {/* Card 2: Total Pesanan Berhasil */}
-          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Pesanan Berhasil</span>
@@ -594,14 +595,14 @@ export default function StoreOverview({ showToast, storeInfo }) {
                 {km?.confirmedOrders?.formatted || '0 Pesanan'}
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
               <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.confirmedOrders?.pctDiff)}
             </div>
           </div>
 
           {/* Card 3: Total Pembeli Unik */}
-          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Pembeli Unik</span>
@@ -613,14 +614,14 @@ export default function StoreOverview({ showToast, storeInfo }) {
                 {km?.uniqueBuyers?.formatted || '0 Pembeli'}
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
               <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.uniqueBuyers?.pctDiff)}
             </div>
           </div>
 
           {/* Card 4: Nilai Belanja / Order (AOV) */}
-          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Nilai Belanja / Order (AOV)</span>
@@ -632,14 +633,14 @@ export default function StoreOverview({ showToast, storeInfo }) {
                 {km?.salesPerOrder?.formatted || 'Rp 0'}
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
               <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.salesPerOrder?.pctDiff)}
             </div>
           </div>
 
           {/* Card 5: Total Tayangan Produk */}
-          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Tayangan Produk</span>
@@ -651,14 +652,14 @@ export default function StoreOverview({ showToast, storeInfo }) {
                 {km?.impressions?.formatted || '0'}
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
               <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.impressions?.pctDiff)}
             </div>
           </div>
 
           {/* Card 6: Total Klik Produk */}
-          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Klik Produk</span>
@@ -670,14 +671,14 @@ export default function StoreOverview({ showToast, storeInfo }) {
                 {km?.clicks?.formatted || '0'}
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
               <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.clicks?.pctDiff)}
             </div>
           </div>
 
           {/* Card 7: Rasio Klik (CTR) */}
-          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Rasio Klik (CTR)</span>
@@ -689,14 +690,14 @@ export default function StoreOverview({ showToast, storeInfo }) {
                 {km?.ctr?.formatted || '0%'}
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
               <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(km?.ctr?.pctDiff)}
             </div>
           </div>
 
           {/* Card 8: Tingkat Konversi Pesanan (CR) */}
-          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid rgba(255, 255, 255, 0.07)' }}>
+          <div className="glass-card" style={{ padding: '16px 18px', borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '124px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)' }}>Konversi Pesanan (CR)</span>
@@ -708,7 +709,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
                 {conversionRateFormatted}
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)' }}>
               <span style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>vs periode lalu:</span>
               {renderDelta(conversionRatePctDiff)}
             </div>
@@ -1010,7 +1011,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
           {/* Operational Health Strip (Pembatalan, Retur, NFR) */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
             {/* 1. Pesanan Dibatalkan */}
-            <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
                 <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Pesanan Dibatalkan</span>
                 <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>
@@ -1023,7 +1024,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
             </div>
 
             {/* 2. Pengembalian Barang & Dana */}
-            <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
                 <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Pengembalian / Retur</span>
                 <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>
@@ -1036,7 +1037,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
             </div>
 
             {/* 3. Non-Fulfilment Rate */}
-            <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ padding: '10px 14px', borderRadius: '10px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
                 <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Tingkat Pesanan Tidak Selesai (NFR)</span>
                 <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#10B981', marginTop: '2px', fontFamily: 'var(--font-mono)' }}>
@@ -1051,7 +1052,7 @@ export default function StoreOverview({ showToast, storeInfo }) {
 
           {/* Table Container */}
           {topProducts.length === 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '36px 16px', background: 'rgba(255, 255, 255, 0.015)', borderRadius: '12px', border: '1px dashed rgba(255, 255, 255, 0.08)', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '36px 16px', background: 'var(--bg-input)', borderRadius: '12px', border: '1px dashed var(--border-subtle)', gap: '10px' }}>
               <ShoppingBag size={28} style={{ color: 'var(--text-muted)', opacity: 0.6 }} />
               <div style={{ textAlign: 'center' }}>
                 <p style={{ margin: 0, fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>
@@ -1063,10 +1064,10 @@ export default function StoreOverview({ showToast, storeInfo }) {
               </div>
             </div>
           ) : (
-            <div style={{ overflowX: 'auto', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+            <div style={{ overflowX: 'auto', borderRadius: '12px', border: '1px solid var(--border-subtle)' }}>
               <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                 <thead>
-                  <tr style={{ background: 'rgba(255, 255, 255, 0.03)', borderBottom: '1px solid rgba(255,255,255,0.08)', textAlign: 'left', color: 'var(--text-muted)' }}>
+                  <tr style={{ background: 'var(--bg-input)', borderBottom: '1px solid var(--border-subtle)', textAlign: 'left', color: 'var(--text-muted)' }}>
                     <th style={{ padding: '11px 14px', width: '52px', textAlign: 'center', textTransform: 'uppercase', fontSize: '10.5px', letterSpacing: '0.04em' }}>Rank</th>
                     <th style={{ padding: '11px 14px', textTransform: 'uppercase', fontSize: '10.5px', letterSpacing: '0.04em' }}>Produk</th>
                     <th style={{ padding: '11px 14px', textAlign: 'right', textTransform: 'uppercase', fontSize: '10.5px', letterSpacing: '0.04em' }}>Penjualan Kotor</th>
@@ -1082,10 +1083,10 @@ export default function StoreOverview({ showToast, storeInfo }) {
                     <tr 
                       key={prod.id} 
                       style={{ 
-                        borderBottom: '1px solid rgba(255,255,255,0.04)', 
+                        borderBottom: '1px solid var(--border-subtle)', 
                         transition: 'background 0.15s ease' 
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.03)'}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-card-hover)'}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                     >
                       <td style={{ padding: '12px 14px', textAlign: 'center' }}>

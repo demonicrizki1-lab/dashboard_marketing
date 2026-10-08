@@ -1,9 +1,9 @@
 {
   "period": "past30days",
-  "startTime": 1788704145,
-  "endTime": 1791296145,
+  "startTime": 1788861618,
+  "endTime": 1791453618,
   "customLabel": "30 Hari Sebelumnya",
-  "lastUpdated": "2026-10-06T14:15:45.432Z",
+  "lastUpdated": "2026-10-08T10:00:18.772Z",
   "isRealShopeeData": true,
   "storeProfile": {
     "storeName": "Monture outdoor",
@@ -21,16 +21,6 @@
     "aovFormatted": "Rp 169.108"
   },
   "dailyTrendPoints": [
-    {
-      "timestamp": 1788627600,
-      "date": "6 Sep",
-      "revenue": 130410
-    },
-    {
-      "timestamp": 1788714000,
-      "date": "7 Sep",
-      "revenue": 0
-    },
     {
       "timestamp": 1788800400,
       "date": "8 Sep",
@@ -170,81 +160,91 @@
       "timestamp": 1791133200,
       "date": "5 Okt",
       "revenue": 166795
+    },
+    {
+      "timestamp": 1791219600,
+      "date": "6 Okt",
+      "revenue": 166795
+    },
+    {
+      "timestamp": 1791306000,
+      "date": "7 Okt",
+      "revenue": 559651
     }
   ],
   "keyMetrics": {
     "totalSales": {
-      "value": 6229477,
-      "formatted": "Rp 6.229.477",
-      "pctDiff": -8.404995655121002,
+      "value": 6825513,
+      "formatted": "Rp 6.825.513",
+      "pctDiff": -1.529347098471908,
       "label": "Total Penjualan Kotor (Total Sales)"
     },
     "confirmedOrders": {
-      "value": 30,
-      "formatted": "30 Pesanan",
-      "pctDiff": -38.775510204081634,
+      "value": 33,
+      "formatted": "33 Pesanan",
+      "pctDiff": -34,
       "label": "Total Pesanan Berhasil (Confirmed Orders)"
     },
     "uniqueBuyers": {
-      "value": 26,
-      "formatted": "26 Pembeli",
-      "pctDiff": -42.22222222222222,
+      "value": 30,
+      "formatted": "30 Pembeli",
+      "pctDiff": -33.33333333333333,
       "label": "Total Pembeli (Unique Buyers)"
     },
     "salesPerOrder": {
-      "value": 207649,
-      "formatted": "Rp 207.649",
-      "pctDiff": 52.034706856489535,
+      "value": 206834,
+      "formatted": "Rp 206.834",
+      "pctDiff": 49.225116959110146,
       "label": "Rata-Rata Nilai Belanja (AOV / Sales per Order)"
     },
     "impressions": {
-      "value": 181719,
-      "formatted": "181.719",
-      "pctDiff": -27.810794276316315,
+      "value": 213442,
+      "formatted": "213.442",
+      "pctDiff": -15.45813545425379,
       "label": "Total Tayangan Produk (Impressions)"
     },
     "clicks": {
-      "value": 4182,
-      "formatted": "4.182",
-      "pctDiff": -26.913666550157288,
+      "value": 4959,
+      "formatted": "4.959",
+      "pctDiff": -13.921194237111612,
       "label": "Total Klik Produk (Clicks)"
     },
     "ctr": {
-      "value": 2.3,
-      "formatted": "2.30%",
-      "pctDiff": 0.02824891645387649,
+      "value": 2.32,
+      "formatted": "2.32%",
+      "pctDiff": 0.041483486623795224,
       "label": "Rasio Klik (CTR)"
     },
     "conversionRate": {
-      "value": 0.72,
-      "formatted": "0.72%",
-      "pctDiff": -0.5374964381579248,
+      "value": 0.67,
+      "formatted": "0.67%",
+      "pctDiff": -0.6260224742650455,
       "label": "Tingkat Konversi Pesanan (CR)"
     }
   },
   "channelBreakdown": {
     "paid_ads": {
       "label": "Iklan Berbayar (Shopee Ads)",
-      "sales": 4780884,
-      "ratio": 76.75,
+      "sales": 5507330,
+      "ratio": 80.69,
       "color": "#EE4D2D"
     },
     "product_card": {
       "label": "Organik & Pencarian Produk",
-      "sales": 5481653,
-      "ratio": 88,
+      "sales": 6208099,
+      "ratio": 90.95,
       "color": "#10B981"
     },
     "video": {
       "label": "Shopee Video",
-      "sales": 564512,
-      "ratio": 9.06,
+      "sales": 434102,
+      "ratio": 6.36,
       "color": "#8B5CF6"
     },
     "affiliate": {
       "label": "Shopee Affiliate",
       "sales": 183312,
-      "ratio": 2.94,
+      "ratio": 2.69,
       "color": "#F59E0B"
     },
     "live": {
@@ -260,28 +260,28 @@
       "id": 40657856676,
       "name": "Monture - Rompi Pria Puffer Gelembung Outdoor Big Size Jumbo Premium M - 6XL",
       "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztd-mtnnv1vvcg74b9",
-      "sales": 4079583,
-      "salesFormatted": "Rp 4.079.583",
+      "sales": 4018670,
+      "salesFormatted": "Rp 4.018.670",
       "orders": 20,
       "units": 21,
-      "clicks": 1790,
-      "ctr": "2.76%",
-      "conversionRate": "1.12%",
-      "addToCart": 108
+      "clicks": 1911,
+      "ctr": "2.78%",
+      "conversionRate": "1.05%",
+      "addToCart": 117
     },
     {
       "rank": 2,
       "id": 41720970731,
       "name": "Monture - Rompi Big Size Jumbo Bikers Anti Angin Bahan Premium M - 6XL",
       "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztj-mtno1phb3dvm27",
-      "sales": 590306,
-      "salesFormatted": "Rp 590.306",
-      "orders": 3,
-      "units": 3,
-      "clicks": 296,
-      "ctr": "3.71%",
-      "conversionRate": "1.01%",
-      "addToCart": 17
+      "sales": 765981,
+      "salesFormatted": "Rp 765.981",
+      "orders": 4,
+      "units": 4,
+      "clicks": 359,
+      "ctr": "3.75%",
+      "conversionRate": "1.11%",
+      "addToCart": 23
     },
     {
       "rank": 3,
@@ -292,10 +292,10 @@
       "salesFormatted": "Rp 438.516",
       "orders": 2,
       "units": 2,
-      "clicks": 48,
-      "ctr": "2.37%",
-      "conversionRate": "4.17%",
-      "addToCart": 3
+      "clicks": 83,
+      "ctr": "2.46%",
+      "conversionRate": "2.41%",
+      "addToCart": 5
     },
     {
       "rank": 4,
@@ -306,10 +306,10 @@
       "salesFormatted": "Rp 333.011",
       "orders": 1,
       "units": 1,
-      "clicks": 103,
-      "ctr": "1.65%",
-      "conversionRate": "0.97%",
-      "addToCart": 2
+      "clicks": 138,
+      "ctr": "1.79%",
+      "conversionRate": "0.72%",
+      "addToCart": 3
     },
     {
       "rank": 5,
@@ -320,10 +320,10 @@
       "salesFormatted": "Rp 237.861",
       "orders": 1,
       "units": 1,
-      "clicks": 91,
-      "ctr": "1.48%",
-      "conversionRate": "1.10%",
-      "addToCart": 5
+      "clicks": 134,
+      "ctr": "1.76%",
+      "conversionRate": "0.75%",
+      "addToCart": 6
     }
   ],
   "orderPerformance": {

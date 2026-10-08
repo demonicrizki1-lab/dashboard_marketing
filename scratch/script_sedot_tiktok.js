@@ -68,25 +68,40 @@
     fetched_at: new Date().toISOString()
   };
 
-  // Coba kirim langsung ke Dashboard jika koneksi lokal diizinkan browser
+  // Simpan ke window global agar selalu bisa diakses kapan saja dari Console DevTools
+  window.finalResult = finalResult;
+  window.tiktokSamples = finalResult;
+
+  // Coba kirim langsung ke Dashboard lokal Monture
+  let sentToDashboard = false;
   try {
-    await fetch('http://localhost:3001/api/tiktok/import-json', {
+    const apiRes = await fetch('http://localhost:3001/api/tiktok/import-json', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ data: finalResult })
     });
-    console.log('%c🚀 DATA BERHASIL DIKIRIM LANGSUNG KE DASHBOARD!', 'color: #10b981; font-weight: bold;');
+    if (apiRes.ok) {
+      sentToDashboard = true;
+      console.log('%c🚀 DATA SUKSES TERKIRIM LANGSUNG KE DASHBOARD MONTURE!', 'color: #10b981; font-size: 14px; font-weight: bold;');
+    }
   } catch (e) {
-    // Jika browser memblokir request langsung ke localhost, data tetap aman disalin ke clipboard
+    // Jika koneksi langsung ke localhost dibatasi kebijakan browser
   }
 
-  // Otomatis salin ke Clipboard Windows
+  // Otomatis salin ke Clipboard
   try {
-    copy(JSON.stringify(finalResult));
-    console.log('%c🎉 SELESAI! Berhasil menarik ' + allSamples.length + ' creator!', 'color: #10b981; font-size: 16px; font-weight: bold;');
-    console.log('%c📋 Seluruh data sudah OTOMATIS DISALIN KE CLIPBOARD Anda!', 'color: #3b82f6; font-size: 14px; font-weight: bold;');
-    alert(`Sukses menarik ${allSamples.length} data creator!\nData sudah otomatis disalin ke clipboard.\n\nSilakan buka Monture Dashboard lalu paste (Ctrl+V) di menu Impor Data.`);
+    if (typeof copy === 'function') {
+      copy(JSON.stringify(finalResult));
+      console.log('%c📋 Data juga telah otomatis disalin ke clipboard!', 'color: #3b82f6; font-size: 12px;');
+    }
   } catch (e) {
-    console.log('Ketik copy(finalResult) di console untuk menyalin data.');
+    // Clipboard fallback
+  }
+
+  console.log('%c🎉 SELESAI! Total ' + allSamples.length + ' data creator berhasil ditarik.', 'color: #10b981; font-size: 16px; font-weight: bold;');
+  if (sentToDashboard) {
+    alert(`🎉 Sukses menarik ${allSamples.length} creator!\n\nData sudah OTOMATIS MASUK ke Monture Dashboard lokal.\nAnda tidak perlu paste manual lagi, silakan refresh tab Dashboard!`);
+  } else {
+    alert(`Sukses menarik ${allSamples.length} creator!\nKetik copy(finalResult) di console jika ingin menyalin manual.`);
   }
 })();

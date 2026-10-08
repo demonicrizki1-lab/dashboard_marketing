@@ -1,16 +1,91 @@
 /**
- * UI UX Pro Max - Design Tokens
+ * UI UX Pro Max - Design Tokens (Commercial Enterprise & Dual-Theme)
  * File: client/src/styles/design-tokens.css
  */
 
-:root {
+:root,
+:root[data-theme="light"],
+body.theme-light {
   /* Color Palette - Shopee & High Performance Marketing */
   --color-brand-primary: #EE4D2D;
   --color-brand-hover: #D73C1E;
-  --color-brand-subtle: rgba(238, 77, 45, 0.12);
-  --color-brand-glow: rgba(238, 77, 45, 0.25);
+  --color-brand-subtle: rgba(238, 77, 45, 0.08);
+  --color-brand-glow: rgba(238, 77, 45, 0.18);
 
+  /* Semantic Accents (Optimized for Clean Light Mode Contrast) */
+  --color-success: #059669;
+  --color-success-bg: rgba(5, 150, 105, 0.08);
+  --color-success-border: rgba(5, 150, 105, 0.22);
+
+  --color-warning: #D97706;
+  --color-warning-bg: rgba(217, 119, 6, 0.08);
+  --color-warning-border: rgba(217, 119, 6, 0.22);
+
+  --color-danger: #DC2626;
+  --color-danger-bg: rgba(220, 38, 38, 0.08);
+  --color-danger-border: rgba(220, 38, 38, 0.22);
+
+  --color-info: #2563EB;
+  --color-info-bg: rgba(37, 99, 235, 0.08);
+  --color-info-border: rgba(37, 99, 235, 0.22);
+
+  --color-purple: #7C3AED;
+  --color-purple-bg: rgba(124, 58, 237, 0.08);
+
+  /* Light Theme Surfaces (Default Commercial Theme) */
+  --bg-canvas: #F8FAFC;
+  --bg-sidebar: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8FAFC;
+  --bg-surface-elevated: #FFFFFF;
+  --bg-input: #F1F5F9;
+
+  /* Borders & Dividers */
+  --border-subtle: #E2E8F0;
+  --border-focus: #3B82F6;
+  --border-highlight: #CBD5E1;
+
+  /* Text Colors (High Contrast Charcoal & Slate) */
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --text-inverse: #FFFFFF;
+
+  /* Typography */
+  --font-family-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Shadows (Soft Ambient Elevation) */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.07), 0 4px 10px rgba(0, 0, 0, 0.03);
+  --shadow-glow-brand: 0 0 20px rgba(238, 77, 45, 0.16);
+  --shadow-glow-success: 0 0 20px rgba(5, 150, 105, 0.16);
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  --theme-transition: background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* ==========================================================================
+   Dark Theme Variant (Precision High-Contrast Theme)
+   ========================================================================== */
+:root[data-theme="dark"],
+body.theme-dark {
   /* Semantic Accents */
+  --color-brand-primary: #EE4D2D;
+  --color-brand-hover: #D73C1E;
+  --color-brand-subtle: rgba(238, 77, 45, 0.15);
+  --color-brand-glow: rgba(238, 77, 45, 0.28);
+
   --color-success: #10B981;
   --color-success-bg: rgba(16, 185, 129, 0.12);
   --color-success-border: rgba(16, 185, 129, 0.28);
@@ -30,7 +105,7 @@
   --color-purple: #8B5CF6;
   --color-purple-bg: rgba(139, 92, 246, 0.12);
 
-  /* Dark Theme Surfaces (Default Precision Theme) */
+  /* Dark Theme Surfaces */
   --bg-canvas: #0B0F19;
   --bg-sidebar: #0E1322;
   --bg-card: #13192B;
@@ -49,50 +124,12 @@
   --text-muted: #64748B;
   --text-inverse: #0F172A;
 
-  /* Typography */
-  --font-family-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
   --shadow-glow-brand: 0 0 20px rgba(238, 77, 45, 0.25);
   --shadow-glow-success: 0 0 20px rgba(16, 185, 129, 0.25);
-
-  /* Radius */
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-full: 9999px;
-
-  /* Transitions */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 220ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Light Theme Variant */
-body.theme-light {
-  --bg-canvas: #F8FAFC;
-  --bg-sidebar: #F1F5F9;
-  --bg-card: #FFFFFF;
-  --bg-card-hover: #F8FAFC;
-  --bg-surface-elevated: #FFFFFF;
-  --bg-input: #F8FAFC;
-
-  --border-subtle: #E2E8F0;
-  --border-focus: #3B82F6;
-  --border-highlight: #CBD5E1;
-
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-muted: #94A3B8;
-  --text-inverse: #FFFFFF;
-
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 /* Tabular Numerals Utility */

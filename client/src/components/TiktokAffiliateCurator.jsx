@@ -349,11 +349,11 @@ export default function TiktokAffiliateCurator({ showToast }) {
       {/* 1. Header Control Bar */}
       <div 
         style={{
-          background: 'linear-gradient(135deg, rgba(28, 36, 59, 0.9) 0%, rgba(14, 19, 34, 0.95) 100%)',
-          border: '1px solid var(--border-highlight)',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border-subtle)',
           borderRadius: 'var(--radius-lg)',
           padding: '20px 24px',
-          boxShadow: 'var(--shadow-md)',
+          boxShadow: 'var(--shadow-sm)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -367,12 +367,12 @@ export default function TiktokAffiliateCurator({ showToast }) {
               width: '44px',
               height: '44px',
               borderRadius: 'var(--radius-md)',
-              background: 'linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)',
+              background: 'linear-gradient(135deg, #0284C7 0%, #0EA5E9 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#07101e',
-              boxShadow: '0 4px 15px rgba(0, 242, 254, 0.3)',
+              color: '#FFFFFF',
+              boxShadow: '0 4px 12px rgba(2, 132, 199, 0.25)',
               flexShrink: 0
             }}
           >
@@ -386,9 +386,9 @@ export default function TiktokAffiliateCurator({ showToast }) {
               <span 
                 className="badge" 
                 style={{
-                  background: 'rgba(0, 242, 254, 0.12)',
-                  color: '#00f2fe',
-                  border: '1px solid rgba(0, 242, 254, 0.3)',
+                  background: 'var(--color-info-bg)',
+                  color: 'var(--color-info)',
+                  border: '1px solid var(--color-info-border)',
                   fontSize: '11px',
                   fontWeight: 700,
                   padding: '2px 8px'
@@ -723,7 +723,7 @@ export default function TiktokAffiliateCurator({ showToast }) {
                         : (item.is_expired ? '1px dashed rgba(148, 163, 184, 0.25)' : '1px solid transparent'),
                       backgroundColor: isSelected 
                         ? 'rgba(59, 130, 246, 0.12)' 
-                        : 'rgba(255, 255, 255, 0.02)',
+                        : 'var(--bg-canvas)',
                       opacity: item.is_expired ? 0.78 : 1,
                       transition: 'all 0.15s ease-in-out',
                       display: 'flex',
@@ -732,10 +732,10 @@ export default function TiktokAffiliateCurator({ showToast }) {
                       position: 'relative'
                     }}
                     onMouseEnter={(e) => {
-                      if (!isSelected) e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                      if (!isSelected) e.currentTarget.style.backgroundColor = 'var(--bg-card-hover)';
                     }}
                     onMouseLeave={(e) => {
-                      if (!isSelected) e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.02)';
+                      if (!isSelected) e.currentTarget.style.backgroundColor = 'var(--bg-canvas)';
                     }}
                   >
                     {/* Baris 1: Avatar + Level + Nama + Status Badge */}
@@ -825,7 +825,7 @@ export default function TiktokAffiliateCurator({ showToast }) {
                               padding: '2px 5px',
                               borderRadius: '4px',
                               backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                              color: '#60A5FA',
+                              color: 'var(--color-info)',
                               border: '1px solid rgba(59, 130, 246, 0.2)',
                               display: 'inline-flex',
                               alignItems: 'center',
@@ -862,7 +862,7 @@ export default function TiktokAffiliateCurator({ showToast }) {
                         fontSize: '11px', 
                         color: 'var(--text-secondary)',
                         paddingTop: '4px',
-                        borderTop: '1px solid rgba(255, 255, 255, 0.05)'
+                        borderTop: '1px solid var(--border-subtle)'
                       }}
                     >
                       <div>
@@ -1044,7 +1044,7 @@ export default function TiktokAffiliateCurator({ showToast }) {
                             fontWeight: 600,
                             padding: '2px 8px',
                             borderRadius: 'var(--radius-xs)',
-                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                            backgroundColor: 'var(--bg-input)',
                             color: 'var(--text-secondary)',
                             border: '1px solid var(--border-subtle)'
                           }}
@@ -1139,9 +1139,9 @@ export default function TiktokAffiliateCurator({ showToast }) {
                 >
                   <AlertTriangle size={20} style={{ color: 'var(--color-danger)', flexShrink: 0 }} />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 800, color: '#FCA5A5', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ fontWeight: 800, color: 'var(--color-danger)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span>PERMOHONAN SAMPEL TELAH KADALUARSA</span>
-                      <span style={{ fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '4px', backgroundColor: 'rgba(239, 68, 68, 0.25)', color: '#fff' }}>
+                      <span style={{ fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '4px', backgroundColor: 'var(--color-danger-bg)', color: 'var(--color-danger)', border: '1px solid var(--color-danger-border)' }}>
                         {activeCreator.time_left_text}
                       </span>
                     </div>
@@ -1166,9 +1166,9 @@ export default function TiktokAffiliateCurator({ showToast }) {
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Clock size={15} style={{ color: '#60A5FA' }} />
+                    <Clock size={15} style={{ color: 'var(--color-info)' }} />
                     <span style={{ color: 'var(--text-secondary)' }}>
-                      Sisa Batas Waktu Respon TikTok: <strong style={{ color: '#60A5FA' }}>{activeCreator.time_left_text}</strong> (Batas: {activeCreator.expires_at_formatted})
+                      Sisa Batas Waktu Respon TikTok: <strong style={{ color: 'var(--color-info)' }}>{activeCreator.time_left_text}</strong> (Batas: {activeCreator.expires_at_formatted})
                     </span>
                   </div>
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
@@ -1294,13 +1294,13 @@ export default function TiktokAffiliateCurator({ showToast }) {
                       <div style={{ fontSize: '13px', lineHeight: 1.6, color: 'var(--text-primary)' }}>
                         {activeCreator.status === 'APPROVED' ? (
                           <span>
-                            Creator <strong style={{ color: '#fff', textDecoration: 'underline' }}>@{activeCreator.creator_name}</strong> sangat potensial untuk diberikan sampel produk Monture.
-                            {activeCreator.is_star_creator && <strong style={{ color: '#F59E0B' }}> Merupakan Star Creator dengan GMV {activeCreator.gmv} (di atas 30 Juta).</strong>}
-                            {' '}Audiens relevan dengan fashion pria/outdoor, memiliki rekam jejak pengiriman sampel yang aman (<strong style={{ color: '#10B981' }}>{activeCreator.fulfillment_rate}%</strong>), dan rata-rata penayangan video konsisten di angka <strong style={{ color: '#60A5FA' }}>{activeCreator.avg_views} views</strong>.
+                            Creator <strong style={{ color: 'var(--text-primary)', fontWeight: 800 }}>@{activeCreator.creator_name}</strong> sangat potensial untuk diberikan sampel produk Monture.
+                            {activeCreator.is_star_creator && <strong style={{ color: 'var(--color-warning)' }}> Merupakan Star Creator dengan GMV {activeCreator.gmv} (di atas 30 Juta).</strong>}
+                            {' '}Audiens relevan dengan fashion pria/outdoor, memiliki rekam jejak pengiriman sampel yang aman (<strong style={{ color: 'var(--color-success)' }}>{activeCreator.fulfillment_rate}%</strong>), dan rata-rata penayangan video konsisten di angka <strong style={{ color: 'var(--color-info)' }}>{activeCreator.avg_views} views</strong>.
                           </span>
                         ) : (
                           <span>
-                            Pengajuan sampel creator <strong style={{ color: '#fff' }}>@{activeCreator.creator_name}</strong> tidak memenuhi standar kurasi Monture pada kriteria: <strong style={{ color: '#EF4444', backgroundColor: 'rgba(239, 68, 68, 0.15)', padding: '2px 6px', borderRadius: '4px' }}>{activeCreator.decision_reason.replace('DITOLAK OTOMATIS: ', '').replace(/\.$/, '')}</strong>. Disarankan menolak permohonan ini untuk menghindari sampel macet atau tidak menghasilkan penjualan.
+                            Pengajuan sampel creator <strong style={{ color: 'var(--text-primary)', fontWeight: 800 }}>@{activeCreator.creator_name}</strong> tidak memenuhi standar kurasi Monture pada kriteria: <strong style={{ color: 'var(--color-danger)', backgroundColor: 'var(--color-danger-bg)', padding: '2px 6px', borderRadius: '4px' }}>{activeCreator.decision_reason.replace('DITOLAK OTOMATIS: ', '').replace(/\.$/, '')}</strong>. Disarankan menolak permohonan ini untuk menghindari sampel macet atau tidak menghasilkan penjualan.
                           </span>
                         )}
                       </div>
@@ -1355,7 +1355,7 @@ export default function TiktokAffiliateCurator({ showToast }) {
                         <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>2. Tier & Omzet</span>
                         {activeCreator.kpi_checklist?.kpi2_level?.passed ? <CheckCircle2 size={13} style={{ color: 'var(--color-info)' }} /> : <XCircle size={13} style={{ color: 'var(--color-danger)' }} />}
                       </div>
-                      <div style={{ fontSize: '12px', fontWeight: 700, color: activeCreator.kpi_checklist?.kpi2_level?.passed ? '#60A5FA' : 'var(--color-danger)' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 700, color: activeCreator.kpi_checklist?.kpi2_level?.passed ? 'var(--color-info)' : 'var(--color-danger)' }}>
                         Level {activeCreator.ecom_level} • {activeCreator.gmv}
                       </div>
                       <div style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>
@@ -1417,7 +1417,7 @@ export default function TiktokAffiliateCurator({ showToast }) {
                     style={{
                       fontSize: '11px',
                       color: 'var(--text-muted)',
-                      borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+                      borderTop: '1px solid var(--border-subtle)',
                       paddingTop: '8px',
                       display: 'flex',
                       alignItems: 'center',
@@ -1483,7 +1483,7 @@ export default function TiktokAffiliateCurator({ showToast }) {
                   alignItems: 'center',
                   gap: '14px',
                   padding: '14px 16px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  backgroundColor: 'var(--bg-input)',
                   borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--border-subtle)'
                 }}
@@ -1525,6 +1525,7 @@ export default function TiktokAffiliateCurator({ showToast }) {
                           setSelectedVideo(vid);
                           setActiveVideoCreator(activeCreator.creator_name);
                         }}
+                        title="Klik untuk memutar video"
                         style={{
                           backgroundColor: 'var(--bg-input)',
                           borderRadius: 'var(--radius-sm)',
@@ -1535,10 +1536,17 @@ export default function TiktokAffiliateCurator({ showToast }) {
                           alignItems: 'center',
                           gap: '12px',
                           position: 'relative',
-                          transition: 'all 0.2s'
+                          transition: 'all 0.2s',
+                          boxShadow: 'var(--shadow-sm)'
                         }}
-                        onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-info)'}
-                        onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-subtle)'}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor = 'var(--color-info)';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = 'var(--border-subtle)';
+                          e.currentTarget.style.transform = 'none';
+                        }}
                       >
                         {/* Video Cover Thumbnail */}
                         <div style={{ position: 'relative', width: '52px', height: '70px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0, backgroundColor: '#000' }}>
@@ -1559,14 +1567,14 @@ export default function TiktokAffiliateCurator({ showToast }) {
                               justifyContent: 'center'
                             }}
                           >
-                            <div style={{ backgroundColor: 'rgba(238, 77, 45, 0.9)', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div style={{ backgroundColor: 'rgba(238, 77, 45, 0.9)', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
                               <Play size={11} fill="#fff" style={{ marginLeft: '1px' }} />
                             </div>
                           </div>
                         </div>
 
                         {/* Video Info */}
-                        <div style={{ overflow: 'hidden', flex: 1 }}>
+                        <div style={{ overflow: 'hidden', flex: 1, paddingRight: '14px' }}>
                           <div style={{ fontSize: '11px', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: 1.4 }}>
                             {vid.title || 'Video VT E-Commerce'}
                           </div>
@@ -1577,6 +1585,40 @@ export default function TiktokAffiliateCurator({ showToast }) {
                             ❤️ {vid.like_cnt} likes • 💬 {vid.comment_cnt}
                           </div>
                         </div>
+
+                        {/* Quick open in TikTok Web */}
+                        {vid.tiktok_web_url && (
+                          <a 
+                            href={vid.tiktok_web_url} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            title="Buka langsung di TikTok Web"
+                            style={{
+                              position: 'absolute',
+                              top: '8px',
+                              right: '8px',
+                              color: 'var(--text-muted)',
+                              padding: '4px',
+                              borderRadius: '4px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              transition: 'color 0.15s, background-color 0.15s',
+                              textDecoration: 'none'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.color = '#FE2C55';
+                              e.currentTarget.style.backgroundColor = 'rgba(254, 44, 85, 0.1)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.color = 'var(--text-muted)';
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                            }}
+                          >
+                            <ExternalLink size={12} />
+                          </a>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -1600,7 +1642,7 @@ export default function TiktokAffiliateCurator({ showToast }) {
                     gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
                     gap: '8px',
                     padding: '14px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                    backgroundColor: 'var(--bg-input)',
                     borderRadius: 'var(--radius-sm)',
                     border: '1px solid var(--border-subtle)'
                   }}
@@ -1616,7 +1658,7 @@ export default function TiktokAffiliateCurator({ showToast }) {
                         <strong style={{ color: kpi.passed ? 'var(--text-primary)' : 'var(--color-danger)' }}>
                           {kpi.label}:
                         </strong>{' '}
-                        <span style={{ color: 'var(--text-muted)' }}>{kpi.note}</span>
+                        <span style={{ color: 'var(--text-secondary)' }}>{kpi.note}</span>
                       </div>
                     </div>
                   ))}

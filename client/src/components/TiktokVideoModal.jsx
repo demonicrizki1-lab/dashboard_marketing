@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { X, Play, Eye, Heart, MessageCircle, Clock, ExternalLink, ShoppingBag, ShieldCheck, Bot, UserCheck } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { X, Play, Eye, Heart, MessageCircle, Clock, ExternalLink, ShoppingBag, ShieldCheck, Bot, UserCheck, AlertTriangle } from 'lucide-react';
 
 export default function TiktokVideoModal({ 
   video, 
@@ -10,6 +10,14 @@ export default function TiktokVideoModal({
   onAuditAi,
   onClose 
 }) {
+  const [playerMode, setPlayerMode] = useState('embed'); // 'embed' | 'direct'
+  const [hasMp4Error, setHasMp4Error] = useState(false);
+
+  useEffect(() => {
+    setPlayerMode('embed');
+    setHasMp4Error(false);
+  }, [video?.item_id]);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -44,7 +52,7 @@ export default function TiktokVideoModal({
           border: '1px solid var(--border-highlight)',
           borderRadius: 'var(--radius-lg)',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
-          maxWidth: '840px',
+          maxWidth: '900px',
           width: '100%',
           maxHeight: '90vh',
           display: 'flex',
@@ -70,7 +78,7 @@ export default function TiktokVideoModal({
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            zIndex: 10,
+            zIndex: 20,
             transition: 'all 0.2s'
           }}
           onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.8)'}
@@ -79,47 +87,223 @@ export default function TiktokVideoModal({
           <X size={18} />
         </button>
 
-        {/* Sisi Kiri: Video Player HTML5 */}
+        {/* Sisi Kiri: Video Player (TikTok Embed + Direct MP4 Fallback) */}
         <div 
           style={{
             flex: '1.2',
-            backgroundColor: '#000',
+            backgroundColor: '#050810',
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            minHeight: '480px',
+            minHeight: '520px',
             maxHeight: '85vh',
-            position: 'relative'
+            position: 'relative',
+            overflow: 'hidden'
           }}
         >
-          {video.mp4_url ? (
-            <video 
-              src={video.mp4_url} 
-              controls 
-              autoPlay 
-              playsInline
+          {/* Top Switcher: Embed vs Direct */}
+          <div 
+            style={{
+              position: 'absolute',
+              top: '12px',
+              left: '12px',
+              zIndex: 15,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              backgroundColor: 'rgba(5, 8, 16, 0.85)',
+              backdropFilter: 'blur(8px)',
+              padding: '4px',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid rgba(255, 255, 255, 0.15)'
+            }}
+          >
+            <button
+              onClick={() => setPlayerMode('embed')}
               style={{
-                width: '100%',
-                maxHeight: '85vh',
-                objectFit: 'contain'
+                padding: '4px 10px',
+                fontSize: '11px',
+                fontWeight: 700,
+                borderRadius: '4px',
+                border: 'none',
+                backgroundColor: playerMode === 'embed' ? 'var(--color-brand-primary)' : 'transparent',
+                color: '#fff',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                transition: 'all 0.15s'
+              }}
+              title="Official TikTok live stream embed"
+            >
+              <Play size={10} fill={playerMode === 'embed' ? '#fff' : 'none'} />
+              TikTok Embed
+            </button>
+            <button
+              onClick={() => setPlayerMode('direct')}
+              style={{
+                padding: '4px 10px',
+                fontSize: '11px',
+                fontWeight: 700,
+                borderRadius: '4px',
+                border: 'none',
+                backgroundColor: playerMode === 'direct' ? 'var(--color-brand-primary)' : 'transparent',
+                color: '#fff',
+                cursor: 'pointer',
+                transition: 'all 0.15s'
+              }}
+              title="Direct MP4 player"
+            >
+              Direct MP4
+            </button>
+          </div>
+
+          {/* Player Display */}
+          {playerMode === 'embed' ? (
+            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+              {video.item_id ? (
+                <iframe
+                  key={video.item_id}
+                  src={`https://www.tiktok.com/embed/v2/${video.item_id}`}
+                  title={video.title || "TikTok Video Player"}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    minHeight: '520px',
+                    border: 'none',
+                    backgroundColor: '#000'
+                  }}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              ) : (
+                <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
+                  <p>ID video TikTok tidak ditemukan.</p>
+                  {video.tiktok_web_url && (
+                    <a 
+                      href={video.tiktok_web_url} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="btn btn-primary"
+                      style={{ marginTop: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                    >
+                      <ExternalLink size={14} /> Buka di TikTok Web
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {hasMp4Error || !video.mp4_url ? (
+                <div style={{ textAlign: 'center', padding: '30px 20px', color: 'var(--text-secondary)', maxWidth: '360px' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'rgba(239, 68, 68, 0.15)', color: 'var(--color-danger)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                    <AlertTriangle size={24} />
+                  </div>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#fff', marginBottom: '6px' }}>
+                    Token CDN TikTok Kadaluarsa
+                  </div>
+                  <p style={{ fontSize: '11px', color: '#94A3B8', lineHeight: 1.5, marginBottom: '14px' }}>
+                    TikTok mengenkripsi link direct MP4 dengan masa kedaluwarsa 24 jam. Silakan putar menggunakan <strong>TikTok Embed</strong> atau buka langsung di TikTok.
+                  </p>
+                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <button
+                      onClick={() => setPlayerMode('embed')}
+                      style={{
+                        padding: '8px 14px',
+                        borderRadius: 'var(--radius-xs)',
+                        backgroundColor: 'var(--color-brand-primary)',
+                        color: '#fff',
+                        border: 'none',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Putar via TikTok Embed
+                    </button>
+                    {video.tiktok_web_url && (
+                      <a
+                        href={video.tiktok_web_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{
+                          padding: '8px 14px',
+                          borderRadius: 'var(--radius-xs)',
+                          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                          color: '#fff',
+                          textDecoration: 'none',
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        <ExternalLink size={12} /> Buka di Web
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <video 
+                  src={video.mp4_url} 
+                  controls 
+                  autoPlay 
+                  playsInline
+                  onError={() => setHasMp4Error(true)}
+                  style={{
+                    width: '100%',
+                    maxHeight: '85vh',
+                    objectFit: 'contain'
+                  }}
+                >
+                  Browser Anda tidak mendukung pemutar video HTML5.
+                </video>
+              )}
+            </div>
+          )}
+
+          {/* Bottom Bar: Quick link */}
+          {video.tiktok_web_url && (
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '10px',
+                left: '12px',
+                right: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                backgroundColor: 'rgba(5, 8, 16, 0.85)',
+                backdropFilter: 'blur(8px)',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-sm)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                fontSize: '11px',
+                zIndex: 10
               }}
             >
-              Browser Anda tidak mendukung pemutar video HTML5.
-            </video>
-          ) : (
-            <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)' }}>
-              <p>Direct MP4 stream tidak tersedia untuk video ini.</p>
-              {video.tiktok_web_url && (
-                <a 
-                  href={video.tiktok_web_url} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="btn btn-primary"
-                  style={{ marginTop: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-                >
-                  <ExternalLink size={14} /> Buka di TikTok Web
-                </a>
-              )}
+              <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '10px' }}>
+                {playerMode === 'embed' ? 'Official TikTok Player' : 'Direct MP4 Stream'}
+              </span>
+              <a
+                href={video.tiktok_web_url}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  color: '#FE2C55',
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontSize: '11px'
+                }}
+              >
+                <ExternalLink size={11} /> Buka Web TikTok
+              </a>
             </div>
           )}
         </div>
@@ -157,7 +341,7 @@ export default function TiktokVideoModal({
             {/* Caption Video */}
             <div 
               style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                backgroundColor: 'var(--bg-input)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: 'var(--radius-sm)',
                 padding: '12px',
@@ -351,28 +535,30 @@ export default function TiktokVideoModal({
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '6px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                  color: 'var(--text-primary)',
+                  backgroundColor: 'var(--color-brand-primary)',
+                  color: '#fff',
                   padding: '9px 12px',
                   borderRadius: 'var(--radius-sm)',
                   fontSize: '12px',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   textDecoration: 'none',
-                  transition: 'background 0.2s'
+                  transition: 'opacity 0.2s',
+                  boxShadow: '0 2px 6px rgba(238, 77, 45, 0.25)'
                 }}
               >
-                <ExternalLink size={14} /> Buka di TikTok App/Web
+                <ExternalLink size={14} /> Tonton Langsung di TikTok Web
               </a>
             )}
             <button 
               onClick={onClose}
               style={{
-                backgroundColor: 'transparent',
+                backgroundColor: 'var(--bg-input)',
                 border: '1px solid var(--border-subtle)',
                 color: 'var(--text-secondary)',
                 padding: '9px 16px',
                 borderRadius: 'var(--radius-sm)',
                 fontSize: '12px',
+                fontWeight: 600,
                 cursor: 'pointer'
               }}
             >

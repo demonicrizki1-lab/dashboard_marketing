@@ -7,7 +7,11 @@ import {
   Calendar,
   CheckCircle2,
   AlertTriangle,
-  ArrowUpRight
+  ArrowUpRight,
+  Sun,
+  Moon,
+  Menu,
+  PanelLeft
 } from 'lucide-react';
 
 export default function Header({ 
@@ -17,7 +21,11 @@ export default function Header({
   onRefresh, 
   isRefreshing, 
   onOpenSettings,
-  activeTab = 'module2'
+  activeTab = 'module2',
+  theme = 'light',
+  onToggleTheme,
+  isSidebarCollapsed,
+  onToggleSidebar
 }) {
   const storeName = storeInfo?.shop_name || 'Monture outdoor';
 
@@ -39,6 +47,11 @@ export default function Header({
           title: 'Laporan Kinerja PIC & Tim Marketing',
           subtitle: `Toko: ${storeName} • Evaluasi Kinerja PIC Lama vs Baru & Audit Finansial Historis`
         };
+      case 'module_tiktok_sample':
+        return {
+          title: 'Kurasi Sample Affiliate TikTok',
+          subtitle: `Toko: ${storeName} • Evaluasi Cepat & Manajemen Sampel Calon Affiliator`
+        };
       case 'module2':
       default:
         return {
@@ -53,6 +66,18 @@ export default function Header({
   return (
     <header className="top-header">
       <div className="header-left">
+        {/* Toggle Sidebar Button */}
+        <button
+          type="button"
+          className={`btn-toggle-sidebar ${isSidebarCollapsed ? 'sidebar-hidden' : ''}`}
+          onClick={onToggleSidebar}
+          title={isSidebarCollapsed ? 'Tampilkan Sidebar (Ctrl+B)' : 'Sembunyikan Sidebar (Ctrl+B)'}
+          aria-label="Toggle Sidebar"
+          id="btn-toggle-sidebar"
+        >
+          <Menu size={18} strokeWidth={2.2} />
+        </button>
+
         <div className="header-title">
           <h2>{currentInfo.title}</h2>
           <p>
@@ -92,6 +117,28 @@ export default function Header({
           id="btn-open-settings"
         >
           <Settings size={16} />
+        </button>
+
+        {/* Dual-Theme Switcher Button */}
+        <button
+          type="button"
+          className="theme-toggle-btn"
+          onClick={onToggleTheme}
+          title={theme === 'light' ? 'Beralih ke Dark Mode' : 'Beralih ke Light Mode'}
+          id="btn-toggle-theme"
+          aria-label={theme === 'light' ? 'Aktifkan mode gelap' : 'Aktifkan mode terang'}
+        >
+          {theme === 'light' ? (
+            <>
+              <Moon size={15} style={{ color: 'var(--color-brand-primary)' }} />
+              <span>Dark</span>
+            </>
+          ) : (
+            <>
+              <Sun size={15} style={{ color: '#F59E0B' }} />
+              <span>Light</span>
+            </>
+          )}
         </button>
       </div>
     </header>
