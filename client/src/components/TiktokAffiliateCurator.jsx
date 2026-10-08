@@ -27,7 +27,10 @@ import {
   TrendingUp,
   Percent,
   Tag,
-  Bot
+  Bot,
+  FileJson,
+  Terminal,
+  ArrowDownToLine
 } from 'lucide-react';
 import TiktokVideoModal from './TiktokVideoModal';
 
@@ -52,8 +55,11 @@ export default function TiktokAffiliateCurator({ showToast }) {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortBy, setSortBy] = useState('default');
 
-  // Modal cURL
+  // Modal Sesi & Import Data (Tab: 'json' | 'curl')
   const [isCurlModalOpen, setIsCurlModalOpen] = useState(false);
+  const [importTab, setImportTab] = useState('json');
+  const [jsonInput, setJsonInput] = useState('');
+  const [jsonSubmitting, setJsonSubmitting] = useState(false);
   const [curlInput, setCurlInput] = useState('');
   const [curlSubmitting, setCurlSubmitting] = useState(false);
 
@@ -130,7 +136,13 @@ export default function TiktokAffiliateCurator({ showToast }) {
         showToast?.(`Sinkronisasi sukses! Berhasil menarik ${data.total_fetched} pengajuan dari TikTok.`, 'success');
         fetchData();
       } else {
-        showToast?.('Gagal sinkronisasi: ' + (data.error || 'Periksa sesi cURL TikTok Anda'), 'error');
+        const errorMsg = data.error || 'Periksa sesi cURL TikTok Anda';
+        showToast?.('Gagal sinkronisasi: ' + errorMsg, 'error');
+        // Jika error signature expired / Code 10000, arahkan user ke Tab Import Response JSON
+        if (errorMsg.includes('10000') || errorMsg.includes('Signature') || errorMsg.includes('X-Bogus')) {
+          setImportTab('json');
+          setIsCurlModalOpen(true);
+        }
       }
     } catch (err) {
       showToast?.('Error sinkronisasi: ' + err.message, 'error');
@@ -191,6 +203,36 @@ export default function TiktokAffiliateCurator({ showToast }) {
     }
   };
 
+  // Import Response JSON dari DevTools
+  const handleImportJson = async (e) => {
+    e.preventDefault();
+    if (!jsonInput.trim()) {
+      showToast?.('Silakan paste data Response JSON dari DevTools terlebih dahulu.', 'error');
+      return;
+    }
+    try {
+      setJsonSubmitting(true);
+      const res = await fetch('/api/tiktok/import-json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: jsonInput.trim() })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showToast?.(data.message || `Berhasil mengimpor ${data.total_imported} pengajuan sampel!`, 'success');
+        setIsCurlModalOpen(false);
+        setJsonInput('');
+        fetchData();
+      } else {
+        showToast?.('Gagal mengimpor JSON: ' + (data.error || 'Format tidak valid'), 'error');
+      }
+    } catch (err) {
+      showToast?.('Error import JSON: ' + err.message, 'error');
+    } finally {
+      setJsonSubmitting(false);
+    }
+  };
+
   // Submit cURL TikTok Session
   const handleSubmitCurl = async (e) => {
     e.preventDefault();
@@ -238,6 +280,8 @@ export default function TiktokAffiliateCurator({ showToast }) {
       result = result.filter(s => s.status === 'REJECTED');
     } else if (statusTab === 'star') {
       result = result.filter(s => s.is_star_creator === true);
+    } else if (statusTab === 'expired') {
+      result = result.filter(s => s.is_expired === true);
     }
 
     // Filter Kategori
@@ -267,9 +311,13 @@ export default function TiktokAffiliateCurator({ showToast }) {
       result.sort((a, b) => b.ecom_level - a.ecom_level);
     } else if (sortBy === 'fulfillment_desc') {
       result.sort((a, b) => b.fulfillment_rate - a.fulfillment_rate);
+    } else if (sortBy === 'expiry_asc') {
+      result.sort((a, b) => (a.expires_at || 0) - (b.expires_at || 0));
     } else {
-      // Default: Approved dulu, lalu Star Creator, lalu GMV
+      // Default: Yang belum kadaluarsa dulu, lalu Approved, lalu Star Creator, lalu GMV
       result.sort((a, b) => {
+        if (!a.is_expired && b.is_expired) return -1;
+        if (a.is_expired && !b.is_expired) return 1;
         if (a.status === 'APPROVED' && b.status !== 'APPROVED') return -1;
         if (a.status !== 'APPROVED' && b.status === 'APPROVED') return 1;
         if (a.is_star_creator && !b.is_star_creator) return -1;
@@ -406,9 +454,10 @@ export default function TiktokAffiliateCurator({ showToast }) {
             onClick={() => setIsCurlModalOpen(true)}
             className="btn btn-secondary"
             style={{ padding: '8px 12px', fontSize: '12px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            title="Kelola Sesi cURL atau Impor Response JSON dari DevTools"
           >
-            <Settings size={14} />
-            <span>Sesi cURL</span>
+            <ArrowDownToLine size={14} />
+            <span>Sesi & Impor Data</span>
           </button>
         </div>
       </div>
@@ -465,6 +514,21 @@ export default function TiktokAffiliateCurator({ showToast }) {
             {summary?.saved_hpp_formatted || 'Rp0'}
           </div>
         </div>
+
+        <div style={{ backgroundColor: 'var(--bg-card)', border: '1px solid rgba(148, 163, 184, 0.25)', borderRadius: 'var(--radius-md)', padding: '14px 18px', background: 'linear-gradient(180deg, rgba(148, 163, 184, 0.04) 0%, var(--bg-card) 100%)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+            <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', color: 'var(--text-muted)' }}>Telah Kadaluarsa</span>
+            <Clock size={15} style={{ color: 'var(--text-muted)' }} />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+            <span style={{ fontSize: '22px', fontWeight: 800, color: '#94A3B8' }}>
+              {summary?.expired_count || 0}
+            </span>
+            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)' }}>
+              ({summary?.active_count || 0} aktif)
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* 3. Filter Bar */}
@@ -487,7 +551,8 @@ export default function TiktokAffiliateCurator({ showToast }) {
             { id: 'all', label: `Semua (${samples.length})` },
             { id: 'approved', label: `✅ Lolos (${summary?.approved_count || 0})` },
             { id: 'star', label: `⭐ Star (${summary?.star_creators_count || 0})` },
-            { id: 'rejected', label: `🚫 Gugur (${summary?.rejected_count || 0})` }
+            { id: 'rejected', label: `🚫 Gugur (${summary?.rejected_count || 0})` },
+            { id: 'expired', label: `⏰ Kadaluarsa (${summary?.expired_count || 0})` }
           ].map(tab => (
             <button
               key={tab.id}
@@ -564,7 +629,8 @@ export default function TiktokAffiliateCurator({ showToast }) {
               cursor: 'pointer'
             }}
           >
-            <option value="default">Rekomendasi Utama</option>
+            <option value="default">Rekomendasi Utama (Aktif Didahulukan)</option>
+            <option value="expiry_asc">Batas Waktu Terdekat (Deadline)</option>
             <option value="gmv_desc">GMV Tertinggi</option>
             <option value="views_desc">Views Terbanyak</option>
             <option value="level_desc">Level Tertinggi</option>
@@ -654,10 +720,11 @@ export default function TiktokAffiliateCurator({ showToast }) {
                       cursor: 'pointer',
                       border: isSelected 
                         ? '1px solid var(--color-info)' 
-                        : '1px solid transparent',
+                        : (item.is_expired ? '1px dashed rgba(148, 163, 184, 0.25)' : '1px solid transparent'),
                       backgroundColor: isSelected 
                         ? 'rgba(59, 130, 246, 0.12)' 
                         : 'rgba(255, 255, 255, 0.02)',
+                      opacity: item.is_expired ? 0.78 : 1,
                       transition: 'all 0.15s ease-in-out',
                       display: 'flex',
                       flexDirection: 'column',
@@ -691,9 +758,9 @@ export default function TiktokAffiliateCurator({ showToast }) {
                                 backgroundColor: 'var(--bg-surface-elevated)', 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                justifyContent: 'center',
-                                fontSize: '13px',
-                                fontWeight: 700
+                                justifyItems: 'center', 
+                                fontSize: '13px', 
+                                fontWeight: 700 
                               }}
                             >
                               {item.creator_name.charAt(0).toUpperCase()}
@@ -730,21 +797,60 @@ export default function TiktokAffiliateCurator({ showToast }) {
                         </div>
                       </div>
 
-                      {/* Pill Status */}
-                      <span 
-                        style={{
-                          fontSize: '10px',
-                          fontWeight: 700,
-                          padding: '2px 6px',
-                          borderRadius: '4px',
-                          flexShrink: 0,
-                          backgroundColor: isApproved ? 'var(--color-success-bg)' : 'var(--color-danger-bg)',
-                          color: isApproved ? 'var(--color-success)' : 'var(--color-danger)',
-                          border: `1px solid ${isApproved ? 'var(--color-success-border)' : 'var(--color-danger-border)'}`
-                        }}
-                      >
-                        {isApproved ? '✓ Lolos' : (item.is_real_human === false ? '🤖 AI' : '✕ Gugur')}
-                      </span>
+                      {/* Pill Status & Expiry */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+                        {item.is_expired ? (
+                          <span 
+                            style={{
+                              fontSize: '9px',
+                              fontWeight: 700,
+                              padding: '2px 5px',
+                              borderRadius: '4px',
+                              backgroundColor: 'rgba(148, 163, 184, 0.15)',
+                              color: '#94A3B8',
+                              border: '1px solid rgba(148, 163, 184, 0.25)',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '2px'
+                            }}
+                            title={`Batas waktu peninjauan TikTok telah lewat: ${item.expires_at_formatted || ''}`}
+                          >
+                            <Clock size={9} /> Kadaluarsa
+                          </span>
+                        ) : (
+                          <span 
+                            style={{
+                              fontSize: '9px',
+                              fontWeight: 600,
+                              padding: '2px 5px',
+                              borderRadius: '4px',
+                              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                              color: '#60A5FA',
+                              border: '1px solid rgba(59, 130, 246, 0.2)',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '2px'
+                            }}
+                            title={`Batas respon: ${item.expires_at_formatted || ''}`}
+                          >
+                            <Clock size={9} /> {item.time_left_text}
+                          </span>
+                        )}
+
+                        <span 
+                          style={{
+                            fontSize: '10px',
+                            fontWeight: 700,
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            backgroundColor: isApproved ? 'var(--color-success-bg)' : 'var(--color-danger-bg)',
+                            color: isApproved ? 'var(--color-success)' : 'var(--color-danger)',
+                            border: `1px solid ${isApproved ? 'var(--color-success-border)' : 'var(--color-danger-border)'}`
+                          }}
+                        >
+                          {isApproved ? '✓ Lolos' : (item.is_real_human === false ? '🤖 AI' : '✕ Gugur')}
+                        </span>
+                      </div>
                     </div>
 
                     {/* Baris 2: Metrik Singkat (GMV | Views | Fulfillment) */}
@@ -950,44 +1056,49 @@ export default function TiktokAffiliateCurator({ showToast }) {
                   </div>
                 </div>
 
-                {/* Tombol Aksi Manual (Approve / Reject / Audit AI) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <button
-                    onClick={() => handleUpdateStatus(activeCreator.apply_id, 'APPROVED')}
-                    className="btn btn-secondary"
+                {/* Tombol Panduan & Eksekusi Manual di TikTok Seller */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <a
+                    href="https://affiliate-id.tokopedia.com/affiliate/sample/sample-request?tab=10&shop_region=ID&shop_id=7494826103548118725"
+                    target="_blank"
+                    rel="noreferrer"
                     style={{
                       padding: '8px 14px',
                       fontSize: '12px',
                       fontWeight: 700,
-                      backgroundColor: activeCreator.status === 'APPROVED' ? 'var(--color-success-bg)' : 'var(--bg-input)',
-                      color: activeCreator.status === 'APPROVED' ? 'var(--color-success)' : 'var(--text-secondary)',
-                      border: `1px solid ${activeCreator.status === 'APPROVED' ? 'var(--color-success-border)' : 'var(--border-subtle)'}`,
+                      backgroundColor: 'var(--color-brand-primary, #4F46E5)',
+                      color: '#fff',
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '6px'
+                      gap: '6px',
+                      borderRadius: 'var(--radius-sm)',
+                      textDecoration: 'none',
+                      boxShadow: '0 2px 6px rgba(79, 70, 229, 0.3)'
                     }}
+                    title="Buka halaman permohonan sampel di TikTok Shop Seller Center"
                   >
-                    <UserCheck size={14} />
-                    <span>Approve Sample</span>
-                  </button>
+                    <ExternalLink size={14} />
+                    <span>Buka di TikTok Seller</span>
+                  </a>
 
                   <button
-                    onClick={() => handleUpdateStatus(activeCreator.apply_id, 'REJECTED')}
+                    onClick={() => handleCopyUsername(activeCreator.creator_name)}
                     className="btn btn-secondary"
                     style={{
-                      padding: '8px 14px',
+                      padding: '8px 12px',
                       fontSize: '12px',
                       fontWeight: 700,
-                      backgroundColor: activeCreator.status === 'REJECTED' ? 'var(--color-danger-bg)' : 'var(--bg-input)',
-                      color: activeCreator.status === 'REJECTED' ? 'var(--color-danger)' : 'var(--text-secondary)',
-                      border: `1px solid ${activeCreator.status === 'REJECTED' ? 'var(--color-danger-border)' : 'var(--border-subtle)'}`,
+                      backgroundColor: 'var(--bg-input)',
+                      color: 'var(--text-secondary)',
+                      border: '1px solid var(--border-subtle)',
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '6px'
                     }}
+                    title="Salin username creator untuk dicari di TikTok Seller Center"
                   >
-                    <UserX size={14} />
-                    <span>Tolak Sample</span>
+                    <Copy size={13} />
+                    <span>Salin Username</span>
                   </button>
 
                   <button
@@ -1011,6 +1122,60 @@ export default function TiktokAffiliateCurator({ showToast }) {
                   </button>
                 </div>
               </div>
+
+              {/* Expiry Banner / Time Indicator */}
+              {activeCreator.is_expired ? (
+                <div 
+                  style={{
+                    padding: '12px 16px',
+                    borderRadius: 'var(--radius-sm)',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    fontSize: '12px'
+                  }}
+                >
+                  <AlertTriangle size={20} style={{ color: 'var(--color-danger)', flexShrink: 0 }} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 800, color: '#FCA5A5', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span>PERMOHONAN SAMPEL TELAH KADALUARSA</span>
+                      <span style={{ fontSize: '10px', fontWeight: 700, padding: '2px 6px', borderRadius: '4px', backgroundColor: 'rgba(239, 68, 68, 0.25)', color: '#fff' }}>
+                        {activeCreator.time_left_text}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '3px', lineHeight: 1.5 }}>
+                      Batas respon 7 hari di TikTok Shop telah lewat ({activeCreator.expires_at_formatted}). Di portal TikTok Seller Center, permohonan ini otomatis dibatalkan/kadaluarsa oleh sistem TikTok sehingga tidak perlu diproses lagi.
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div 
+                  style={{
+                    padding: '10px 16px',
+                    borderRadius: 'var(--radius-sm)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                    border: '1px solid rgba(59, 130, 246, 0.25)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '8px',
+                    fontSize: '12px'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Clock size={15} style={{ color: '#60A5FA' }} />
+                    <span style={{ color: 'var(--text-secondary)' }}>
+                      Sisa Batas Waktu Respon TikTok: <strong style={{ color: '#60A5FA' }}>{activeCreator.time_left_text}</strong> (Batas: {activeCreator.expires_at_formatted})
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                    Diajukan: <strong style={{ color: 'var(--text-secondary)' }}>{activeCreator.create_date_formatted}</strong>
+                  </div>
+                </div>
+              )}
 
               {/* Executive Decision & Alasan Rekomendasi Card (Redesigned for Maximum Clarity) */}
               <div 
@@ -1261,8 +1426,10 @@ export default function TiktokAffiliateCurator({ showToast }) {
                   >
                     <span>
                       {activeCreator.status === 'APPROVED' 
-                        ? '💡 Rekomendasi: Klik "Approve Sample" di atas untuk konfirmasi persetujuan permohonan.'
-                        : '🛡️ Proteksi HPP: Otomatis disaring untuk mencegah biaya sampel terbuang percuma.'}
+                        ? (activeCreator.is_expired 
+                            ? '⏰ Permohonan telah kadaluarsa di TikTok Shop (tidak perlu diproses lagi).' 
+                            : '💡 Rekomendasi LAYAK APPROVE: Silakan setujui permohonan ini secara manual di TikTok Shop Seller Center.')
+                        : '🛡️ Proteksi HPP: Rekomendasi GUGUR / TOLAK. Hindari menyetujui sampel ini di TikTok Shop Seller Center.'}
                     </span>
                     <span style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>
                       Evaluasi Engine Monture AI
@@ -1478,7 +1645,7 @@ export default function TiktokAffiliateCurator({ showToast }) {
       )}
 
 
-      {/* 6. Modal Import cURL TikTok Session */}
+      {/* 6. Modal Sinkronisasi & Impor Data TikTok (Dual Mode: JSON Response & cURL) */}
       {isCurlModalOpen && (
         <div 
           className="modal-backdrop" 
@@ -1502,77 +1669,200 @@ export default function TiktokAffiliateCurator({ showToast }) {
               backgroundColor: 'var(--bg-card)',
               border: '1px solid var(--border-highlight)',
               borderRadius: 'var(--radius-lg)',
-              maxWidth: '620px',
+              maxWidth: '680px',
               width: '100%',
               padding: '24px',
-              position: 'relative'
+              position: 'relative',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)'
             }}
           >
+            {/* Header Modal */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Settings size={20} style={{ color: 'var(--color-brand-primary)' }} />
-                <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
-                  Pengaturan Sesi cURL TikTok
-                </h3>
+                <ArrowDownToLine size={20} style={{ color: 'var(--color-brand-primary)' }} />
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
+                    Sinkronisasi & Impor Data TikTok
+                  </h3>
+                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
+                    Perbarui daftar pengajuan sampel creator affiliate ke dalam Monture Dashboard
+                  </p>
+                </div>
               </div>
               <button 
                 onClick={() => setIsCurlModalOpen(false)}
-                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '4px' }}
               >
                 <X size={18} />
               </button>
             </div>
 
-            <div style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '14px' }}>
-              Untuk memperbarui sesi atau menarik halaman berikutnya dari TikTok:
-              <ol style={{ paddingLeft: '20px', marginTop: '6px', marginBottom: '8px' }}>
-                <li>Buka halaman Permintaan Sampel di browser Anda.</li>
-                <li>Buka <strong>DevTools (F12)</strong> ➔ Tab <strong>Network</strong>.</li>
-                <li>Klik kanan request <code>list</code> ➔ <strong>Copy</strong> ➔ <strong>Copy as cURL (bash)</strong>.</li>
-                <li>Tempel (*paste*) perintah cURL di bawah ini:</li>
-              </ol>
+            {/* Tab Navigasi Mode Impor */}
+            <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border-subtle)', marginBottom: '16px', paddingBottom: '8px' }}>
+              <button
+                type="button"
+                onClick={() => setImportTab('json')}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '8px 14px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  borderRadius: 'var(--radius-sm)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: importTab === 'json' ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+                  color: importTab === 'json' ? 'var(--color-success)' : 'var(--text-secondary)',
+                  borderBottom: importTab === 'json' ? '2px solid var(--color-success)' : '2px solid transparent',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <FileJson size={16} />
+                <span>Impor Response JSON</span>
+                <span style={{ fontSize: '10px', padding: '1px 6px', borderRadius: '4px', backgroundColor: 'var(--color-success)', color: '#fff', fontWeight: 700 }}>
+                  100% Berhasil
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setImportTab('curl')}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '8px 14px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  borderRadius: 'var(--radius-sm)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: importTab === 'curl' ? 'rgba(59, 130, 246, 0.15)' : 'transparent',
+                  color: importTab === 'curl' ? 'var(--color-brand-primary)' : 'var(--text-secondary)',
+                  borderBottom: importTab === 'curl' ? '2px solid var(--color-brand-primary)' : '2px solid transparent',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <Terminal size={16} />
+                <span>Sesi cURL API</span>
+                <span style={{ fontSize: '10px', padding: '1px 6px', borderRadius: '4px', backgroundColor: 'rgba(239, 68, 68, 0.2)', color: 'var(--color-danger)', fontWeight: 600 }}>
+                  TTL ~60s
+                </span>
+              </button>
             </div>
 
-            <form onSubmit={handleSubmitCurl}>
-              <textarea 
-                rows={6}
-                value={curlInput}
-                onChange={(e) => setCurlInput(e.target.value)}
-                placeholder="curl --url 'https://affiliate-id.tokopedia.com/api/v1/affiliate/sample/group/list?...' -H 'cookie: ...'"
-                style={{
-                  width: '100%',
-                  backgroundColor: 'var(--bg-input)',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: 'var(--radius-sm)',
-                  padding: '12px',
-                  color: 'var(--text-primary)',
-                  fontSize: '12px',
-                  fontFamily: 'monospace',
-                  resize: 'vertical',
-                  outline: 'none',
-                  marginBottom: '16px'
-                }}
-              />
+            {/* TAB 1: IMPOR RESPONSE JSON (REKOMENDASI UTAMA) */}
+            {importTab === 'json' && (
+              <form onSubmit={handleImportJson}>
+                <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.06)', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: 'var(--radius-sm)', padding: '12px 14px', marginBottom: '14px', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  <div style={{ fontWeight: 700, color: 'var(--color-success)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <CheckCircle2 size={14} /> Solusi Pasti Berhasil (Bebas Error Signature / Code 10000):
+                  </div>
+                  <ol style={{ paddingLeft: '18px', margin: 0 }}>
+                    <li>Buka tab TikTok Seller Center Anda di browser (halaman Permintaan Sampel).</li>
+                    <li>Buka <strong>DevTools (tekan F12)</strong> ➔ pilih tab <strong>Network</strong> ➔ ketik <code style={{ color: 'var(--color-brand-primary)' }}>list</code> di filter pencarian.</li>
+                    <li>Klik salah satu request <strong>list</strong> ➔ buka tab <strong>Response</strong> di sebelah kanan.</li>
+                    <li>Klik kanan di isi response ➔ pilih <strong>Copy object</strong> (atau <em>Ctrl+A</em> lalu <em>Ctrl+C</em>).</li>
+                    <li>Tempelkan (*paste*) teks JSON di bawah ini, lalu klik <strong>Impor Data Sampel</strong>.</li>
+                  </ol>
+                </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                <button
-                  type="button"
-                  onClick={() => setIsCurlModalOpen(false)}
-                  className="btn btn-secondary"
-                  style={{ padding: '8px 16px', fontSize: '13px' }}
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  disabled={curlSubmitting}
-                  className="btn btn-primary"
-                  style={{ padding: '8px 20px', fontSize: '13px' }}
-                >
-                  {curlSubmitting ? 'Memproses...' : 'Simpan Sesi cURL'}
-                </button>
-              </div>
-            </form>
+                <textarea 
+                  rows={7}
+                  value={jsonInput}
+                  onChange={(e) => setJsonInput(e.target.value)}
+                  placeholder={`Tempelkan Response JSON di sini (contoh: {"code":0,"message":"success","agg_info":[...],"total_count":50})`}
+                  style={{
+                    width: '100%',
+                    backgroundColor: 'var(--bg-input)',
+                    border: '1px solid var(--border-subtle)',
+                    borderRadius: 'var(--radius-sm)',
+                    padding: '12px',
+                    color: 'var(--text-primary)',
+                    fontSize: '12px',
+                    fontFamily: 'monospace',
+                    resize: 'vertical',
+                    outline: 'none',
+                    marginBottom: '16px'
+                  }}
+                />
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsCurlModalOpen(false)}
+                    className="btn btn-secondary"
+                    style={{ padding: '8px 16px', fontSize: '13px' }}
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={jsonSubmitting}
+                    className="btn btn-primary"
+                    style={{ padding: '8px 22px', fontSize: '13px', backgroundColor: 'var(--color-success)', borderColor: 'var(--color-success)' }}
+                  >
+                    {jsonSubmitting ? 'Mengimpor...' : 'Impor Data Sampel'}
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* TAB 2: SESI cURL */}
+            {importTab === 'curl' && (
+              <form onSubmit={handleSubmitCurl}>
+                <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: 'var(--radius-sm)', padding: '12px 14px', marginBottom: '14px', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                  <div style={{ fontWeight: 700, color: 'var(--color-danger)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <AlertTriangle size={14} /> Mengapa Muncul Code 10000 di cURL?
+                  </div>
+                  <div>
+                    TikTok menerapkan proteksi bot WAF dengan cryptographic signature <code>X-Bogus</code> yang otomatis <strong>kadaluarsa dalam waktu ~60 detik</strong> dan hanya bisa dieksekusi 1 kali (replay protection). 
+                    <br />
+                    Jika tombol <strong>Sync Live</strong> memunculkan error Code 10000, segera gunakan tab <strong>"Impor Response JSON"</strong> di atas.
+                  </div>
+                </div>
+
+                <textarea 
+                  rows={7}
+                  value={curlInput}
+                  onChange={(e) => setCurlInput(e.target.value)}
+                  placeholder="curl --url 'https://affiliate-id.tokopedia.com/api/v1/affiliate/sample/group/list?...' -H 'cookie: ...'"
+                  style={{
+                    width: '100%',
+                    backgroundColor: 'var(--bg-input)',
+                    border: '1px solid var(--border-subtle)',
+                    borderRadius: 'var(--radius-sm)',
+                    padding: '12px',
+                    color: 'var(--text-primary)',
+                    fontSize: '12px',
+                    fontFamily: 'monospace',
+                    resize: 'vertical',
+                    outline: 'none',
+                    marginBottom: '16px'
+                  }}
+                />
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsCurlModalOpen(false)}
+                    className="btn btn-secondary"
+                    style={{ padding: '8px 16px', fontSize: '13px' }}
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={curlSubmitting}
+                    className="btn btn-primary"
+                    style={{ padding: '8px 20px', fontSize: '13px' }}
+                  >
+                    {curlSubmitting ? 'Memproses...' : 'Simpan Sesi cURL'}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}

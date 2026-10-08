@@ -180,7 +180,7 @@ function auditVideoAuthenticity(topVideos, creator, sampleItem) {
  * Menerima 1 record permohonan sampel (agg_info item)
  * Mengembalikan objek hasil kurasi lengkap dengan reasoning log.
  */
-function evaluateMontureKpi(sampleItem) {
+function evaluateMontureKpi(sampleItem, baseSyncTime) {
   const creator = sampleItem.apply_group?.creator_info || {};
   const applyInfo = sampleItem.apply_deatil?.apply_info || {};
   
@@ -345,7 +345,11 @@ function evaluateMontureKpi(sampleItem) {
     sku_price_formatted: applyInfo.sku_price?.formatted_price || `Rp${skuPrice.toLocaleString('id-ID')}`,
     commission_rate: (parseInt(applyInfo.commission_rate || '1000', 10) / 100).toFixed(1) + '%',
     create_time: applyInfo.create_time || Date.now(),
+    curr_status: applyInfo.curr_status,
     expired_in: applyInfo.expired_in || 0,
+    expires_at: (Number(applyInfo.expired_in) > 0 && baseSyncTime)
+      ? (new Date(baseSyncTime).getTime() + Number(applyInfo.expired_in))
+      : (Number(applyInfo.create_time || Date.now()) + 7 * 86400 * 1000),
     
     // Video showcase
     videos: topVideos.map(v => ({
@@ -373,11 +377,53 @@ function evaluateMontureKpi(sampleItem) {
 }
 
 /**
+ * Helper: Tambahkan status kadaluarsa realtime
+ */
+function enrichExpiryInfo(record, syncTime) {
+  const now = Date.now();
+  const expiredIn = Number(record.expired_in || 0);
+  const syncMs = syncTime ? new Date(syncTime).getTime() : (record.evaluated_at ? new Date(record.evaluated_at).getTime() : now);
+  const expiresAt = record.expires_at || (expiredIn > 0 ? (syncMs + expiredIn) : (Number(record.create_time || now) + 7 * 86400 * 1000));
+  const isExpired = Number(record.curr_status) === 52 || (now >= expiresAt);
+  const diffMs = expiresAt - now;
+
+  let timeLeftText = '';
+  if (isExpired) {
+    const passedHours = Math.round((now - expiresAt) / (3600 * 1000));
+    timeLeftText = passedHours >= 24 ? `Kadaluarsa (${Math.floor(passedHours / 24)} hari lalu)` : `Kadaluarsa (${passedHours} jam lalu)`;
+  } else {
+    const remainHours = Math.round(diffMs / (3600 * 1000));
+    timeLeftText = remainHours >= 24 ? `Tersisa ${Math.floor(remainHours / 24)} hari` : `Tersisa ${remainHours} jam`;
+  }
+
+  return {
+    ...record,
+    expires_at: expiresAt,
+    expires_at_formatted: new Date(expiresAt).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }),
+    create_date_formatted: new Date(Number(record.create_time || now)).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    }),
+    is_expired: isExpired,
+    remaining_ms: Math.max(0, diffMs),
+    time_left_text: timeLeftText
+  };
+}
+
+/**
  * 3. Jalankan Kurasi pada seluruh data
  */
 function runCuration(force = false) {
   const db = loadDatabase();
   const rawSamples = db.raw_samples || [];
+  const syncTime = db.config?.lastSync || db.updated_at;
   
   if (!db.curated_records) {
     db.curated_records = {};
@@ -393,7 +439,7 @@ function runCuration(force = false) {
       return;
     }
 
-    const evaluation = evaluateMontureKpi(item);
+    const evaluation = evaluateMontureKpi(item, syncTime);
     db.curated_records[applyId] = evaluation;
     newlyCurated++;
   });
@@ -419,13 +465,14 @@ function getCuratedSamples(filters = {}) {
   }
 
   const {
-    status = 'all', // all | approved | rejected | star
+    status = 'all', // all | approved | rejected | star | expired | active
     search = '',
     category = 'all',
     sortBy = 'default'
   } = filters;
 
-  let list = Object.values(db.curated_records || {});
+  const syncTime = db.config?.lastSync || db.updated_at;
+  let list = Object.values(db.curated_records || {}).map(item => enrichExpiryInfo(item, syncTime));
 
   // Filter Status
   if (status === 'approved') {
@@ -434,6 +481,10 @@ function getCuratedSamples(filters = {}) {
     list = list.filter(item => item.status === 'REJECTED');
   } else if (status === 'star') {
     list = list.filter(item => item.is_star_creator === true);
+  } else if (status === 'expired') {
+    list = list.filter(item => item.is_expired === true);
+  } else if (status === 'active') {
+    list = list.filter(item => item.is_expired === false);
   }
 
   // Filter Kategori
@@ -463,9 +514,14 @@ function getCuratedSamples(filters = {}) {
     list.sort((a, b) => b.ecom_level - a.ecom_level);
   } else if (sortBy === 'fulfillment_desc') {
     list.sort((a, b) => b.fulfillment_rate - a.fulfillment_rate);
+  } else if (sortBy === 'expiry_asc') {
+    list.sort((a, b) => a.expires_at - b.expires_at);
   } else {
-    // Default: Approved dulu, lalu Star Creator, lalu GMV
+    // Default: Approved aktif dulu, lalu Star Creator, lalu GMV
     list.sort((a, b) => {
+      // Prioritaskan yang belum kadaluarsa
+      if (!a.is_expired && b.is_expired) return -1;
+      if (a.is_expired && !b.is_expired) return 1;
       if (a.status === 'APPROVED' && b.status !== 'APPROVED') return -1;
       if (a.status !== 'APPROVED' && b.status === 'APPROVED') return 1;
       if (a.is_star_creator && !b.is_star_creator) return -1;
@@ -482,12 +538,15 @@ function getCuratedSamples(filters = {}) {
  */
 function getSummaryMetrics() {
   const db = loadDatabase();
-  const list = Object.values(db.curated_records || {});
+  const syncTime = db.config?.lastSync || db.updated_at;
+  const list = Object.values(db.curated_records || {}).map(item => enrichExpiryInfo(item, syncTime));
 
   const total = list.length;
   const approved = list.filter(i => i.status === 'APPROVED').length;
   const rejected = list.filter(i => i.status === 'REJECTED').length;
   const starCreators = list.filter(i => i.is_star_creator).length;
+  const expiredCount = list.filter(i => i.is_expired).length;
+  const activeCount = list.filter(i => !i.is_expired).length;
 
   // Hitung total HPP terselamatkan (nilai produk dari creator yang ditolak)
   const savedHpp = list
@@ -501,6 +560,8 @@ function getSummaryMetrics() {
     approved_count: approved,
     rejected_count: rejected,
     star_creators_count: starCreators,
+    expired_count: expiredCount,
+    active_count: activeCount,
     saved_hpp_amount: savedHpp,
     saved_hpp_formatted: `Rp${savedHpp.toLocaleString('id-ID')}`,
     pass_rate: passRate,
@@ -532,7 +593,19 @@ function updateSampleStatus(applyId, newStatus, note = '') {
  */
 function parseTiktokCurl(curlString) {
   if (!curlString || typeof curlString !== 'string') {
-    throw new Error('Perintah cURL tidak boleh kosong.');
+    throw new Error('Perintah cURL atau data tidak boleh kosong.');
+  }
+
+  const trimmed = curlString.trim();
+
+  // Smart Detection: Jika user menempelkan format JSON langsung
+  if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+    try {
+      const parsedJson = JSON.parse(trimmed);
+      return { isJson: true, data: parsedJson };
+    } catch (e) {
+      // Jika bukan JSON murni, lanjutkan parsing cURL
+    }
   }
 
   // Ekstrak URL (Mendukung --url 'https://...', curl 'https://...', atau direct URL)
@@ -545,17 +618,31 @@ function parseTiktokCurl(curlString) {
   }
   const url = urlMatch[1] || urlMatch[0];
 
-  // Ekstrak Headers
+  // Ekstrak Headers dengan regex kuat untuk single-quote dan double-quote
   const headers = {};
-  const headerRegex = /-H\s+['"]([^'"]+)['"]/gi;
+  
+  // Single quote headers: -H 'key: value'
+  const singleQuoteRegex = /-H\s+'([^']+)'/gi;
   let match;
-  while ((match = headerRegex.exec(curlString)) !== null) {
+  while ((match = singleQuoteRegex.exec(curlString)) !== null) {
     const line = match[1];
     const colonIdx = line.indexOf(':');
     if (colonIdx > -1) {
       const key = line.slice(0, colonIdx).trim().toLowerCase();
       const val = line.slice(colonIdx + 1).trim();
       headers[key] = val;
+    }
+  }
+
+  // Double quote headers: -H "key: value"
+  const doubleQuoteRegex = /-H\s+"([^"]+)"/gi;
+  while ((match = doubleQuoteRegex.exec(curlString)) !== null) {
+    const line = match[1];
+    const colonIdx = line.indexOf(':');
+    if (colonIdx > -1) {
+      const key = line.slice(0, colonIdx).trim().toLowerCase();
+      const val = line.slice(colonIdx + 1).trim();
+      if (!headers[key]) headers[key] = val;
     }
   }
 
@@ -566,25 +653,111 @@ function parseTiktokCurl(curlString) {
     headers['cookie'] = cookieMatch[1];
   }
 
-  return { url, headers };
+  // Ekstrak Body (--data-raw, --data, -d)
+  let body = null;
+  const bodyMatch = curlString.match(/(?:--data-raw|--data|--data-binary|-d)\s+'([^']+)'/i) ||
+                    curlString.match(/(?:--data-raw|--data|--data-binary|-d)\s+"([^"]+)"/i);
+  if (bodyMatch) {
+    try {
+      body = JSON.parse(bodyMatch[1]);
+    } catch {
+      body = bodyMatch[1];
+    }
+  }
+
+  return { isJson: false, url, headers, body };
 }
 
 /**
- * 8. Simpan Sesi Baru dari cURL
+ * 7b. Import Data Sampel dari Raw JSON Response
+ * 100% Reliable: Bebas dari limitasi signature X-Bogus atau anti-bot WAF TikTok
+ */
+function importJsonSamples(jsonData) {
+  let parsed = jsonData;
+  if (typeof jsonData === 'string') {
+    try {
+      parsed = JSON.parse(jsonData);
+    } catch (e) {
+      throw new Error('Format JSON tidak valid: ' + e.message);
+    }
+  }
+
+  let items = [];
+  if (Array.isArray(parsed)) {
+    items = parsed;
+  } else if (Array.isArray(parsed.agg_info)) {
+    items = parsed.agg_info;
+  } else if (parsed.data && Array.isArray(parsed.data.agg_info)) {
+    items = parsed.data.agg_info;
+  } else if (parsed.data && Array.isArray(parsed.data)) {
+    items = parsed.data;
+  } else {
+    throw new Error('Data JSON tidak memuat array "agg_info". Pastikan Anda meng-copy Response dari request "list" di DevTools.');
+  }
+
+  if (items.length === 0) {
+    throw new Error('Data permohonan sampel kosong (agg_info tidak memiliki elemen).');
+  }
+
+  const db = loadDatabase();
+  const existingMap = new Map();
+  (db.raw_samples || []).forEach(item => {
+    const id = item.apply_deatil?.apply_info?.apply_id || item.apply_group?.group_id;
+    if (id) existingMap.set(id, item);
+  });
+
+  let newCount = 0;
+  items.forEach(item => {
+    const id = item.apply_deatil?.apply_info?.apply_id || item.apply_group?.group_id;
+    if (id) {
+      if (!existingMap.has(id)) newCount++;
+      existingMap.set(id, item);
+    }
+  });
+
+  db.raw_samples = Array.from(existingMap.values());
+  db.total_count = parsed.total_count || db.raw_samples.length;
+  if (!db.config) db.config = {};
+  db.config.lastSync = new Date().toISOString();
+
+  saveDatabase(db);
+
+  // Jalankan kurasi otomatis 7 KPI
+  runCuration(false);
+
+  return {
+    success: true,
+    message: `Berhasil mengimpor ${items.length} permohonan sampel (${newCount} data baru)!`,
+    total_imported: items.length,
+    new_items_count: newCount,
+    total_in_db: db.raw_samples.length
+  };
+}
+
+/**
+ * 8. Simpan Sesi Baru dari cURL atau JSON
  */
 function updateTiktokSessionFromCurl(curlString) {
-  const db = loadDatabase();
   const parsed = parseTiktokCurl(curlString);
 
+  // Jika input berupa JSON response, alihkan ke importer JSON
+  if (parsed.isJson) {
+    return importJsonSamples(parsed.data);
+  }
+
+  const db = loadDatabase();
   if (!db.config) db.config = {};
   db.config.url = parsed.url;
   db.config.headers = { ...db.config.headers, ...parsed.headers };
+  if (parsed.body) {
+    db.config.body = parsed.body;
+  }
   db.config.lastSync = new Date().toISOString();
 
   saveDatabase(db);
   return {
     success: true,
-    message: 'Sesi cURL TikTok berhasil disimpan dan diperbarui!',
+    message: 'Sesi cURL TikTok berhasil disimpan!',
     url: parsed.url.slice(0, 100) + '...'
   };
 }
@@ -597,10 +770,10 @@ async function syncLiveFromTiktok(page = 1, pageSize = 50) {
   const config = db.config || {};
 
   if (!config.url) {
-    throw new Error('URL TikTok API belum dikonfigurasi. Silakan paste cURL di pengaturan.');
+    throw new Error('URL TikTok API belum dikonfigurasi. Silakan paste cURL atau JSON di pengaturan sesi.');
   }
 
-  const payload = {
+  const payload = config.body || {
     tab: 10,
     cur_page: page,
     page_size: pageSize,
@@ -622,6 +795,9 @@ async function syncLiveFromTiktok(page = 1, pageSize = 50) {
 
   const resJson = await response.json();
   if (resJson.code !== 0 && resJson.code !== '0') {
+    if (resJson.code === 10000) {
+      throw new Error('TikTok API Code 10000: Signature WAF X-Bogus kadaluarsa. Signature TikTok hanya aktif ~60 detik. Gunakan tab "Import JSON Response" di menu Sesi untuk sinkronisasi tanpa batas waktu.');
+    }
     throw new Error(`TikTok API error: Code ${resJson.code} - ${resJson.message || 'Signature / Sesi kadaluarsa'}`);
   }
 
@@ -728,6 +904,7 @@ module.exports = {
   updateAiAudit,
   parseTiktokCurl,
   updateTiktokSessionFromCurl,
+  importJsonSamples,
   syncLiveFromTiktok
 };
 

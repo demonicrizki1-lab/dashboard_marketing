@@ -34,6 +34,7 @@ const {
   updateSampleStatus,
   updateAiAudit,
   updateTiktokSessionFromCurl,
+  importJsonSamples,
   syncLiveFromTiktok,
   loadDatabase: loadTiktokDatabase
 } = require('./services/tiktokAffiliateService');
@@ -321,6 +322,20 @@ app.get('/api/tiktok/session', (req, res) => {
       shopRegion: config.shopRegion || 'ID',
       hasUrl: Boolean(config.url)
     });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/tiktok/import-json - Import data sampel dari raw response JSON DevTools (Bebas kendala signature WAF)
+app.post('/api/tiktok/import-json', (req, res) => {
+  try {
+    const rawData = req.body.data !== undefined ? req.body.data : req.body;
+    if (!rawData) {
+      return res.status(400).json({ error: 'Data JSON permohonan sampel TikTok wajib diisi.' });
+    }
+    const result = importJsonSamples(rawData);
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

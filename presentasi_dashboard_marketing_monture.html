@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentasi Eksekutif: Dashboard Marketing & Curation Engine Monture Outdoor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070a13;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --border-subtle: rgba(148, 163, 184, 0.12);
+      --border-highlight: rgba(14, 165, 233, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --brand-primary: #0284c7;
+      --brand-glow: #38bdf8;
+      --brand-accent: #f97316;
+      --brand-tiktok: #fe2c55;
+      --brand-shopee: #ee4d2d;
+      --color-success: #10b981;
+      --color-warning: #f59e0b;
+      --color-danger: #ef4444;
+      --color-info: #06b6d4;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      line-height: 1.5;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(2, 132, 199, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(254, 44, 85, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+      background-attachment: fixed;
+    }
+
+    /* Top Bar Header */
+    .top-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      backdrop-filter: blur(16px);
+      background: rgba(7, 10, 19, 0.85);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: white;
+      font-weight: 900;
+      font-size: 14px;
+      letter-spacing: 1px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .slide-progress-bar {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #38bdf8, #fe2c55, #10b981);
+      width: 0%;
+      transition: width 0.3s ease;
+      z-index: 101;
+    }
+
+    /* Presentation Container */
+    .deck-container {
+      max-width: 1280px;
+      margin: 100px auto 100px auto;
+      padding: 0 24px;
+      position: relative;
+    }
+
+    /* Slide Item */
+    .slide {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hero Slide */
+    .hero-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-highlight);
+      border-radius: 24px;
+      padding: 64px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .pill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-title {
+      font-size: 46px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, #38bdf8 0%, #fe2c55 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-description {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 820px;
+      margin: 0 auto 40px auto;
+      line-height: 1.6;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    /* Stat Cards */
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 24px;
+      position: relative;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .stat-card:hover {
+      border-color: var(--border-highlight);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .stat-card.emerald {
+      border-color: rgba(16, 185, 129, 0.3);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, var(--bg-card) 100%);
+    }
+
+    .stat-card.rose {
+      border-color: rgba(244, 63, 94, 0.3);
+      background: linear-gradient(180deg, rgba(244, 63, 94, 0.08) 0%, var(--bg-card) 100%);
+    }
+
+    .stat-card.amber {
+      border-color: rgba(245, 158, 11, 0.3);
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, var(--bg-card) 100%);
+    }
+
+    .stat-card.sky {
+      border-color: rgba(56, 189, 248, 0.3);
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.08) 0%, var(--bg-card) 100%);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .stat-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* Content Card */
+    .content-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+    }
+
+    .box-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .box-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--brand-glow);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .box-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .box-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* List Items */
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .check-icon {
+      color: var(--color-success);
+      font-weight: 800;
+      font-size: 16px;
+      margin-top: 1px;
+    }
+
+    .danger-icon {
+      color: var(--color-danger);
+      font-weight: 800;
+      font-size: 16px;
+      margin-top: 1px;
+    }
+
+    /* KPI Table */
+    .kpi-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 12px;
+    }
+
+    .kpi-table th {
+      text-align: left;
+      padding: 12px 14px;
+      background: rgba(30, 41, 59, 0.6);
+      color: var(--text-main);
+      font-weight: 700;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .kpi-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .kpi-table tr:hover td {
+      background: rgba(30, 41, 59, 0.4);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-wajib {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--color-danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .badge-star {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--color-warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-pass {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--color-success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    /* Code Snippet Box */
+    .code-box {
+      background: #030712;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #38bdf8;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    /* Navigation Bar */
+    .deck-nav {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-highlight);
+      border-radius: 9999px;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--brand-primary);
+      border-color: var(--brand-glow);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .slide-counter {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      min-width: 70px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .section-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    /* Module Card */
+    .module-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+    }
+
+    .module-card:hover {
+      border-color: var(--border-highlight);
+      transform: translateY(-4px);
+    }
+
+    .module-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--brand-glow);
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .grid-4 {
+        grid-template-columns: 1fr;
+      }
+      .hero-title {
+        font-size: 32px;
+      }
+      .top-header {
+        padding: 0 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar Header -->
+  <header class="top-header">
+    <div class="brand-logo">
+      <div class="brand-badge">MONTURE</div>
+      <div>
+        <div class="brand-title">Marketing Command Hub & TikTok Curator</div>
+        <div class="brand-subtitle">Executive Presentation & Technical Architecture</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="nav-btn" onclick="toggleFullscreen()">⛶ Layar Penuh</button>
+      <button class="nav-btn" onclick="switchSlide(0)">⏮ Mulai Ulang</button>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="slide-progress-bar" id="progressBar"></div>
+
+  <!-- Deck Container -->
+  <main class="deck-container">
+
+    <!-- ============================================================== -->
+    <!-- SLIDE 1: COVER & EXECUTIVE SUMMARY -->
+    <!-- ============================================================== -->
+    <section class="slide active" id="slide-0">
+      <div class="hero-card">
+        <div class="pill-tag">🔥 Executive Briefing & Live Proof</div>
+        <h1 class="hero-title">
+          Monture Marketing Analytics & <br>
+          <span>TikTok Affiliate Curation Engine</span>
+        </h1>
+        <p class="hero-description">
+          Solusi terpadu otomatisasi kurasi sampel produk TikTok Shop dan analitik performa iklan Shopee. Melindungi ratusan juta rupiah modal produk (HPP) dari akun bot/tidak produktif melalui <strong>Quality Gate 7 KPI</strong> dan verifikasi keaslian konten real try-on.
+        </p>
+
+        <div class="grid-4" style="margin-top: 40px; text-align: left;">
+          <div class="stat-card emerald">
+            <div class="stat-label">HPP Terlindungi</div>
+            <div class="stat-value">Rp121 Juta+</div>
+            <div class="stat-desc">Modal stok terselamatkan dari 272 permohonan tidak layak</div>
+          </div>
+          <div class="stat-card sky">
+            <div class="stat-label">Total Permohonan</div>
+            <div class="stat-value">514 Creator</div>
+            <div class="stat-desc">Ditarik lengkap & dikurasi otomatis dalam hitungan detik</div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-label">Star Creator</div>
+            <div class="stat-value">86 Creator</div>
+            <div class="stat-desc">Prioritas utama dengan omset penjualan GMV > Rp30 Juta</div>
+          </div>
+          <div class="stat-card rose">
+            <div class="stat-label">Efisiensi Tim</div>
+            <div class="stat-value">95% Lebih Cepat</div>
+            <div class="stat-desc">Dari 4 jam cek manual menjadi 10 detik kurasi otomatis</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SLIDE 2: MASALAH BISNIS & LATAR BELAKANG -->
+    <!-- ============================================================== -->
+    <section class="slide" id="slide-1">
+      <h2 class="section-title">Latar Belakang & Tantangan Bisnis</h2>
+      <p class="section-subtitle">Mengapa program sampel gratis affiliate TikTok sebelumnya rawan pemborosan anggaran?</p>
+
+      <div class="grid-2">
+        <div class="content-box">
+          <div class="box-header">
+            <div class="box-icon" style="background: rgba(239, 68, 68, 0.15); color: var(--color-danger); border-color: rgba(239, 68, 68, 0.3);">⚠️</div>
+            <div>
+              <div class="box-title">Risiko & Kebocoran Biaya Sebelumnya</div>
+              <div class="box-subtitle">Pola kerugian pada sistem kurasi manual TikTok Seller</div>
+            </div>
+          </div>
+          <ul class="feature-list">
+            <li class="feature-item">
+              <span class="danger-icon">✗</span>
+              <div>
+                <strong style="color: var(--text-main);">Pemborosan HPP Produk Bernilai Tinggi:</strong><br>
+                Rompi puffer dan jaket Monture bernilai ratusan ribu rupiah sering terkirim ke akun dengan <em>fulfillment rate</em> 0% (creator mengambil sampel gratis tapi tidak pernah membuat video ulasan).
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="danger-icon">✗</span>
+              <div>
+                <strong style="color: var(--text-main);">Ketidaksesuaian Kategori (Wrong Niche):</strong><br>
+                Banyak creator dari niche yang tidak relevan (seperti suku cadang mobil, peralatan dapur, dan mainan) meminta sampel pakaian pria, menghasilkan nol konversi.
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="danger-icon">✗</span>
+              <div>
+                <strong style="color: var(--text-main);">Maraknya Akun Bot & Video AI Slideshow:</strong><br>
+                Banyak affiliator hanya mengunggah video foto katalog bergerak (slideshow) buatan bot tanpa pernah mencoba produk secara fisik (*real try-on*).
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="danger-icon">✗</span>
+              <div>
+                <strong style="color: var(--text-main);">Hilangnya Peluang Karena Deadline Kadaluarsa:</strong><br>
+                TikTok membatasi waktu respon 7 hari. Cek manual di HP lambat, menyebabkan creator beromset ratusan juta terlanjur kadaluarsa (*expired*).
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="content-box">
+          <div class="box-header">
+            <div class="box-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--color-success); border-color: rgba(16, 185, 129, 0.3);">🛡️</div>
+            <div>
+              <div class="box-title">Solusi Monture Quality Gate Engine</div>
+              <div class="box-subtitle">Otomatisasi filter objektif berbasis data performa nyata</div>
+            </div>
+          </div>
+          <ul class="feature-list">
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong style="color: var(--text-main);">Engine 7 KPI Brand Monture:</strong><br>
+                Penyaringan otomatis seketika berdasarkan Level, GMV, Views, Kategori, Konsistensi, dan Kepatuhan Konten.
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong style="color: var(--text-main);">Audit Keaslian Video (Real Human vs AI):</strong><br>
+                Pendeteksi cerdas karakteristik video fisik (fitting, audio asli) untuk langsung menggugurkan bot slideshow.
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong style="color: var(--text-main);">Pelacak Batas Waktu Kadaluarsa Real-Time:</strong><br>
+                Indikator countdown sisa hari/jam agar creator beromset puluhan juta diprioritaskan sebelum dibatalkan TikTok.
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div>
+                <strong style="color: var(--text-main);">Split-View Curation Workspace:</strong><br>
+                Antarmuka satu layar untuk langsung menginspeksi metrik, memutar video MP4 asli, dan tombol satu-klik ke TikTok Seller.
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SLIDE 3: EKOSISTEM 5 MODUL DASHBOARD -->
+    <!-- ============================================================== -->
+    <section class="slide" id="slide-2">
+      <h2 class="section-title">Arsitektur Ekosistem Dashboard Monture</h2>
+      <p class="section-subtitle">Satu Command Hub terintegrasi untuk mengendalikan seluruh saluran penjualan & promosi Monture Outdoor</p>
+
+      <div class="grid-3">
+        <div class="module-card">
+          <div>
+            <span class="module-badge">MODUL 1</span>
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">1. Ringkasan Bisnis (Overview)</h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+              Monitoring omset total toko, profitabilitas bersih harian/bulanan, kontribusi channel berbayar (Ads) vs Organik, serta tren performa 30 hari terakhir.
+            </p>
+          </div>
+          <div style="font-size: 12px; color: #38bdf8; font-weight: 600; margin-top: 16px;">✓ Quick Presets (7H, 30H, Custom)</div>
+        </div>
+
+        <div class="module-card">
+          <div>
+            <span class="module-badge" style="background: rgba(238, 77, 45, 0.15); color: var(--brand-shopee);">MODUL 2</span>
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">2. Performa Iklan (Shopee Ads)</h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+              Deep-dive efektivitas iklan Shopee: Evaluasi ROAS, CIR (Cost-to-Income), Cost-Per-Click (CPC), dan perbandingan performa per jam (Time Graph).
+            </p>
+          </div>
+          <div style="font-size: 12px; color: var(--brand-shopee); font-weight: 600; margin-top: 16px;">✓ Analisis ROAS Real-Time</div>
+        </div>
+
+        <div class="module-card">
+          <div>
+            <span class="module-badge" style="background: rgba(16, 185, 129, 0.15); color: var(--color-success);">MODUL 3</span>
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">3. Master Data SKU & Margin</h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+              Kalkulator margin profit bersih per SKU produk Monture. Menghitung HPP, potongan admin Shopee/TikTok, biaya kemasan, dan laba bersih per transaksi.
+            </p>
+          </div>
+          <div style="font-size: 12px; color: var(--color-success); font-weight: 600; margin-top: 16px;">✓ HPP & Net Margin Guard</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 24px;">
+        <div class="module-card">
+          <div>
+            <span class="module-badge" style="background: rgba(245, 158, 11, 0.15); color: var(--color-warning);">MODUL 4</span>
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">4. Laporan Kinerja PIC & Tim Marketing</h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+              Evaluasi akuntabilitas kinerja personal PIC toko dari bulan ke bulan. Membandingkan target penjualan, efisiensi rasio iklan, dan laba kontribusi nyata.
+            </p>
+          </div>
+          <div style="font-size: 12px; color: var(--color-warning); font-weight: 600; margin-top: 16px;">✓ Benchmark PIC Lama vs PIC Baru</div>
+        </div>
+
+        <div class="module-card" style="border-color: rgba(254, 44, 85, 0.4); background: linear-gradient(180deg, rgba(254, 44, 85, 0.08) 0%, var(--bg-card) 100%);">
+          <div>
+            <span class="module-badge" style="background: rgba(254, 44, 85, 0.2); color: var(--brand-tiktok);">MODUL 5 (BARU)</span>
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">5. Kurasi Sample Affiliate TikTok</h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+              Engine kurasi cerdas split-view: menyaring 500+ permohonan creator menggunakan 7 KPI objektif, audit keaslian try-on, dan kalkulator perlindungan HPP.
+            </p>
+          </div>
+          <div style="font-size: 12px; color: var(--brand-tiktok); font-weight: 600; margin-top: 16px;">✓ Core Focus: AI Audit & 7 KPI Gate</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SLIDE 4: PEMBUKTIAN DATA REAL & STATISTIK AKTUAL -->
+    <!-- ============================================================== -->
+    <section class="slide" id="slide-3">
+      <h2 class="section-title">Pembuktian Data Aktual Toko Monture</h2>
+      <p class="section-subtitle">Hasil eksekusi nyata dari 514 permohonan sampel yang ditarik langsung dari TikTok Seller Center</p>
+
+      <div class="grid-4" style="margin-bottom: 24px;">
+        <div class="stat-card">
+          <div class="stat-label">Total Permohonan</div>
+          <div class="stat-value">514</div>
+          <div class="stat-desc">Permohonan creator di database</div>
+        </div>
+        <div class="stat-card emerald">
+          <div class="stat-label">Direkomendasikan</div>
+          <div class="stat-value" style="color: var(--color-success);">242</div>
+          <div class="stat-desc">47% Lolos semua 7 KPI Monture</div>
+        </div>
+        <div class="stat-card rose">
+          <div class="stat-label">Ditolak Otomatis</div>
+          <div class="stat-value" style="color: var(--color-danger);">272</div>
+          <div class="stat-desc">53% Gugur demi proteksi anggaran</div>
+        </div>
+        <div class="stat-card amber">
+          <div class="stat-label">HPP Terlindungi</div>
+          <div class="stat-value" style="color: var(--color-warning);">Rp121,3 Juta</div>
+          <div class="stat-desc">Nilai produk yang aman dari sampel sia-sia</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="content-box">
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main);">
+            ⚡ Prioritas Utama: 79 Creator Aktif Menunggu Keputusan
+          </h3>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+            Dari 514 riwayat pengajuan, sebanyak <strong>79 creator saat ini statusnya masih aktif</strong> di TikTok Shop dan harus segera diputuskan oleh PIC Marketing sebelum batas waktu respon 7 hari habis:
+          </p>
+
+          <table class="kpi-table">
+            <thead>
+              <tr>
+                <th>Creator</th>
+                <th>Level</th>
+                <th>GMV Penjualan</th>
+                <th>Sisa Waktu</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>@benyox.id</strong> ⭐</td>
+                <td>Level 6</td>
+                <td style="color: #38bdf8; font-weight: 700;">Rp130.973.930</td>
+                <td><span class="badge badge-wajib">Tersisa 1 Hari</span></td>
+                <td><span class="badge badge-pass">APPROVE</span></td>
+              </tr>
+              <tr>
+                <td><strong>@anadakbanggak</strong> ⭐</td>
+                <td>Level 6</td>
+                <td style="color: #38bdf8; font-weight: 700;">Rp129.268.620</td>
+                <td>Tersisa 5 Hari</td>
+                <td><span class="badge badge-pass">APPROVE</span></td>
+              </tr>
+              <tr>
+                <td><strong>@adhityanjay</strong> ⭐</td>
+                <td>Level 6</td>
+                <td style="color: #38bdf8; font-weight: 700;">Rp114.283.542</td>
+                <td>Tersisa 3 Hari</td>
+                <td><span class="badge badge-pass">APPROVE</span></td>
+              </tr>
+              <tr>
+                <td><strong>@azisniken_</strong> ⭐</td>
+                <td>Level 6</td>
+                <td style="color: #38bdf8; font-weight: 700;">Rp94.766.397</td>
+                <td><span class="badge badge-wajib">Tersisa 1 Hari</span></td>
+                <td><span class="badge badge-pass">APPROVE</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="content-box">
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main);">
+            ❌ Mengapa 272 Creator Ditolak Otomatis?
+          </h3>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+            Sistem secara transparan mencatat alasan penolakan pada setiap profil untuk memastikan keputusan audit dapat dipertanggungjawabkan:
+          </p>
+
+          <ul class="feature-list">
+            <li class="feature-item">
+              <span class="danger-icon">•</span>
+              <div>
+                <strong>Fulfillment Rate Rendah (0% s/d &lt; 80%):</strong><br>
+                Creator terbiasa mengambil sampel gratis dari berbagai toko tapi tidak pernah memposting video keranjang kuning.
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="danger-icon">•</span>
+              <div>
+                <strong>Kategori Tidak Sesuai (Niche Mismatch):</strong><br>
+                Akun bertema otomotif, perkakas bengkel, mainan, atau gadget yang tidak memiliki audiens pakaian pria/outdoor.
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="danger-icon">•</span>
+              <div>
+                <strong>Views Video &lt; 500:</strong><br>
+                Trafik video terlalu rendah sehingga potensi konversi pembelian hampir nol.
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="danger-icon">•</span>
+              <div>
+                <strong>Terindikasi Konten Bot / AI Slideshow:</strong><br>
+                51 akun terdeteksi hanya mengunggah slide foto katalog tanpa orang asli.
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SLIDE 5: 7 STANDAR KPI BRAND MONTURE -->
+    <!-- ============================================================== -->
+    <section class="slide" id="slide-4">
+      <h2 class="section-title">Mesin Evaluasi: 7 Standar KPI Brand Monture</h2>
+      <p class="section-subtitle">Parameter objektif berbasis data yang menentukan kelayakan setiap pengajuan sampel</p>
+
+      <div class="content-box" style="padding: 24px;">
+        <table class="kpi-table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">No</th>
+              <th>Parameter KPI</th>
+              <th style="width: 120px;">Tipe Aturan</th>
+              <th>Kriteria Lolos Sistem</th>
+              <th>Dampak Bisnis Monture</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><strong>Jenis Konten</strong></td>
+              <td><span class="badge badge-wajib">WAJIB</span></td>
+              <td>Wajib memiliki riwayat Video TikTok (VT) aktif e-commerce</td>
+              <td>Menolak akun penonton atau akun pasif yang tidak bisa berpromosi</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><strong>Level Affiliate</strong></td>
+              <td><span class="badge badge-wajib">WAJIB</span></td>
+              <td>Minimal <strong>Level 2, 3, 4, 5, atau 6</strong> (kecuali penjualan &gt; 1.000 pcs)</td>
+              <td>Memastikan creator sudah berpengalaman mencetak transaksi penjualan</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><strong>Tren Penjualan</strong></td>
+              <td><span class="badge badge-pass">OPSIONAL</span></td>
+              <td>Memiliki transaksi penjualan yang teratur dalam 30 hari</td>
+              <td>Poin penunjang stabilitas konversi penjualan creator</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><strong>Total Omzet GMV</strong></td>
+              <td><span class="badge badge-star">STAR CREATOR</span></td>
+              <td>GMV creator <strong>&gt; Rp30.000.000</strong></td>
+              <td>Otomatis dilabeli Star Creator ⭐ untuk diprioritaskan toko</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><strong>Kesesuaian Niche</strong></td>
+              <td><span class="badge badge-wajib">WAJIB</span></td>
+              <td>Niche wajib <em>Pakaian Pria, Jaket/Outer, Sports, atau Outdoor</em></td>
+              <td>Memastikan audiens creator memiliki minat beli pada produk Monture</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><strong>Views Video</strong></td>
+              <td><span class="badge badge-wajib">WAJIB</span></td>
+              <td>Rata-rata tayangan video atau top video <strong>&gt;= 500 views</strong></td>
+              <td>Menjamin eksposur promosi produk dilihat oleh ratusan calon pembeli</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><strong>Konsistensi & Kepatuhan</strong></td>
+              <td><span class="badge badge-wajib">WAJIB</span></td>
+              <td><strong>Fulfillment Rate &gt;= 80%</strong> & Level &gt;= 2 & Aktif 30 hari</td>
+              <td>Mengeliminasi creator nakal yang suka mengambil sampel tanpa posting</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SLIDE 6: QUALITY GATE KEASLIAN VIDEO (AI VS REAL) -->
+    <!-- ============================================================== -->
+    <section class="slide" id="slide-5">
+      <h2 class="section-title">Quality Gate Keaslian Video: Real Try-On vs AI Bot</h2>
+      <p class="section-subtitle">Aturan Mutlak Monture: Sampel fisik hanya diberikan kepada creator manusia nyata yang mencoba produk</p>
+
+      <div class="grid-2">
+        <div class="content-box" style="border-color: rgba(16, 185, 129, 0.3); background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--bg-card) 100%);">
+          <div class="box-header">
+            <div class="box-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--color-success); border-color: rgba(16, 185, 129, 0.3);">👤</div>
+            <div>
+              <div class="box-title" style="color: var(--color-success);">Karakteristik Real Human Try-On (LOLOS)</div>
+              <div class="box-subtitle">Kreator dengan potensi konversi penjualan tertinggi</div>
+            </div>
+          </div>
+          <ul class="feature-list">
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div><strong>Fisik Orang Terlihat Nyata:</strong> Kreator memakai rompi/jaket secara langsung di depan kamera (*fitting on body*).</div>
+            </li>
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div><strong>Ulasan Detail Bahan & Fitting:</strong> Menunjukkan tekstur kain puffer, kerapian jahitan, kantong, dan resleting.</div>
+            </li>
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div><strong>Audio Alami & Suara Asli:</strong> Narasi berbicara asli manusia (bukan suara template robot TTS kaku).</div>
+            </li>
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div><strong>Interaksi Komentar Ukuran:</strong> Ada tanya jawab ukuran badan (*"TB 170 BB 65 ambil size L kak"*).</div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="content-box" style="border-color: rgba(239, 68, 68, 0.3); background: linear-gradient(180deg, rgba(239, 68, 68, 0.05) 0%, var(--bg-card) 100%);">
+          <div class="box-header">
+            <div class="box-icon" style="background: rgba(239, 68, 68, 0.15); color: var(--color-danger); border-color: rgba(239, 68, 68, 0.3);">🤖</div>
+            <div>
+              <div class="box-title" style="color: var(--color-danger);">Indikator AI Generator / Bot (GUGUR OTOMATIS)</div>
+              <div class="box-subtitle">Akun berisiko tinggi pemborosan HPP produk toko</div>
+            </div>
+          </div>
+          <ul class="feature-list">
+            <li class="feature-item">
+              <span class="danger-icon">✗</span>
+              <div><strong>Slideshow Foto Katalog:</strong> Hanya kumpulan foto katalog toko yang digeser dengan efek musik CapCut tanpa orang memegang barang.</div>
+            </li>
+            <li class="feature-item">
+              <span class="danger-icon">✗</span>
+              <div><strong>Avatar Tiruan AI (Deepfake):</strong> Model animasi digital dengan gerakan bibir kaku dan tekstur kulit plastik sintetis.</div>
+            </li>
+            <li class="feature-item">
+              <span class="danger-icon">✗</span>
+              <div><strong>Reupload Video Luar Negeri:</strong> Mengambil video promosi model luar negeri yang tidak sesuai dengan produk fisik Monture.</div>
+            </li>
+            <li class="feature-item">
+              <span class="danger-icon">✗</span>
+              <div><strong>Anomali Engagement:</strong> Ribuan views tanpa interaksi like atau komentar sama sekali (indikasi bot trafik palsu).</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SLIDE 7: ALUR KERJA SINKRONISASI INSTAN (ONE-CLICK INGESTION) -->
+    <!-- ============================================================== -->
+    <section class="slide" id="slide-6">
+      <h2 class="section-title">Inovasi Teknis: Ingestion & WAF Bypass Otomatis</h2>
+      <p class="section-subtitle">Bagaimana dashboard berhasil menarik 514 data TikTok secara instan tanpa kendala blokir keamanan</p>
+
+      <div class="grid-3">
+        <div class="content-box">
+          <div class="box-header">
+            <div class="box-icon">1</div>
+            <div>
+              <div class="box-title">Tantangan WAF</div>
+              <div class="box-subtitle">Proteksi Bot TikTok</div>
+            </div>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            TikTok menerapkan signature kriptografis <code>X-Bogus</code> dan <code>msToken</code> yang otomatis kadaluarsa dalam waktu ~60 detik dan menolak request otomatis dari server luar.
+          </p>
+        </div>
+
+        <div class="content-box">
+          <div class="box-header">
+            <div class="box-icon">2</div>
+            <div>
+              <div class="box-title">Solusi Console Ingestion</div>
+              <div class="box-subtitle">Memanfaatkan Browser Asli</div>
+            </div>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            Script otomatis dijalankan langsung di tab browser yang sudah login. Browser sendiri yang men-generate signature secara legal untuk memutar seluruh halaman 1 hingga 11 dalam 10 detik.
+          </p>
+        </div>
+
+        <div class="content-box">
+          <div class="box-header">
+            <div class="box-icon">3</div>
+            <div>
+              <div class="box-title">Dual-Mode Importer</div>
+              <div class="box-subtitle">100% Bebas Kadaluarsa</div>
+            </div>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+            Modal di Monture Dashboard mendukung impor langsung via <strong>Response JSON</strong> atau <strong>cURL Parser</strong> dengan deduplikasi otomatis berdasarkan <code>apply_id</code>.
+          </p>
+        </div>
+      </div>
+
+      <div class="content-box" style="margin-top: 24px;">
+        <h4 style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">
+          Logika Loop Aman Penarikan 514 Data di Browser:
+        </h4>
+        <div class="code-box">
+// Alur Looping Otomatis (Page 1 sampai Page 11) dengan Safety Delay 600ms:
+for (let page = 1; page &lt;= totalPages; page++) {
+  const data = await fetch('/api/v1/affiliate/sample/group/list?...', { cur_page: page, page_size: 50 });
+  allSamples.push(...data.agg_info);
+  await sleep(600); // Mencegah pemicu rate limit WAF TikTok
+}
+copy(JSON.stringify(allSamples)); // Otomatis disalin ke Clipboard Windows!
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SLIDE 8: WORKSPACE CURATOR (SPLIT VIEW UI) -->
+    <!-- ============================================================== -->
+    <section class="slide" id="slide-7">
+      <h2 class="section-title">Antarmuka Kerja Tim: Split-View Curation Workspace</h2>
+      <p class="section-subtitle">Didesain khusus untuk efisiensi kecepatan audit tim marketing Monture</p>
+
+      <div class="grid-2">
+        <div class="content-box">
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main);">
+            📋 Panel Kiri: Master List Creator Ringkas (380px)
+          </h3>
+          <ul class="feature-list">
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div><strong>Filter Cepat Multi-Status:</strong> Tab <em>Semua (514), Lolos (242), Star (86), Gugur (272), dan Kadaluarsa (435)</em>.</div>
+            </li>
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div><strong>Pencarian Instan:</strong> Mengetik nama creator, nickname, atau judul produk langsung memfilter daftar tanpa loading.</div>
+            </li>
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div><strong>Pengurutan Cerdas (Smart Sort):</strong> Mengurutkan berdasarkan <em>Batas Waktu Terdekat (Deadline), GMV Tertinggi, Views Terbanyak,</em> atau <em>Level Tertinggi</em>.</div>
+            </li>
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div><strong>Visual Badge Status:</strong> Label warna hijau (Lolos) atau merah (Gugur) serta sisa hari waktu respon.</div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="content-box">
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-main);">
+            🔍 Panel Kanan: Detail Inspeksi, Video MP4 & Action
+          </h3>
+          <ul class="feature-list">
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div><strong>Executive Verdict Card:</strong> Kotak keputusan resmi sistem (misal: <em>STAR CREATOR • PRIORITAS APPROVE</em>) lengkap dengan alasan logika.</div>
+            </li>
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div><strong>Tombol Aksi Satu-Klik:</strong>
+                <ul style="padding-left: 20px; margin-top: 6px;">
+                  <li><code>[Buka di TikTok Seller]</code> ➔ Langsung membuka tab persetujuan di TikTok Shop.</li>
+                  <li><code>[Salin Username]</code> ➔ Menyalin @username creator ke clipboard.</li>
+                  <li><code>[Tandai AI (Gugur)]</code> ➔ Override manual jika tim menemukan video manipulasi.</li>
+                </ul>
+              </div>
+            </li>
+            <li class="feature-item">
+              <span class="check-icon">✓</span>
+              <div><strong>Pemutar Video Langsung (In-App Video Modal):</strong> Mengklik thumbnail video akan memutar direct stream MP4 langsung di layar dashboard tanpa membuka aplikasi TikTok.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- SLIDE 9: DAMPAK BISNIS & ROI MONTURE -->
+    <!-- ============================================================== -->
+    <section class="slide" id="slide-8">
+      <h2 class="section-title">Dampak Bisnis Nyata (ROI & Business Impact)</h2>
+      <p class="section-subtitle">Nilai strategis implementasi Marketing Dashboard bagi perkembangan brand Monture Outdoor</p>
+
+      <div class="grid-3">
+        <div class="stat-card emerald">
+          <div class="stat-label">Penghematan Modal</div>
+          <div class="stat-value">Rp121 Juta+</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+            Modal produk Monture terselamatkan dari pengiriman sampel cuma-cuma ke akun bot atau affiliator dengan fulfillment 0%.
+          </p>
+        </div>
+
+        <div class="stat-card sky">
+          <div class="stat-label">Pertumbuhan Penjualan</div>
+          <div class="stat-value">86 Star Affiliate</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+            Fokus persetujuan cepat dialokasikan khusus ke creator level tinggi dengan omset terbukti (GMV puluhan s/d ratusan juta).
+          </p>
+        </div>
+
+        <div class="stat-card amber">
+          <div class="stat-label">Efisiensi Jam Kerja</div>
+          <div class="stat-value">95% Saved Time</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+            Tim marketing tidak lagi menghabiskan 3-4 jam per hari scrolling ponsel; kurasi 500 creator selesai secara otomatis dalam hitungan detik.
+          </p>
+        </div>
+      </div>
+
+      <div class="content-box" style="margin-top: 24px; text-align: center;">
+        <h3 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 12px;">
+          Kesimpulan Strategis Brand Monture Outdoor
+        </h3>
+        <p style="font-size: 15px; color: var(--text-muted); max-width: 860px; margin: 0 auto; line-height: 1.6;">
+          Dengan sistem ini, Monture beralih dari pola pembagian sampel manual yang berisiko tekor menjadi <strong>strategi alokasi sampel berbasis data terukur</strong>. Anggaran pemasaran menjadi tepat sasaran, modal HPP terlindungi maksimal, dan peluang kolaborasi dengan affiliator bernilai ratusan juta rupiah dapat ditindaklanjuti secara cepat sebelum kadaluarsa.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Navigation Bar -->
+  <nav class="deck-nav">
+    <button class="nav-btn" onclick="prevSlide()">◀ Sebelumnya</button>
+    <div class="slide-counter" id="slideCounter">1 / 9</div>
+    <button class="nav-btn" onclick="nextSlide()">Berikutnya ▶</button>
+  </nav>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+
+    function updateSlide() {
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === currentSlide);
+      });
+
+      // Update counter
+      document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+      // Update progress bar
+      const progressPercent = ((currentSlide + 1) / totalSlides) * 100;
+      document.getElementById('progressBar').style.width = `${progressPercent}%`;
+
+      // Scroll to top of deck
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function switchSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        updateSlide();
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Home') {
+        switchSlide(0);
+      } else if (e.key === 'End') {
+        switchSlide(totalSlides - 1);
+      }
+    });
+
+    // Initialize
+    updateSlide();
+  </script>
+</body>
+</html>
