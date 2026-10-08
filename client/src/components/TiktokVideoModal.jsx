@@ -10,13 +10,14 @@ export default function TiktokVideoModal({
   onAuditAi,
   onClose 
 }) {
-  const [playerMode, setPlayerMode] = useState('embed'); // 'embed' | 'direct'
+  // Default to 'direct' agar video langsung autoplay di dashboard seperti sebelumnya
+  const [playerMode, setPlayerMode] = useState(video?.mp4_url ? 'direct' : 'embed');
   const [hasMp4Error, setHasMp4Error] = useState(false);
 
   useEffect(() => {
-    setPlayerMode('embed');
+    setPlayerMode(video?.mp4_url ? 'direct' : 'embed');
     setHasMp4Error(false);
-  }, [video?.item_id]);
+  }, [video?.item_id, video?.mp4_url]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
