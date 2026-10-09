@@ -1,9 +1,9 @@
 {
   "period": "past30days",
-  "startTime": 1788861618,
-  "endTime": 1791453618,
+  "startTime": 1788940820,
+  "endTime": 1791532820,
   "customLabel": "30 Hari Sebelumnya",
-  "lastUpdated": "2026-10-08T10:00:18.772Z",
+  "lastUpdated": "2026-10-09T08:00:21.120Z",
   "isRealShopeeData": true,
   "storeProfile": {
     "storeName": "Monture outdoor",
@@ -21,11 +21,6 @@
     "aovFormatted": "Rp 169.108"
   },
   "dailyTrendPoints": [
-    {
-      "timestamp": 1788800400,
-      "date": "8 Sep",
-      "revenue": 0
-    },
     {
       "timestamp": 1788886800,
       "date": "9 Sep",
@@ -170,81 +165,86 @@
       "timestamp": 1791306000,
       "date": "7 Okt",
       "revenue": 559651
+    },
+    {
+      "timestamp": 1791392400,
+      "date": "8 Okt",
+      "revenue": 349351
     }
   ],
   "keyMetrics": {
     "totalSales": {
-      "value": 6825513,
-      "formatted": "Rp 6.825.513",
-      "pctDiff": -1.529347098471908,
+      "value": 7174864,
+      "formatted": "Rp 7.174.864",
+      "pctDiff": 3.5106874105535293,
       "label": "Total Penjualan Kotor (Total Sales)"
     },
     "confirmedOrders": {
-      "value": 33,
-      "formatted": "33 Pesanan",
-      "pctDiff": -34,
+      "value": 35,
+      "formatted": "35 Pesanan",
+      "pctDiff": -30,
       "label": "Total Pesanan Berhasil (Confirmed Orders)"
     },
     "uniqueBuyers": {
-      "value": 30,
-      "formatted": "30 Pembeli",
-      "pctDiff": -33.33333333333333,
+      "value": 31,
+      "formatted": "31 Pembeli",
+      "pctDiff": -31.11111111111111,
       "label": "Total Pembeli (Unique Buyers)"
     },
     "salesPerOrder": {
-      "value": 206834,
-      "formatted": "Rp 206.834",
-      "pctDiff": 49.225116959110146,
+      "value": 204996,
+      "formatted": "Rp 204.996",
+      "pctDiff": 47.77111769694669,
       "label": "Rata-Rata Nilai Belanja (AOV / Sales per Order)"
     },
     "impressions": {
-      "value": 213442,
-      "formatted": "213.442",
-      "pctDiff": -15.45813545425379,
+      "value": 222667,
+      "formatted": "222.667",
+      "pctDiff": -11.961141709401033,
       "label": "Total Tayangan Produk (Impressions)"
     },
     "clicks": {
-      "value": 4959,
-      "formatted": "4.959",
-      "pctDiff": -13.921194237111612,
+      "value": 5175,
+      "formatted": "5.175",
+      "pctDiff": -10.405124653739612,
       "label": "Total Klik Produk (Clicks)"
     },
     "ctr": {
       "value": 2.32,
       "formatted": "2.32%",
-      "pctDiff": 0.041483486623795224,
+      "pctDiff": 0.04036320834924084,
       "label": "Rasio Klik (CTR)"
     },
     "conversionRate": {
-      "value": 0.67,
-      "formatted": "0.67%",
-      "pctDiff": -0.6260224742650455,
+      "value": 0.68,
+      "formatted": "0.68%",
+      "pctDiff": -0.6261779377498065,
       "label": "Tingkat Konversi Pesanan (CR)"
     }
   },
   "channelBreakdown": {
     "paid_ads": {
       "label": "Iklan Berbayar (Shopee Ads)",
-      "sales": 5507330,
-      "ratio": 80.69,
+      "sales": 5701469,
+      "ratio": 79.46,
       "color": "#EE4D2D"
     },
     "product_card": {
       "label": "Organik & Pencarian Produk",
-      "sales": 6208099,
-      "ratio": 90.95,
+      "sales": 6557450,
+      "ratio": 91.39,
       "color": "#10B981"
     },
     "video": {
       "label": "Shopee Video",
       "sales": 434102,
-      "ratio": 6.36,
+      "ratio": 6.05,
       "color": "#8B5CF6"
     },
     "affiliate": {
       "label": "Shopee Affiliate",
       "sales": 183312,
-      "ratio": 2.69,
+      "ratio": 2.55,
       "color": "#F59E0B"
     },
     "live": {
@@ -260,14 +260,14 @@
       "id": 40657856676,
       "name": "Monture - Rompi Pria Puffer Gelembung Outdoor Big Size Jumbo Premium M - 6XL",
       "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztd-mtnnv1vvcg74b9",
-      "sales": 4018670,
-      "salesFormatted": "Rp 4.018.670",
-      "orders": 20,
-      "units": 21,
-      "clicks": 1911,
-      "ctr": "2.78%",
-      "conversionRate": "1.05%",
-      "addToCart": 117
+      "sales": 4173882,
+      "salesFormatted": "Rp 4.173.882",
+      "orders": 21,
+      "units": 22,
+      "clicks": 1928,
+      "ctr": "2.75%",
+      "conversionRate": "1.09%",
+      "addToCart": 120
     },
     {
       "rank": 2,
@@ -278,13 +278,27 @@
       "salesFormatted": "Rp 765.981",
       "orders": 4,
       "units": 4,
-      "clicks": 359,
-      "ctr": "3.75%",
-      "conversionRate": "1.11%",
+      "clicks": 364,
+      "ctr": "3.76%",
+      "conversionRate": "1.10%",
       "addToCart": 23
     },
     {
       "rank": 3,
+      "id": 42484321116,
+      "name": "Monture - Makalu Jaket Gropcore Cycling Premium Big Size Jumbo M - 6XL",
+      "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztm-mtpcgjhsmyh2ba",
+      "sales": 527150,
+      "salesFormatted": "Rp 527.150",
+      "orders": 2,
+      "units": 2,
+      "clicks": 146,
+      "ctr": "1.87%",
+      "conversionRate": "1.37%",
+      "addToCart": 5
+    },
+    {
+      "rank": 4,
       "id": 50665938893,
       "name": "Monture - Rompi Puffer Hoodie Bikers Big Size Jumbo M - 6XL Premium",
       "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztm-mto7mjswo9vp49",
@@ -292,38 +306,24 @@
       "salesFormatted": "Rp 438.516",
       "orders": 2,
       "units": 2,
-      "clicks": 83,
-      "ctr": "2.46%",
-      "conversionRate": "2.41%",
-      "addToCart": 5
-    },
-    {
-      "rank": 4,
-      "id": 42484321116,
-      "name": "Monture - Makalu Jaket Gropcore Cycling Premium Big Size Jumbo M - 6XL",
-      "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztm-mtpcgjhsmyh2ba",
-      "sales": 333011,
-      "salesFormatted": "Rp 333.011",
-      "orders": 1,
-      "units": 1,
-      "clicks": 138,
-      "ctr": "1.79%",
-      "conversionRate": "0.72%",
-      "addToCart": 3
+      "clicks": 102,
+      "ctr": "2.57%",
+      "conversionRate": "1.96%",
+      "addToCart": 6
     },
     {
       "rank": 5,
-      "id": 45117599594,
-      "name": "Monture - Makalu Jaket Gropcore Hiking Big Size Jumbo M - 6XL Premium",
-      "image": "https://down-id.img.susercontent.com/file/id-11134207-81ztc-mtpc2nzox4at34",
-      "sales": 237861,
-      "salesFormatted": "Rp 237.861",
-      "orders": 1,
-      "units": 1,
-      "clicks": 134,
-      "ctr": "1.76%",
-      "conversionRate": "0.75%",
-      "addToCart": 6
+      "id": 54915938034,
+      "name": "Monture - Rompi Puffer Hoodie Street Wear Big Size Jumbo Premium M - 6XL",
+      "image": "https://down-id.img.susercontent.com/file/id-11134207-81zte-mto76mz7ppfq6e",
+      "sales": 304968,
+      "salesFormatted": "Rp 304.968",
+      "orders": 2,
+      "units": 2,
+      "clicks": 169,
+      "ctr": "2.28%",
+      "conversionRate": "1.18%",
+      "addToCart": 11
     }
   ],
   "orderPerformance": {
